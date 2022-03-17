@@ -163,9 +163,9 @@ mobility(:)=1;
     Hesq, Kde, Kn, Kt, Ded,weightDMP,auxface,...
     benchmark,iteration,nflag,calnormface,N,gravresult,gravrate);
 % pos-processador no visit
-postprocessor(full(abs(p-solanal)),1)
-postprocessor(full(p),2)
-postprocessor(solanal,3)
+% postprocessor(full(abs(p-solanal)),1)
+% postprocessor(full(p),2)
+% postprocessor(solanal,3)
 %% calculo do erro, pressao maxima e minima
 [erropressure,errovelocity,pressuremax,pressuremin]=errorateconv(solanal, p, velanal,flowrate,...
     erromethod,benchmark)
