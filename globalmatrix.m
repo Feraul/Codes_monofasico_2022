@@ -1,3 +1,5 @@
+% funcao que faz a montagem da matrizes globais para todos os metodos
+% estudado
 function [M,I]=globalmatrix(p,pinterp,gamma,nflagface,nflagno,parameter,kmap,...
     fonte,metodoP,w,s,benchmark,weightDMP,auxface,wells,mobility,Hesq, Kde, Kn, Kt, Ded,calnormface,gravresult,gravrate)
 
@@ -29,7 +31,7 @@ elseif strcmp(metodoP,'lfvLPEW')
     [M,I]=assemblematrixlfvLPEW(parameter,fonte,w,s,nflagno,weightDMP,wells,mobility);
 elseif strcmp(metodoP,'lfvHP')
     
-    [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,mobility,g);
+    [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,mobility,gravresult);
 elseif strcmp(metodoP,'mpfad')
     [ M, I ] = globalmatrixmpfad( w,s, Kde, Ded, Kn, Kt, nflagno, Hesq,wells,1,fonte,gravresult,gravrate);
 elseif strcmp(metodoP,'tpfa')

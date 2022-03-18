@@ -1,37 +1,12 @@
 function [x,iter,res_hist,tabletol] = AndAcc(x,auxtol,kmap,...
-    parameter,metodoP,auxflag,w,s,nflagface,fonte,gamma,nflagno,benchmark,...
-    weightDMP,auxface,wells,mobility,Hesq, Kde, Kn, Kt, Ded,calnormface,R0,tolpicard)
+    parameter,metodoP,w,s,nflagface,fonte,gamma,nflagno,benchmark,...
+    weightDMP,auxface,wells,mobility,Hesq, Kde, Kn, Kt, Ded,...
+    calnormface,R0,tolpicard,nitpicard)
 % This performs fixed-point iteration with or without Anderson
 % acceleration for a given fixed-point map g and initial
 % approximate solution x.
 %%
 % https://users.wpi.edu/~walker/Papers/anderson_accn_algs_imps.pdf
-%%
-% Required inputs:
-%        g = fixed-point map (function handle); form gval = g(x).
-%        x = initial approximate solution (column vector).
-%
-% Optional inputs:
-%       mMax = maximum number of stored residuals (non-negative integer).
-% NOTE: mMax = 0 => no acceleration.
-%       itmax = maximum allowable number of iterations.
-%       atol = absolute error tolerance.
-%       rtol = relative error tolerance.
-%       droptol = tolerance for dropping stored residual vectors to improve
-% conditioning: If droptol > 0, drop residuals if the
-% condition number exceeds droptol; if droptol <= 0,
-% do not drop residuals.
-%       beta = damping factor: If beta > 0 (and beta ~= 1), then the step is
-% damped by beta; otherwise, the step is not damped.
-% NOTE: beta can be a function handle; form beta(iter), where iter is
-% the iteration number and 0 < beta(iter) <= 1.
-%       AAstart = acceleration delay factor: If AAstart > 0, start acceleration
-%       when iter = AAstart.
-%
-% Output:
-%       x = final approximate solution.
-%       iter = final iteration number.
-%       res_hist = residual history matrix (iteration numbers and residual norms).
 %
 % Homer Walker (walker@wpi.edu), 10/14/2011.
 % Set the method parameters.
@@ -43,7 +18,7 @@ end
 mMax = min(4,size(x,1)); % é o "m" no artigo e
 %end
 %if nargin < 4
-itmax = 1000;
+itmax = nitpicard;
 %end
 %if nargin < 5
 %atol = 1.e-6;
@@ -79,7 +54,7 @@ mAA = 0; % é o "m_{k}" no artigo
 % Top of the iteration loop.
 %% Interpolação das pressões na arestas (faces)
 % Apply g and compute the current residual norm.
-    [pinterp_new]=pressureinterp(x,nflagface,nflagno,w,s,auxflag,metodoP,...
+    [pinterp_new]=pressureinterp(x,nflagface,nflagno,w,s,metodoP,...
         parameter,weightDMP);
     %% Calculo da matriz global
     [M_new,RHS_new]=globalmatrix(x,pinterp_new,gamma,nflagface,nflagno...
@@ -197,24 +172,23 @@ for iter = 0:itmax
                 end
             end
             % Solve the least-squares problem.
-            gamma = R\(Q'*fval);
+            gamma_AA = R\(Q'*fval);
             % Update the approximate solution.
-            x = gval - DG*gamma;
+            x = gval - DG*gamma_AA;
             % Apply damping if beta is a function handle or if beta > 0
             % (and beta ~= 1).
             if isa(beta,'function_handle'),
-                x = x - (1-beta(iter))*(fval - Q*R*gamma);
+                x = x - (1-beta(iter))*(fval - Q*R*gamma_AA);
             else
                 if beta > 0 && beta ~= 1 
-                    x = x - (1-beta)*(fval - Q*R*gamma);          
+                    x = x - (1-beta)*(fval - Q*R*gamma_AA);          
                 end
             end
         end
     end
     x=x-min(x,0);
     % Apply g and compute the current residual norm.
-    [pinterp_new]=pressureinterp(x,nflagface,nflagno,w,s,auxflag,metodoP,...
-        parameter,weightDMP);
+    [pinterp_new]=pressureinterp(x,nflagface,nflagno,w,s,metodoP,parameter,weightDMP);
     %% Calculo da matriz global
     [M_new,RHS_new]=globalmatrix(x,pinterp_new,gamma,nflagface,nflagno...
         ,parameter,kmap,fonte,metodoP,w,s,benchmark,weightDMP,auxface,wells,...

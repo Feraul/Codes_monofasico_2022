@@ -1,4 +1,4 @@
-function [flowrate,flowresult]=flowratelfvHP(parameter,weightDMP,mobility,pinterp,p,g)
+function [flowrate,flowresult]=flowratelfvHP(parameter,weightDMP,mobility,pinterp,p)
 global inedge coord bedge bcflag centelem
 % incialização das matrizes
 % 
@@ -24,7 +24,7 @@ for ifacont=1:size(bedge,1)
     if bedge(ifacont,5)>200
         x=bcflag(:,1)==bedge(ifacont,5);
         r=find(x==1);
-        flowrate(ifacont,1)=normcont*bcflag(r,2)+ g(ifacont,1);
+        flowrate(ifacont,1)=normcont*bcflag(r,2);
     else
         facelef1=parameter(1,3,ifacont);
         facelef2=parameter(1,4,ifacont);
@@ -33,7 +33,7 @@ for ifacont=1:size(bedge,1)
         %    parameter(1,1,ifacont)*pinterp(facelef1)-parameter(1,2,ifacont)*pinterp(facelef2));
         
         flowrate(ifacont,1)= normcont*((parameter(1,1,ifacont)+parameter(1,2,ifacont))*p(lef)-...
-            parameter(1,1,ifacont)*pinterp(facelef1)-parameter(1,2,ifacont)*pinterp(facelef2))+g(ifacont,1);
+            parameter(1,1,ifacont)*pinterp(facelef1)-parameter(1,2,ifacont)*pinterp(facelef2));
     end
     %Attribute the flow rate to "flowresult"
     %On the left:
@@ -67,7 +67,7 @@ for iface=1:size(inedge,1)
                        parameter(2,1,ifactual)*pinterp(auxfacerel1)-parameter(2,2,ifactual)*pinterp(auxfacerel2));
     % calculo do fluxo unico na face
    % flowrate(iface+size(bedge,1),1)=mobility(ifactual)*(murel*fluxesq-mulef*fluxdireit);
-    flowrate(iface+size(bedge,1),1)=(murel*fluxesq-mulef*fluxdireit) + g(ifactual,1);
+    flowrate(iface+size(bedge,1),1)=(murel*fluxesq-mulef*fluxdireit) ;
     %Attribute the flow rate to "flowresult"
     %On the left:
     flowresult(lef) = flowresult(lef) + flowrate(bedgesize + iface);  

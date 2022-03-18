@@ -1,5 +1,5 @@
 function y = JV_APPROX1(v, R, p_old1,nflag,w,s,metodoP,parameter,...
-    kmap,nflagno,benchmark,fonte,auxflag,gamma,weightDMP,auxface,...
+    kmap,nflagno,benchmark,fonte,gamma,weightDMP,auxface,...
     wells,mobility,Hesq, Kde, Kn, Kt, Ded,calnormface,M_new,RHS_new)
 
 
@@ -45,7 +45,7 @@ end
 xper = p_old1 + per * v; % perturbed vector
 
 % Interpolação das pressões na arestas (faces)
-[pinterp_new]=pressureinterp(xper,nflag,nflagno,w,s,auxflag,metodoP,parameter,weightDMP,mobility);
+[pinterp_new]=pressureinterp(xper,nflag,nflagno,w,s,metodoP,parameter,weightDMP,mobility);
 
 % Calculo da matriz global
 [M_new,RHS_new]=globalmatrix(xper,pinterp_new,gamma,nflag,nflagno...

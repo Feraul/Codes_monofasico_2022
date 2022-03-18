@@ -1,6 +1,6 @@
-function [x0,t tabletol] = extrapolate(x0, k, L, method,nflagface,nflagno,w,s,auxflag,metodoP,...
-    parameter,weightDMP,kmap,fonte,auxface,mobility,Hesq, Kde, Kn, Kt, ...
-    Ded,calnormface,wells,benchmark,tolpicard,R0)
+function [x0,t tabletol] = extrapolate(x0, k, L, method,nflagface,...
+    nflagno,w,s,metodoP,parameter,weightDMP,kmap,fonte,auxface,mobility,...
+    Hesq, Kde, Kn, Kt,Ded,calnormface,wells,benchmark,tolpicard,R0)
 % https://bitbucket.org/romanz/numericodes/src/default/
 % obtido de esse site
 N = numel(x0);
@@ -14,7 +14,7 @@ switch upper(method)
 end
 % Perform L cycles of extrapolation method
 %% Interpolação das pressões na arestas (faces)
-[pinterp_new]=pressureinterp(x0,nflagface,nflagno,w,s,auxflag,metodoP,...
+[pinterp_new]=pressureinterp(x0,nflagface,nflagno,w,s,metodoP,...
     parameter,weightDMP);
 
 %% Calculo da matriz global
@@ -49,7 +49,7 @@ for t = 1:L %
     for i = 1:k
         mm=1;
         %% Interpolação das pressões na arestas (faces)
-        [pinterp_new]=pressureinterp(Q(:,i),nflagface,nflagno,w,s,auxflag,metodoP,...
+        [pinterp_new]=pressureinterp(Q(:,i),nflagface,nflagno,w,s,metodoP,...
             parameter,weightDMP);
         
         %% Calculo da matriz global
@@ -98,7 +98,7 @@ for t = 1:L %
         x0=x0-min(x0,0); % se algum elemento de x0 é negativo, então sera zero, creterio de LIPNIKOV.
         
         %% Interpolação das pressões na arestas (faces)
-        [pinterp_new]=pressureinterp(x0,nflagface,nflagno,w,s,auxflag,metodoP,...
+        [pinterp_new]=pressureinterp(x0,nflagface,nflagno,w,s,metodoP,...
             parameter,weightDMP);
         
         %% Calculo da matriz global

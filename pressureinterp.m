@@ -1,4 +1,4 @@
-function [pressurinterp]=pressureinterp(p,nflagface,nflagno,w,s,auxflag,...
+function [pressurinterp]=pressureinterp(p,nflagface,nflagno,w,s,...
     metodoP,parameter,weightDMP,mobility,gravresult,gravrate)
 global inedge coord esurn1 esurn2 bedge bcflag
 
@@ -259,7 +259,7 @@ elseif strcmp(metodoP,'nlfvLPEW') || strcmp(metodoP,'lfvLPEW') || strcmp(metodoP
     for no=1:size(coord,1)
         nec1=esurn2(no+1)-esurn2(no);
         p1=0;
-        auxflag=202;
+        auxflag=202; % fluxo diferente de zero recebe flag 202 caso contrario 201
         if nflagno(no,1) >200
             if nflagno(no,1)==auxflag
                 for j=1:nec1

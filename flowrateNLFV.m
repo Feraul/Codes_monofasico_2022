@@ -1,5 +1,5 @@
 function [flowrate,flowresult,coercividade]=flowrateNLFV(p, pinterp, parameter,mobility)
-global inedge coord bedge bcflag centelem phasekey smethod
+global inedge coord bedge bcflag centelem 
 
 %Initialize "bedgesize" and "inedgesize"
 bedgesize = size(bedge,1);

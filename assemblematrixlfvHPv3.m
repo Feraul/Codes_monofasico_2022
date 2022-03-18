@@ -8,7 +8,7 @@ M=sparse(size(elem,1),size(elem,1));
 % mobility(1:size(bedge,1),1)=auxmobility2;
 % mobility((size(bedge,1)+1):(size(inedge,1)+size(bedge,1)),1)=auxmobility1;
 % fonte
-I=I+fonte;
+I=I+fonte+g;
 if max(max(wells))~=0
     sumvol=0;
     for iw = 1:size(wells,1)
@@ -29,7 +29,7 @@ else
         if bedge(ifacont,5)>200
             x=bcflag(:,1)==bedge(ifacont,5);
             r=find(x==1);
-            I(lef)=I(lef)- normcont*bcflag(r,2)-g(ifacont,1);
+            I(lef)=I(lef)- normcont*bcflag(r,2);
         else
             %auxmobility=mobility(ifacont);
             %-------------------------------------------------------------%
@@ -46,7 +46,7 @@ else
                 normcont,mobility,auxparameter2,auxmobility,lef,weightDMP,M,I,g);
            
             M(lef,lef)=M(lef,lef)+ auxmobility*normcont*(auxparameter1 + auxparameter2);
-            I(lef)=I(lef)-g(ifacont,1);
+            I(lef)=I(lef);
         end
     end
 end
@@ -117,7 +117,7 @@ for iface=1:size(inedge,1)
             r=find(x==1);
             
             % calcula o fluxo na face "ifacelef1"
-            fluxoN=normcont*bcflag(r,2)+g(ifacelef1,1);
+            fluxoN=normcont*bcflag(r,2);
             
             % retorna as faces que formam os eixos auxiliares
             auxifacelef1=parameter(1,3,ifacelef1);
@@ -169,7 +169,7 @@ for iface=1:size(inedge,1)
                     
                     x=bcflag(:,1)==bedge(faceoposto,5);
                     r=find(x==1);
-                    fluxOpost=normcontopost*bcflag(r,2)+g(faceoposto,1);
+                    fluxOpost=normcontopost*bcflag(r,2);
                     % caso II. Quando a face oposto pertence ao contorno de Neumann
                     
                     if auxifacelef1==faceoposto
@@ -287,7 +287,7 @@ for iface=1:size(inedge,1)
             r=find(x==1);
             
             % calcula o fluxo na face "ifacelef2"
-            fluxoN=normcont*bcflag(r,2)+g(ifacelef2,1);
+            fluxoN=normcont*bcflag(r,2);
             
             % retorna as faces que formam os eixos auxiliares
             auxifacelef1=parameter(1,3,ifacelef2);
@@ -337,7 +337,7 @@ for iface=1:size(inedge,1)
                     
                     x=bcflag(:,1)==bedge(ifacelef1,5);
                     r=find(x==1);
-                    fluxOpost=normcontopost*bcflag(r,2)+g(faceoposto,1);
+                    fluxOpost=normcontopost*bcflag(r,2);
                     % caso II. Quando a face oposto pertence ao contorno de Neumann
                     
                     if auxifacelef1==faceoposto
@@ -502,7 +502,7 @@ for iface=1:size(inedge,1)
                     
                     x=bcflag(:,1)==bedge(faceoposto,5);
                     r=find(x==1);
-                    fluxOpost=normcontopost*bcflag(r,2)+g(faceoposto,1);
+                    fluxOpost=normcontopost*bcflag(r,2);
                     % caso II. Quando a face oposto pertence ao contorno de Neumann
                     ksi1a=parameter(1,1,faceoposto);
                     ksi2b=parameter(1,2,faceoposto);
@@ -635,7 +635,7 @@ for iface=1:size(inedge,1)
             normcont=norm(coord(bedge(ifacerel2,1),:)-coord(bedge(ifacerel2,2),:));
             x=bcflag(:,1)==bedge(ifacerel2,5);
             r=find(x==1);
-            fluxoN=normcont*bcflag(r,2)+g(ifacerel2,1);
+            fluxoN=normcont*bcflag(r,2);
             % lembre-se que a face "ifacerel1" pertence ao contorno, então
             % as faces que definem os eixos auxiliares são
             auxifacerel1=parameter(1,3,ifacerel2);
@@ -681,7 +681,7 @@ for iface=1:size(inedge,1)
                     
                     x=bcflag(:,1)==bedge(faceoposto,5);
                     r=find(x==1);
-                    fluxOpost=normcontopost*bcflag(r,2)+g(faceoposto,1);
+                    fluxOpost=normcontopost*bcflag(r,2);
                     % caso II. Quando a face oposto pertence ao contorno de Neumann
                     ksi1a=parameter(1,1,faceoposto);
                     ksi2b=parameter(1,2,faceoposto);
@@ -787,8 +787,8 @@ for iface=1:size(inedge,1)
         M(rel,[auxlef,auxrel])=  M(rel,[auxlef,auxrel])- termo0*[auxweightrel1,auxweightrel2];
         
     end
-    I(lef)=I(lef)-g(ifactual,1);
-    I(rel)=I(rel)+g(ifactual,1);
+    I(lef)=I(lef);
+    I(rel)=I(rel);
 end
 
 % adequação da matriz nos poços produtores

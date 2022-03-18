@@ -1,7 +1,9 @@
 function [pointarmonic,parameter,gamma,p_old,tol,nit,er,nflagface,...
-    nflagno,weightDMP,Hesq,Kde,Kn,Kt,Ded,auxface,calnormface,gravresult,gravrate]=preNLFV(kmap,...
-    N,metodoP,benchmark,bedge,grav,gravitational,correction)
+    nflagno,weightDMP,Hesq,Kde,Kn,Kt,Ded,auxface,calnormface,...
+    gravresult,gravrate,weight,contrcontor]=preNLFV(kmap,...
+    N,metodoP,benchmark,bedge,grav,gravitational,correction,interpol)
 global elem
+% inicializando as variaveis
 nflagno=0;
 nflagface=0;
 pointarmonic=0;
@@ -14,13 +16,12 @@ Kn=0;
 Kt=0;
 Ded=0;
 calnormface=0;
-%% faces alrededor de um nó
-w=0;
-s=0;
 gravresult=0;
 gravrate=0;
+weight=0;
+contrcontor=0;
 if strcmp(metodoP,'nlfvLPEW')
-   %% calculo dos parametros ou constantes (ksi)
+    %% calculo dos parametros ou constantes (ksi)
     % esta rutina estamos usando de 7/2/2016
     %[parameter]=coefficientPPS(kmap); % urgente revisar
     %temos usado para muitos estes o seguinte rutina
@@ -28,10 +29,21 @@ if strcmp(metodoP,'nlfvLPEW')
     % adequação dos flags de contorno
     nflagno= contflagno(benchmark,bedge);
     
+    % calculo dos pesos que correspondem aos metodos de interpolacao
+    if strcmp(interpol,'LPEW1')
+        % interpolaca LPEW1 proposto por Gao e Wu 2010
+        [weight,contrcontor] = Pre_LPEW_1(kmap,N);
+    elseif strcmp(interpol,'eLPEW2')
+        % interpolaca LPEW2 modificado por proposto por Miao e Wu 2021
+        [weight,contrcontor] = Pre_ELPEW_2(kmap,N,gravrate);
+    else
+        % interpolaca LPEW1 proposto por Gao e Wu 2010
+        [weight,contrcontor] = Pre_LPEW_2(kmap,N,gravrate);
+    end
     % calculo do termo gravitacional
     if strcmp(gravitational,'yes')
         [gravresult,gravrate]=gravitation(kmap,grav);
-    end 
+    end
 elseif strcmp(metodoP,'nlfvPPS')
     %% calculo dos parametros ou constantes (ksi)
     % esta rutina estamos usando de 7/2/2016
@@ -40,15 +52,15 @@ elseif strcmp(metodoP,'nlfvPPS')
     [parameter,calnormface]=coefficientLPSangle(kmap);
     % adequação dos flags de contorno
     nflagno= contflagno(benchmark,bedge);
-        
+    
     if strcmp(correction,'yes')
         % calculo dos pontos harmonicos com correcao
         [pointarmonic,weightDMP,raioaux]=harmonicopointcorrection(kmap);
     else
         % calculoa dos pontos harmonicos sem correcao
-        [pointarmonic,weightDMP,raioaux]=harmonicopoint(kmap,N,benchmark); 
+        [pointarmonic,weightDMP,raioaux]=harmonicopoint(kmap,N,benchmark);
     end
-        
+    
     % calculo do termo gravitacional
     if strcmp(gravitational,'yes')
         [gravresult,gravrate]=gravitation(kmap,grav);
@@ -56,10 +68,14 @@ elseif strcmp(metodoP,'nlfvPPS')
 elseif strcmp(metodoP,'nlfvHP')
     %% faces alrededor de um elemento
     [facelement]=element_face;
-    %% calculoa dos pontos armonicos
-    %[pointarmonic,weightDMP,raioaux]=harmonicopoint(kmap,N,benchmark);
-    %% calculo dos pontos harmonicos com correcao
-    [pointarmonic,weightDMP,raioaux]=harmonicopointcorrection(kmap);
+    
+    if strcmp(correction,'yes')
+        % calculo dos pontos harmonicos com correcao
+        [pointarmonic,weightDMP,raioaux]=harmonicopointcorrection(kmap);
+    else
+        % calculoa dos pontos harmonicos sem correcao
+        [pointarmonic,weightDMP,raioaux]=harmonicopoint(kmap,N,benchmark);
+    end
     %% calculo dos parametros ou constantes (ksi)
     % temos usado este parametro durante muito tempo em muitos testes
     [parameter,auxface]=coefficientPPSharmonicpoint(facelement,pointarmonic,kmap,raioaux);
@@ -73,10 +89,14 @@ elseif strcmp(metodoP,'nlfvHP')
 elseif strcmp(metodoP,'nlfvDMPSY')|| strcmp(metodoP,'lfvHP') || strcmp(metodoP,'nlfvDMPV1')
     %% faces alrededor de um elemento
     [facelement]=element_face;
-    %% calculoa dos pontos armonicos
-    %[pointarmonic,weightDMP,raioaux]=harmonicopoint(kmap,N,benchmark);
-    %% calculo dos pontos harmonicos com correcao
-    [pointarmonic,weightDMP,raioaux]=harmonicopointcorrection(kmap);
+    
+    if strcmp(correction,'yes')
+        % calculo dos pontos harmonicos com correcao
+        [pointarmonic,weightDMP,raioaux]=harmonicopointcorrection(kmap);
+    else
+        % calculoa dos pontos harmonicos sem correcao
+        [pointarmonic,weightDMP,raioaux]=harmonicopoint(kmap,N,benchmark);
+    end
     %% calculo dos parametros ou constantes (ksi)
     % temos usado este parametro durante muito tempo em muitos testes
     [parameter,auxface]=coefficientPPSharmonicpoint(facelement,pointarmonic,kmap,raioaux);
@@ -100,6 +120,22 @@ elseif strcmp(metodoP,'lfvLPEW')
     % calculo dos pesos DMP
     [weightDMP]=weightnlfvDMP(kmap);
     
+    
+    % calculo dos pesos que correspondem aos metodos de interpolacao
+    if strcmp(interpol,'LPEW1')
+        % interpolaca LPEW1 proposto por Gao e Wu 2010
+        [weight,contrcontor] = Pre_LPEW_1(kmap,N);
+    elseif strcmp(interpol,'eLPEW2')
+        % interpolaca LPEW2 modificado por proposto por Miao e Wu 2021
+        [weight,contrcontor] = Pre_ELPEW_2(kmap,N,gravrate);
+    else
+        % interpolaca LPEW1 proposto por Gao e Wu 2010
+        [weight,contrcontor] = Pre_LPEW_2(kmap,N,gravrate);
+    end
+    
+    if strcmp(gravitational,'yes')
+        [gravresult,gravrate]=gravitation(kmap,grav);
+    end
     % outra maneira de calcular os pesos proposto no artigo
     %[weightDMP]=weightlfv(parameter);
 elseif strcmp(metodoP,'mpfad')
@@ -108,12 +144,24 @@ elseif strcmp(metodoP,'mpfad')
     [Hesq, Kde, Kn, Kt, Ded]=preMPFAD(kmap);
     % adequação dos flags de contorno
     nflagno= contflagno(benchmark,bedge);
+    
+    % calculo dos pesos que correspondem aos metodos de interpolacao
+    if strcmp(interpol,'LPEW1')
+        % interpolaca LPEW1 proposto por Gao e Wu 2010
+        [weight,contrcontor] = Pre_LPEW_1(kmap,N);
+    elseif strcmp(interpol,'eLPEW2')
+        % interpolaca LPEW2 modificado por proposto por Miao e Wu 2021
+        [weight,contrcontor] = Pre_ELPEW_2(kmap,N,gravrate);
+    else
+        % interpolaca LPEW1 proposto por Gao e Wu 2010
+        [weight,contrcontor] = Pre_LPEW_2(kmap,N,gravrate);
+    end
     % gravitational term
     if strcmp(gravitational,'yes')
         [gravresult,gravrate]=gravitation(kmap,grav);
     end
 else
-    %% calculo das constantes fisicos-geometrico
+    %% calculo das constantes fisicos-geometrico para o TPFA
     [Hesq, Kde, Kn, Kt, Ded]=preMPFAD(kmap);
     % adequação dos flags de contorno
     nflagno= contflagno(benchmark);

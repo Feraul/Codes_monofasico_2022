@@ -1,5 +1,5 @@
 function [p_new,tabletol,step,ciclos]=fullpicard(M_old,RHS_old,nitpicard,tolpicard,kmap,...
-    parameter,metodoP,auxflag,w,s,nflagface,fonte,p_old,gamma,nflagno,benchmark,...
+    parameter,metodoP,w,s,nflagface,fonte,p_old,gamma,nflagno,benchmark,...
     weightDMP,auxface,wells,mobility,Hesq, Kde, Kn, Kt, Ded,calnormface,gravresult)
 ciclos=1;
 %% calculo do residuo Inicial
@@ -27,7 +27,7 @@ while (tolpicard<er || tolpicard==er) && (step<nitpicard)
 %         p_max=max(p_new)
 %         p_min=min(p_new)
     %% Interpolação das pressões na arestas (faces)
-    [pinterp_new]=pressureinterp(p_new,nflagface,nflagno,w,s,auxflag,metodoP,parameter,weightDMP);
+    [pinterp_new]=pressureinterp(p_new,nflagface,nflagno,w,s,metodoP,parameter,weightDMP);
     
     %% Calculo da matriz global
     [M_new,RHS_new]=globalmatrix(p_new,pinterp_new,gamma,nflagface,nflagno...

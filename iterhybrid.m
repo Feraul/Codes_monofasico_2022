@@ -1,10 +1,11 @@
-function [p,step,errorelativo,flowrate,flowresult]=iterhybrid(M_old,RHS_old,tolnewton,kmap,...
-    parameter,metodoP,auxflag,w,s,nflag,fonte,p_old,gamma,nflagno,benchmark,p_old1,weightDMP,auxface)
+function [p,step,ciclos,tolerancia]=iterhybrid(M_old,RHS_old,tolnewton,kmap,...
+    parameter,metodoP,w,s,nflag,fonte,p_old,gamma,nflagno,benchmark,p_old1,weightDMP,auxface)
 global elem
 % inicializando dados para iteração Picard
 R0= M_old*p_old-RHS_old;
 er=1;
 step=0;
+ciclos=1;
 while tolnewton<er
     step=step+1;
     % calculo da pressão
@@ -14,7 +15,7 @@ while tolnewton<er
     postprocessor(p_new,step)
     
     % Interpolação das pressões na arestas (faces)
-    [pinterp_new]=pressureinterp(p_new,nflag,w,s,auxflag,metodoP,parameter,weightDMP);
+    [pinterp_new]=pressureinterp(p_new,nflag,w,s,metodoP,parameter,weightDMP);
     
     % Calculo da matriz global
     [M_new,RHS_new]=globalmatrix(p_new,pinterp_new,gamma,nflag,nflagno...
@@ -55,7 +56,7 @@ while tolnewton<er
             postprocessor(p_new,step+1);
             
             % Interpolação das pressões na arestas (faces)
-            [pinterp_new]=pressureinterp(p_new,nflag,w,s,auxflag,metodoP,parameter,weightDMP);
+            [pinterp_new]=pressureinterp(p_new,nflag,w,s,metodoP,parameter,weightDMP);
             
             % Calculo da matriz global
             [M_new,RHS_new]=globalmatrix(p_new,pinterp_new,gamma,nflag,nflagno...
@@ -80,12 +81,5 @@ while tolnewton<er
     RHS_old=RHS_new;
 end
 p=p_old1;
-pinterp=pressureinterp(p,nflag,w,s,auxflag,metodoP,parameter,weightDMP);
-if strcmp(metodoP,'nlfvDMPSY')
-    % implementação do fluxo NLFV-DMP
-    [flowrate,flowresult]=flowrateNLFVDMP(p, pinterp, parameter,nflag,kmap,gamma,weightDMP);
-else
-    % implementação do fluxo NLFV
-    [flowrate,flowresult]=flowrateNLFV(p, pinterp, parameter);
-end
+tolerancia=er;
 end

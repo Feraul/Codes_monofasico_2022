@@ -1,5 +1,6 @@
-function [p,step,errorelativo,flowrate,flowresult]=iterdiscretnewton(M_old1,RHS_old1,M_old,RHS_old,nitpicard,tolpicard,kmap,...
-    parameter,metodoP,auxflag,w,s,nflagface,fonte,p_old,gamma,nflagno,benchmark,...
+function [p,step,errorelativo,flowrate,flowresult]=...
+    iterdiscretnewton(M_old1,RHS_old1,M_old,RHS_old,nitpicard,tolpicard,kmap,...
+    parameter,metodoP,w,s,nflagface,fonte,p_old,gamma,nflagno,benchmark,...
     weightDMP,auxface,wells,mobility,Hesq, Kde, Kn, Kt, Ded,calnormface,p_old1)
 % inicializando dados para iteração Picard
 Rk= M_old1*p_old1-RHS_old1;
@@ -23,7 +24,7 @@ while tolpicard<er
      %S=ones(size(p_new,1),1);
      %postprocessor(p_new,S,step)
     % Interpolação das pressões na arestas (faces)
-    [pinterp_new]=pressureinterp(x0,nflagface,nflagno,w,s,auxflag,metodoP,...
+    [pinterp_new]=pressureinterp(x0,nflagface,nflagno,w,s,metodoP,...
         parameter,weightDMP);
     
     %% Calculo da matriz global
@@ -36,7 +37,7 @@ while tolpicard<er
     
     % calculo do Jacobiano discreto
     [J]=aproxmjacobian(Rk,p_new,p_old1,nflagface,w,s,metodoP,parameter,kmap,...
-        nflagno,benchmark,fonte,auxflag,gamma,weightDMP,auxface,wells,mobility,Hesq, Kde, Kn, Kt, Ded);
+        nflagno,benchmark,fonte,auxflag,gamma,weightDMP,wells,mobility,Hesq, Kde, Kn, Kt, Ded);
     
     % calculo do erro
     A=logical(norm(R0) ~= 0.0);

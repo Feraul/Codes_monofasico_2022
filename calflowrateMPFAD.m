@@ -1,7 +1,7 @@
 %funçao que calcula os fluxos nas arestas internas
 %equacoes 28 e 29 (heterogeneo) ou 15 e 16 (homogeneo)
 
-function [flowrate, flowresult]=calflowrateMPFAD(p,w,s,Kde,Ded,Kn,Kt,Hesq,nflag,auxflag,mobility,gravresult,gravrate)
+function [flowrate, flowresult]=calflowrateMPFAD(p,w,s,Kde,Ded,Kn,Kt,Hesq,nflag,mobility,gravresult,gravrate)
 
 global coord esurn1 esurn2 bedge inedge centelem bcflag
 
@@ -47,6 +47,7 @@ for iface=1:size(inedge,1)
     nec1=esurn2(inedge(iface,1)+1)-esurn2(inedge(iface,1));
     p1=0;
     % calculo da pressão no nó "inedge(iface,1)"
+    auxflag=202;
     if nflag(inedge(iface,1),1) >200
         if nflag(inedge(iface,1),1)==auxflag
             for j=1:nec1
@@ -68,6 +69,7 @@ for iface=1:size(inedge,1)
     % calculo da pressão no "inedge(i,2)"
     nec2=esurn2(inedge(iface,2)+1)- esurn2(inedge(iface,2));
     p2=0;
+    auxflag=202;
     if  nflag(inedge(iface,2),1)>200
         if nflag(inedge(iface,2),1)==auxflag
             for j=1:nec2
