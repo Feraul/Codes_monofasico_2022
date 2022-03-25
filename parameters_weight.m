@@ -6,6 +6,7 @@ O=zeros(esurn2(no+1)-esurn2(no),3); % vetor de baricentro na vizinhança do nó "n
 nec=size(O,1);
 K=zeros(3);
 R=[0 1 0; -1 0 0; 0 0 0];
+R1=[0 -1 0; 1 0 0; 0 0 0];
 for k=1:nec
     ielem= esurn1(esurn2(no)+k); % elemento em questão
     
@@ -27,25 +28,20 @@ for k=1:nec
     tsigma=coord(v1,:)-coord(no,:);
     ttau=coord(v2,:)-coord(no,:);
 
-    % projecao
-    
     % x sigma tau
     xsigma=coord(no,:)+epsilon*tsigma;
     xtau=coord(no,:)+epsilon*ttau;
     
      vec1=xsigma-coord(no,:);
      vec2=xtau-coord(no,:);
-%     unitnormalsigma=R*(vec1)'/norm(vec1);
-%     unitnormaltau=R*(vec2)'/norm(vec2);
-    unitnormalsigma=R*tsigma'/norm(tsigma);
-    unitnormaltau=R*ttau'/norm(ttau);
-    
+
     % normal a face interior da regiao de iteracao
     normal1=(R*(xtau-xsigma)');
     
     % calculo da area
     sielem=norm(cross(xsigma-coord(no,:),xtau-coord(no,:)))/2;
-
+    
+    
     % tensor de permeabilidade
     K(1,1)=kmap(elem(ielem,5),2);
     K(1,2)=kmap(elem(ielem,5),3);
@@ -56,11 +52,11 @@ for k=1:nec
     %areasigma=norm(cross(xilem-coord(no,:),vec1))*0.5;
     %areatau=norm(cross(xilem-coord(no,:),vec2))*0.5;
     dKsigma=norm(cross(xilem-coord(no,:),tsigma))/norm(tsigma);
-    %dKsigma1=(coord(no,:)-xilem)*(R*(coord(v1,:)-xilem)')/norm(coord(no,:)-coord(v1,:));
+    %dKsigma=(coord(no,:)-xilem)*(R*(coord(v1,:)-xilem)')/norm(coord(no,:)-coord(v1,:));
     
     dKtau=norm(cross(xilem-coord(no,:),ttau))/norm(ttau);
     
-    %dKtau1=(coord(v2,:)-xilem)*(R*(coord(no,:)-xilem)')/norm(coord(no,:)-coord(v2,:));
+    %dKtau=(coord(v2,:)-xilem)*(R*(coord(no,:)-xilem)')/norm(coord(no,:)-coord(v2,:));
     %% ================================================================
     E(k,1)=dot(K*(R*tsigma'),R*tsigma')/dKsigma;
     E(k,2)=dot(K*(R*ttau'),R*ttau')/dKtau;
@@ -69,7 +65,7 @@ for k=1:nec
     
     EE(k,2)=dot(K*(R*ttau'),R*(xilem-coord(no,:))')/dKtau;
     %% ================================================================
-    netas(k,1)=dot(K*normal1,(normal1+R*vec1'))/(2*sielem);
+    netas(k,1)=dot(K*normal1,(normal1+R*(-vec1')))/(2*sielem);
     
     netas(k,2)=dot(K*normal1,(normal1+R*vec2'))/(2*sielem);
     
