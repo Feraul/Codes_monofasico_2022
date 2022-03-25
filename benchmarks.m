@@ -21,8 +21,35 @@ switch benchmark
                          kmap(i,:) = [i 10 3 3 10];
                     end
                   elem(i,5)=i;  
-        
         end
+        
+        for iface=1:size(bedge,1)+size(inedge,1)
+            R1=[0 -1 0; 1 0 0; 0 0 0];
+            if iface< size(bedge,1) || iface==size(bedge,1)
+                v1=bedge(iface,1);
+                v2=bedge(iface,2);
+               
+                IJ=coord(v2,:)-coord(v1,:);
+                norma=norm(IJ);
+                nij=R1*IJ'/norma;
+            else
+                v1=inedge(iface-size(bedge,1),1);
+                v2=inedge(iface-size(bedge,1),2);
+                IJ=coord(v2,:)-coord(v1,:);
+                norma=norm(IJ);
+                nij=R1*IJ'/norma;
+            end
+             p1=(coord(v2,:)+coord(v1,:))*0.5;
+             if p1(1,1)<0.5
+                    a=[-43, -17, 0];
+                   
+            else
+                    a=[-43, -22, 0];
+            end
+            F(iface,1)=dot(a,nij');
+            
+        end
+        vel=F;
         K=kmap;
     case 'starnonigrav'
         %Klef=zeros(2,2);
