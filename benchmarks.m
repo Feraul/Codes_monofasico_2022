@@ -6,6 +6,24 @@ u=0;
 fonte=0;
 grav=zeros(size(elem,1),2);
 switch benchmark
+    
+    case 'miao'
+        for i = 1:size(centelem,1)
+                    %Define "x" and "y"
+                    x = centelem(i,1);
+                    y = centelem(i,2);
+                    if x<=0.5
+                        u(i,1)= 14*x+y;
+                        kmap(i,:) = [i 3 1 1 3];
+                        
+                    else
+                         u(i,1)= 4*x+y+5;
+                         kmap(i,:) = [i 10 3 3 10];
+                    end
+                  elem(i,5)=i;  
+        
+        end
+        K=kmap;
     case 'starnonigrav'
         %Klef=zeros(2,2);
         %R=[0 1 0; -1 0 0; 0 0 0];
@@ -1070,7 +1088,7 @@ switch benchmark
             kmap(1,1:5)=[1 1 0 0 1];
             elem(i,5)=1;
             
-            u(i,1)=centelem(i,1);
+            u(i,1)=1-centelem(i,1);
             fonte=0;
         end
         
@@ -1083,7 +1101,7 @@ switch benchmark
                 norma=norm(IJ);
                 nij=R1*IJ'/norma;
                 
-                a=[-1, 0, 0];
+                a=[1, 0, 0];
             else
                 v1=inedge(iface-size(bedge,1),1);
                 v2=inedge(iface-size(bedge,1),2);
@@ -1091,7 +1109,7 @@ switch benchmark
                 norma=norm(IJ);
                 nij=R1*IJ'/norma;
                 
-                a=[-1, 0, 0];
+                a=[1, 0, 0];
                 
             end
             F(iface,1)=dot(a,nij');
@@ -1124,7 +1142,7 @@ switch benchmark
                 nij=R1*IJ'/norma;
                 if IJ(1,1)<0.5
                     
-                    a=[-2/3, 0, 0];
+                    a=[-4/3, 0, 0];
                 else
                     a=[-4/3, 0, 0];
                 end
@@ -1137,7 +1155,7 @@ switch benchmark
                 
                 if IJ(1,1)<0.5
                     
-                    a=[-2/3, 0, 0];
+                    a=[-4/3, 0, 0];
                 else
                     a=[-4/3, 0, 0];
                 end
@@ -1147,6 +1165,7 @@ switch benchmark
             
         end
         vel=F;
+		K=kmap;
     case 'crumpton'
         
         alfa=1000;

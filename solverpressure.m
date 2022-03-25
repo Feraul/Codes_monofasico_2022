@@ -2,7 +2,7 @@ function [pressure,errorelativo,flowrate,flowresult,tabletol,coercividade]=...
     solverpressure(kmap,nflagface,nflagno,fonte,...
     tol, nit,p_old,mobility,gamma,wells,parameter,metodoP,...
     Hesq, Kde, Kn, Kt, Ded,weightDMP,auxface,benchmark,...
-    iteration,nflag,calnormface,gravresult,gravrate,w,s)
+    iteration,calnormface,gravresult,gravrate,w,s)
 
 errorelativo=0;
 tabletol=0;
@@ -185,10 +185,10 @@ elseif strcmp(metodoP, 'lfvLPEW')
     [flowrate,flowresult]=flowratelfvLPEW(parameter,weightDMP,mobility,pinterp,pressure);
     
 elseif  strcmp(metodoP, 'tpfa')
-    [flowrate, flowresult]=flowrateTPFA(pressure,Kde,Kn,Hesq,nflag,mobility);
+    [flowrate, flowresult]=flowrateTPFA(pressure,Kde,Kn,Hesq,nflagno,mobility);
 else
     %calculo das vazões
-    [flowrate,flowresult]=calflowrateMPFAD(pressure,w,s,Kde,Ded,Kn,Kt,Hesq,nflag,1,gravresult,gravrate);
+    [flowrate,flowresult]=calflowrateMPFAD(pressure,w,s,Kde,Ded,Kn,Kt,Hesq,nflagno,1,gravresult,gravrate);
 end
 
 

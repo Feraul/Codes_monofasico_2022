@@ -33,8 +33,8 @@ for k=1:nec
     xsigma=coord(no,:)+epsilon*tsigma;
     xtau=coord(no,:)+epsilon*ttau;
     
-%     vec1=xsigma-coord(no,:);
-%     vec2=xtau-coord(no,:);
+     vec1=xsigma-coord(no,:);
+     vec2=xtau-coord(no,:);
 %     unitnormalsigma=R*(vec1)'/norm(vec1);
 %     unitnormaltau=R*(vec2)'/norm(vec2);
     unitnormalsigma=R*tsigma'/norm(tsigma);
@@ -53,10 +53,14 @@ for k=1:nec
     K(2,2)=kmap(elem(ielem,5),5);
     
     % calculo da distancia ortogonal
-    %areasigma=norm(cross(xilem-coord(no,:),tsigma))*0.5;
-    %areatau=norm(cross(xilem-coord(no,:),ttau))*0.5;
+    %areasigma=norm(cross(xilem-coord(no,:),vec1))*0.5;
+    %areatau=norm(cross(xilem-coord(no,:),vec2))*0.5;
     dKsigma=norm(cross(xilem-coord(no,:),tsigma))/norm(tsigma);
+    %dKsigma1=(coord(no,:)-xilem)*(R*(coord(v1,:)-xilem)')/norm(coord(no,:)-coord(v1,:));
+    
     dKtau=norm(cross(xilem-coord(no,:),ttau))/norm(ttau);
+    
+    %dKtau1=(coord(v2,:)-xilem)*(R*(coord(no,:)-xilem)')/norm(coord(no,:)-coord(v2,:));
     %% ================================================================
     E(k,1)=dot(K*(R*tsigma'),R*tsigma')/dKsigma;
     E(k,2)=dot(K*(R*ttau'),R*ttau')/dKtau;
@@ -65,9 +69,9 @@ for k=1:nec
     
     EE(k,2)=dot(K*(R*ttau'),R*(xilem-coord(no,:))')/dKtau;
     %% ================================================================
-    netas(k,1)=dot(K*normal1,(normal1+epsilon*norm(tsigma)*unitnormalsigma))/(2*sielem);
+    netas(k,1)=dot(K*normal1,(normal1+R*vec1'))/(2*sielem);
     
-    netas(k,2)=dot(K*normal1,(normal1+epsilon*norm(ttau)*unitnormaltau))/(2*sielem);
+    netas(k,2)=dot(K*normal1,(normal1+R*vec2'))/(2*sielem);
     
 end
 

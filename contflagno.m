@@ -13,6 +13,17 @@ for ifacont=1:size(bedge,1)
     lef=bedge(ifacont,3);
     %%
     switch benchmark
+        case 'miao'
+            xx=bcflag(:,1)==bedge(ifacont,4);
+            rr=find(xx==1);
+            nflag(bedge(ifacont,1),1)=bcflag(rr,1);
+            
+            if x<=0.5
+               nflag(bedge(ifacont,1),2)=14*x+y;
+            else
+              nflag(bedge(ifacont,1),2)= 4*x+y+5;
+              
+            end
         case{'starnonigrav'}
             xx=bcflag(:,1)==bedge(ifacont,4);
             rr=find(xx==1);

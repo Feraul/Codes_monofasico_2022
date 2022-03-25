@@ -39,7 +39,7 @@ else %Se for um nó do contorno.
             
         elseif (k==nec)&&(size(P,1)~=size(O,1))
             
-            omega(k,1)=(netas(k,2))*(E(k,2))/(EE(k,2));
+            omega(k,1)=((netas(k,1)+netas(k-1,2))*(E(k,1))/(EE(k,1)+EE(k-1,2)))+ (netas(k,2)*(E(k,2))/(EE(k,2)));
         else
             omega(k,1)=((netas(k,1)+netas(k-1,2))*(E(k,1))/(EE(k,1)+EE(k-1,2)))+ ((netas(k,2)+netas(k+1,1))*(E(k,2))/(EE(k,2)+EE(k+1,1)));
             
