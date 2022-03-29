@@ -1,7 +1,7 @@
 %funçao que calcula os fluxos nas arestas internas
 %equacoes 28 e 29 (heterogeneo) ou 15 e 16 (homogeneo)
 
-function [flowrate, flowresult]=calflowrateMPFAD(p,w,s,Kde,Ded,Kn,Kt,Hesq,nflag,mobility,gravresult,gravrate)
+function [flowrate, flowresult]=calflowrateMPFAD(p,w,s,Kde,Ded,Kn,Kt,Hesq,nflag,mobility,gravresult,gravrate,pinterp)
 
 global coord esurn1 esurn2 bedge inedge centelem bcflag
 
@@ -43,52 +43,9 @@ end
 for iface=1:size(inedge,1)
     lef=inedge(iface,3); %indice do elemento a direita da aresta i
     rel=inedge(iface,4); %indice do elemento a esquerda da aresta i
-    % interpolando os nós (ou vértices)
-    nec1=esurn2(inedge(iface,1)+1)-esurn2(inedge(iface,1));
-    p1=0;
-    % calculo da pressão no nó "inedge(iface,1)"
-    auxflag=202;
-    if nflag(inedge(iface,1),1) >200
-        if nflag(inedge(iface,1),1)==auxflag
-            for j=1:nec1
-                element1=esurn1(esurn2(inedge(iface,1))+j);
-                p1=p1+w(esurn2(inedge(iface,1))+j)*p(element1);
-            end
-            p1=p1+s(inedge(iface,1),1);
-        else
-            for j=1:nec1
-                element1=esurn1(esurn2(inedge(iface,1))+j);
-                p1=p1+w(esurn2(inedge(iface,1))+j)*p(element1);
-            end
-        end
-        
-    else
-        p1=nflag(inedge(iface,1),2);
-    end
-    
-    % calculo da pressão no "inedge(i,2)"
-    nec2=esurn2(inedge(iface,2)+1)- esurn2(inedge(iface,2));
-    p2=0;
-    auxflag=202;
-    if  nflag(inedge(iface,2),1)>200
-        if nflag(inedge(iface,2),1)==auxflag
-            for j=1:nec2
-                element2=esurn1(esurn2(inedge(iface,2))+j);
-                p2=p2+w(esurn2(inedge(iface,2))+j)*p(element2);
-            end
-            p2=p2+s(inedge(iface,2),1);
-        else
-            for j=1:nec2
-                element2=esurn1(esurn2(inedge(iface,2))+j);
-                p2=p2+w(esurn2(inedge(iface,2))+j)*p(element2);
-            end
-            
-        end
-        
-    else
-        p2=nflag(inedge(iface,2),2);
-    end
-    
+   
+    p1=pinterp(inedge(iface,1),1);
+    p2=pinterp(inedge(iface,2),1);
     %calculo das vazões
     flowrate(iface+size(bedge,1))=Kde(iface)*(p(rel)-p(lef)-Ded(iface)*(p2-p1));
     %Attribute the flow rate to "flowresult"
