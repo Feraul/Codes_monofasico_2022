@@ -1,6 +1,6 @@
 function [ M, I ] = globalmatrixmpfad( w,s, Kde, Ded, Kn, Kt, nflag, ...
                                           Hesq,wells,mobility,fonte,...
-                                          gravresult,gravrate)
+                                          gravresult,gravrate,pinterp)
 
 global coord elem esurn1 esurn2  bedge inedge  centelem elemarea bcflag
 
