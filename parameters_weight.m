@@ -1,12 +1,15 @@
+% Calcula os parametros fisicos e geometricos do artigo  Shuia Miao e
+% Jiming Wu, 2021. Os parametros encontra-se na pagina 7 equacao 15.
+
 function [netas,E,EE]=parameters_weight(no,kmap,epsilon)
 global nsurn2 nsurn1 esurn2 esurn1 elem coord centelem
 
-
-O=zeros(esurn2(no+1)-esurn2(no),3); % vetor de baricentro na vizinhança do nó "ni".
+% vetor de baricentro na vizinhança do nó "ni"
+O=zeros(esurn2(no+1)-esurn2(no),3); 
 nec=size(O,1);
 K=zeros(3);
+% Matriz de rotacao em sentido horario
 R=[0 1 0; -1 0 0; 0 0 0];
-R1=[0 -1 0; 1 0 0; 0 0 0];
 for k=1:nec
     ielem= esurn1(esurn2(no)+k); % elemento em questão
     
@@ -36,7 +39,7 @@ for k=1:nec
      vec2=xtau-coord(no,:);
 
     % normal a face interior da regiao de iteracao
-    normal1=(R*(xtau-xsigma)');
+    normal1=(R*-(xtau-xsigma)');
     
     % calculo da area
     sielem=norm(cross(xsigma-coord(no,:),xtau-coord(no,:)))/2;
@@ -49,14 +52,10 @@ for k=1:nec
     K(2,2)=kmap(elem(ielem,5),5);
     
     % calculo da distancia ortogonal
-    %areasigma=norm(cross(xilem-coord(no,:),vec1))*0.5;
-    %areatau=norm(cross(xilem-coord(no,:),vec2))*0.5;
     dKsigma=norm(cross(xilem-coord(no,:),tsigma))/norm(tsigma);
-    %dKsigma=(coord(no,:)-xilem)*(R*(coord(v1,:)-xilem)')/norm(coord(no,:)-coord(v1,:));
     
     dKtau=norm(cross(xilem-coord(no,:),ttau))/norm(ttau);
     
-    %dKtau=(coord(v2,:)-xilem)*(R*(coord(no,:)-xilem)')/norm(coord(no,:)-coord(v2,:));
     %% ================================================================
     E(k,1)=dot(K*(R*tsigma'),R*tsigma')/dKsigma;
     E(k,2)=dot(K*(R*ttau'),R*ttau')/dKtau;
