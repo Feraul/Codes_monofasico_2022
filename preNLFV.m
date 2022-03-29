@@ -36,6 +36,10 @@ if strcmp(metodoP,'nlfvLPEW')
     elseif strcmp(interpol,'eLPEW2')
         % interpolaca LPEW2 modificado por proposto por Miao e Wu 2021
         [weight,contrcontor] = Pre_ELPEW_2(kmap,N,gravrate);
+    elseif strcmp(interpol,'LS')
+        disp('>> falta implementar!')
+    elseif strcmp(interpol,'eLS')
+        disp('>> falta implementar!')
     else
         % interpolaca LPEW1 proposto por Gao e Wu 2010
         [weight,contrcontor] = Pre_LPEW_2(kmap,N,gravrate);
@@ -44,6 +48,10 @@ if strcmp(metodoP,'nlfvLPEW')
     if strcmp(gravitational,'yes')
         [gravresult,gravrate]=gravitation(kmap,grav);
     end
+elseif strcmp(metodoP,'interpfree')
+    [parameter]=coeffinterpfree(kmap,F);
+    
+    
 elseif strcmp(metodoP,'nlfvPPS')
     %% calculo dos parametros ou constantes (ksi)
     % esta rutina estamos usando de 7/2/2016
@@ -128,6 +136,10 @@ elseif strcmp(metodoP,'lfvLPEW')
     elseif strcmp(interpol,'eLPEW2')
         % interpolaca LPEW2 modificado por proposto por Miao e Wu 2021
         [weight,contrcontor] = Pre_ELPEW_2(kmap,N,gravrate);
+     elseif strcmp(interpol,'LS')
+        disp('>> falta implementar!')
+    elseif strcmp(interpol,'eLS')
+        disp('>> falta implementar!')
     else
         % interpolaca LPEW1 proposto por Gao e Wu 2010
         [weight,contrcontor] = Pre_LPEW_2(kmap,N,gravrate);
@@ -152,6 +164,12 @@ elseif strcmp(metodoP,'mpfad')
     elseif strcmp(interpol,'eLPEW2')
         % interpolaca LPEW2 modificado por proposto por Miao e Wu 2021
         [weight,contrcontor] = Pre_ELPEW_2(kmap,N,gravrate);
+     elseif strcmp(interpol,'LS')
+        disp('>> falta implementar!')
+       
+    elseif strcmp(interpol,'eLS')
+        disp('>> falta implementar!')
+        
     else
         % interpolaca LPEW1 proposto por Gao e Wu 2010
         [weight,contrcontor] = Pre_LPEW_2(kmap,N,gravrate);
@@ -170,7 +188,7 @@ end
 %% dados inicialização métodos dos volumes finitos não linear
 gamma=0.0;                     % este parametro esta no intervalo [0,1] pode ser utilizado para o método nao linear MPFA
 p_old=1*ones(size(elem,1),1);  % inicializando a presao
-tol=1e-9;                      % tolerancia para metodos não lineares
+tol=1e-11;                      % tolerancia para metodos não lineares
 nit=2000;                      % numero de iteracoes de Picard
 er=1;                          % inicializacao do erro
 end
