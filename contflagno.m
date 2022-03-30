@@ -1,9 +1,11 @@
+% Esta funcao calcula ou impoe todos flags de contorno e seus respectivos
+% valores
 function nflag= contflagno(benchmark,bedge)
 global  bcflag coord elem
 
-% determinar o flag do nó interior e fronteira de Neumann
 
-nflag=50000*ones(size(coord,1),2); % flags 7.15934 é uma constante
+% 500000: simplesmente representa o flag dos vertices interiores
+nflag=50000*ones(size(coord,1),2); 
 
 for ifacont=1:size(bedge,1)
     a=coord(bedge(ifacont,1),:);
@@ -30,9 +32,29 @@ for ifacont=1:size(bedge,1)
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
             
             if nflag(bedge(ifacont,1),1)>200
+              % condicao de contorno de Neumann no lado superior e inferior
                nflag(bedge(ifacont,1),2)=0;
             else
+              % condicao de contorno de Dirichlet no lado direito e esquerdo
               nflag(bedge(ifacont,1),2)= -sind(x)*cosd(y);
+              
+            end
+        case 'starnonigrav2'
+            xx=bcflag(:,1)==bedge(ifacont,4);
+            rr=find(xx==1);
+            nflag(bedge(ifacont,1),1)=bcflag(rr,1);
+            
+            if nflag(bedge(ifacont,1),1)>200
+              % condicao de contorno de Neumann no lado superior e inferior
+               nflag(bedge(ifacont,1),2)=0;
+            else
+                if single(y)>0.5
+                    nflag(bedge(ifacont,1),2)= y;
+                else
+                    
+                    % condicao de contorno de Dirichlet no lado direito e esquerdo
+                    nflag(bedge(ifacont,1),2)= 10*y;
+                end
               
             end
         case{'zhangkobaise'}
