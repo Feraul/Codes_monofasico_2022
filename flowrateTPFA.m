@@ -1,7 +1,7 @@
 %funçao que calcula os fluxos nas arestas internas
 %equacoes 28 e 29 (heterogeneo) ou 15 e 16 (homogeneo)
 
-function [flowrate, flowresult]=flowrateTPFA(p,Kde,Kn,Hesq,nflag,mobility)
+function [flowrate, flowresult]=flowrateTPFA(p,Kde,Kn,Hesq,nflag,mobility,gravresult,gravrate,pinterp)
 
 global coord bedge inedge bcflag centelem
 
