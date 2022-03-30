@@ -1,3 +1,6 @@
+% este codigo contem todas as informacoes dos diferentes casos, como por
+% exemplo: tensor de permeabilidade (kmap), pressão analitica (u), termos de fonte (fonte),
+% velocidade analitica (vel),gravidade (grav)
 function[elem,kmap,normKmap,u,bedge,fonte,vel,grav]=benchmarks(benchmark, kmap,elem,bedge)
 global centelem coord inedge normals elemarea bcflag
 normKmap=0;
@@ -58,13 +61,37 @@ switch benchmark
                     %Define "x" and "y"
                     x = centelem(i,1);
                     y = centelem(i,2);
-        
+                    % solucao analitica foi calculado usando pag. 385
+                    % Calculo II Tom Apostol
                     u(i,1)= -sind(x)*cosd(y);
-                    gradu=[-cosd(x)*cosd(y) sind(x)*sind(y)];
-                    %gradu=[0 0];
-                    grav(i,:)=-gradu;
-        
+                    % gravidade
+                    grav(i,:)=[cosd(x)*cosd(y) -sind(x)*sind(y)];
+                 
                 end
+
+
+        K=kmap;
+    case 'starnonigrav2'
+        for i = 1:size(centelem,1)
+            %Define "x" and "y"
+            x = centelem(i,1);
+            y = centelem(i,2);
+            % parametro segundo  Starnoni
+            h1=1;
+            h2=10;
+            if single(y)>0.5
+                
+                % solucao analitica
+                u(i,1)= h1*y;
+                % calculo do gravidade
+                grav(i,:)=-h1*[0,1];
+            else
+                % solucao analitica
+                u(i,1)= h2*y;
+                % calculo do gravidade
+                grav(i,:)=-h2*[0,1];
+            end
+        end
 
 
         K=kmap;
