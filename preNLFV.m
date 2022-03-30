@@ -182,8 +182,10 @@ else
     %% calculo das constantes fisicos-geometrico para o TPFA
     [Hesq, Kde, Kn, Kt, Ded]=preMPFAD(kmap);
     % adequação dos flags de contorno
-    nflagno= contflagno(benchmark);
-    
+    nflagno= contflagno(benchmark,bedge);
+    if strcmp(gravitational,'yes')
+        [gravresult,gravrate]=gravitation(kmap,grav);
+    end
 end
 %% dados inicialização métodos dos volumes finitos não linear
 gamma=0.0;                     % este parametro esta no intervalo [0,1] pode ser utilizado para o método nao linear MPFA
