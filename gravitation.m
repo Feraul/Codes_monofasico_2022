@@ -4,10 +4,10 @@ Klef=zeros(2,2);
 Krel=zeros(2,2);
 G=zeros(size(elem,1),1);
 for i=1:size(bedge,1)
-    
-   
-        
-        lef=bedge(i,3);  
+
+    lef=bedge(i,3); 
+    if bedge(i,5)<200
+         
         % tensor de permeabilidade do elemento a esquerda
         Klef(1,1)=kmap(elem(lef,5),2);
         Klef(1,2)=kmap(elem(lef,5),3);
@@ -16,6 +16,11 @@ for i=1:size(bedge,1)
         g(i,1)=dot(normals(i,1:2),(Klef*grav(lef,:)')');
         
         G(lef,1)=G(lef,1)+g(i,1);
+    else
+       g(i,1)=0;
+        
+        G(lef,1)=G(lef,1)+g(i,1); 
+    end
 end
 
 for ii=1:size(inedge,1)
