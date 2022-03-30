@@ -35,7 +35,7 @@ elseif strcmp(metodoP,'lfvHP')
 elseif strcmp(metodoP,'mpfad')
     [ M, I ] = globalmatrixmpfad( w,s, Kde, Ded, Kn, Kt, nflagno, Hesq,wells,1,fonte,gravresult,gravrate);
 elseif strcmp(metodoP,'tpfa')
-    [ M, I ] = globalmatrixtpfa( Kde, Kn, nflag, Hesq,wells,mobility);
+    [ M, I ] = globalmatrixtpfa( Kde, Kn, nflagno, Hesq,gravresult,gravrate);
    
 end
 end
