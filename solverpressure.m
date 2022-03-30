@@ -185,7 +185,7 @@ elseif strcmp(metodoP, 'lfvLPEW')
     [flowrate,flowresult]=flowratelfvLPEW(parameter,weightDMP,mobility,pinterp,pressure);
     
 elseif  strcmp(metodoP, 'tpfa')
-    [flowrate, flowresult]=flowrateTPFA(pressure,Kde,Kn,Hesq,nflagno,mobility);
+    [flowrate, flowresult]=flowrateTPFA(pressure,Kde,Kn,Hesq,nflagno,mobility,gravresult,gravrate,pinterp);
 else
     %calculo das vazões
     [flowrate,flowresult]=calflowrateMPFAD(pressure,w,s,Kde,Ded,Kn,Kt,Hesq,nflagno,1,gravresult,gravrate,pinterp);
