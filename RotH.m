@@ -1,6 +1,6 @@
 function [RH]=RotH(vi)
 %Função que retorna a rotação de um certo vetor em 90 graus, 
-%anti-horariamente, na primeira coluna da matriz R, e horariamente, 
+%horariamente, na primeira coluna da matriz R, e horariamente, 
 %na segunda. Restringe um vetor de 3 coordenadas a um de 2, considerando
 %que a terceira coordenada é nula.
 % vi2=zeros(2,1);
