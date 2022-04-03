@@ -164,7 +164,7 @@ elseif strcmp(metodoP,'lfvHP')||strcmp(metodoP,'nlfvDMPV1')
             r=find(x==1);
             
             % calcula o fluxo na face "ifacelef2"
-            fluxoN=normcont*bcflag(r,2)-g(ifacont,1);
+            fluxoN=normcont*bcflag(r,2);
             %mobil=mobility(ifacont);
             % "faceoposto" é aquele face oposto ao "ifacont"
             if faceoposto<size(bedge,1) || faceoposto==size(bedge,1)
@@ -185,7 +185,7 @@ elseif strcmp(metodoP,'lfvHP')||strcmp(metodoP,'nlfvDMPV1')
                     
                     x=bcflag(:,1)==bedge(faceoposto,5);
                     r=find(x==1);
-                    fluxOpost=normcontopost*bcflag(r,2)-g(faceoposto,1);
+                    fluxOpost=normcontopost*bcflag(r,2);
                     
                     if auxfacelef1==faceoposto
                         atualksO=parameter(1,1,faceoposto);

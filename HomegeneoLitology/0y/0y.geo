@@ -1,12 +1,12 @@
 //--------------------------------------------------------------------
 //---------------- UNIVERSIDADE FEDERAL DE PERNAMBUCO ----------------
 //---------------- CENTRO DE TECNOLOGIA E GEOCIENCIAS ----------------
+//---------- PROGRAMA DE POS GRADUACAO EM ENGENHARIA CIVIL -----------
 //--------------------------------------------------------------------
 
-//Work developed by: Marcio Souza, Luiz E. Queiroz e Fernando Contreras
+//Work developed by: Marcio Souza and Luiz E. Queiroz
 //Adviser Professors: Paulo Lyra & Darlan Carvalho
-//Create date: 13/12/2011
-//Create date: 2022/3/29;	hour: 18:59h
+//Create date: 2022/3/31;	hour: 18:49h
 
 //--------------------------------------------------------------------
 //This file has CAD parameters. It is related to building of domain

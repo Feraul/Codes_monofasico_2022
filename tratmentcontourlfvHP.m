@@ -1,5 +1,5 @@
 function [M,I]=tratmentcontourlfvHP(ifacelef,parameter,nflagface,normcont,...
-                         mobility,auxparameter,auxmobility,lef,weightDMP,M,I,g)
+                         mobility,auxparameter,auxmobility,lef,weightDMP,M,I)
  global bedge bcflag coord
 termo0=auxmobility*normcont*auxparameter;
 % ifacelef1 por pertencer a face interior, á face Neumann
@@ -21,7 +21,7 @@ if ifacelef<size(bedge,1) || ifacelef==size(bedge,1)
         r=find(x==1);
         
         % calcula o fluxo na face "ifacelef1"
-        fluxoN=normcont*bcflag(r,2)+g(ifacelef,1);
+        fluxoN=normcont*bcflag(r,2);
         
         % retorna as faces que formam os eixos auxiliares
         auxifacelef1=parameter(1,3,ifacelef);
@@ -66,7 +66,7 @@ if ifacelef<size(bedge,1) || ifacelef==size(bedge,1)
                 
                 x=bcflag(:,1)==bedge(faceoposto,5);
                 r=find(x==1);
-                fluxOpost=normcontopost*bcflag(r,2)+g(faceoposto,1);
+                fluxOpost=normcontopost*bcflag(r,2);
                 % caso II. Quando a face oposto pertence ao contorno de Neumann
                 
                 if auxifacelef1==faceoposto

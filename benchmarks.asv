@@ -1,7 +1,7 @@
 % este codigo contem todas as informacoes dos diferentes casos, como por
 % exemplo: tensor de permeabilidade (kmap), pressão analitica (u), termos de fonte (fonte),
 % velocidade analitica (vel),gravidade (grav)
-function[elem,kmap,normKmap,u,bedge,fonte,vel,grav,gravno,gravelem,gravface]=benchmarks(benchmark, kmap,elem,bedge)
+function[elem,kmap,normKmap,u,bedge,fonte,vel,grav,gravno,gravelem]=benchmarks(benchmark, kmap,elem,bedge)
 global centelem coord inedge normals elemarea bcflag
 normKmap=0;
 vel=0;
@@ -86,17 +86,29 @@ switch benchmark
                v2=bedge(j,2);
                
                a=0.5*(coord(v1,:)+coord(v2,:));
-               x2=a(1,1);
-               y2=a(1,2);
+               x1=
+               y1=a(1,2);
             else
                v1=inedge(j-size(bedge,1),1);
                v2=inedge(j-size(bedge,1),2);
                
                a=0.5*(coord(v1,:)+coord(v2,:));
-               x2=a(1,1);
-               y2=a(1,2);  
+               y1=a(1,2);  
             end
-             gravface(j,1)= sind(x2)*cosd(y2);           
+            
+            % parametro segundo  Starnoni
+            h1=1;
+            h2=10;
+            if single(y1)>0.5
+                
+                % solucao analitica
+                gravface(j,1)= -h1*y1;
+            else
+                % solucao analitica
+                gravface(j,1)= -h2*y1;
+                
+            end
+            
         end
 
         K=kmap;

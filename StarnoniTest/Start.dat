@@ -1,9 +1,10 @@
 //--------------------------------------------------------------------
 //---------------- UNIVERSIDADE FEDERAL DE PERNAMBUCO ----------------
 //---------------- CENTRO DE TECNOLOGIA E GEOCIENCIAS ----------------
+//---------- PROGRAMA DE POS GRADUACAO EM ENGENHARIA CIVIL -----------
 //--------------------------------------------------------------------
 
-//Work developed by: Marcio Souza, Luiz E. Queiroz e Fernando Contreras
+//Work developed by: Marcio Souza and Luiz E. Queiroz
 //Adviser Professors: Paulo Lyra & Darlan Carvalho
 //Create date: 13/12/2011
 
@@ -18,14 +19,14 @@ n
 //If [y] write, immediately below, only the name of mesh file with 
 //extension *.msh:
 
-Tipo6Malha1.msh
+malha6_triangular_72_72_cilamce_2019_4_3.msh
 
 //OBS.: This file must be puted into folder together with *.m files 
 //or in a folder whose path will be declared immediately below:
 //IMPORTANT: if the file is puted into folder which contain the *.m
 //files, write in the statment below "no path".
 
-C:\Users\flc59\Documents\Malhas
+C:\Users\fernando\Desktop\Codes_unificado_2019_monofasico
 
 //If [n] write, immediately below, the path which conduct to  
 //folder where the *.m files is:
@@ -38,7 +39,7 @@ C:\Users\flc59\Documents\GitHub\Codes_monofasico_2022
 //This file can serve to several simulations. Each one may have 
 //a different configuration. Therefore is a BASE file. 
 
-five_spot
+StarnoniTest
 
 //Write either a number or other reference to feature the CAD above:
 //OBS.: If you do not want a complementar label, leave "0" below:
@@ -89,14 +90,17 @@ y
 //Direction "x" (number of statments, number of points, growth rate 
 //and two geometric tag)
 
-1
-7 1 1 3
+2
+1 1 1 7
+1 1 4 7
 
 //Direction "y" (number of statments, number of points, growth rate 
 //and two geometric tag)
 
-1
-7 1 2 4
+2
+1 1 2 6
+1 1 3 5
+
 
 //IMPORTANT: In case where there are two or more properties to long
 //domain, the user must take care during attribution of parameters 
@@ -109,7 +113,7 @@ y
 //The half size of mesh element. Write below the value you want.
 //[1] ==> "DEFAULT value"
 
-0.3333
+ 0.1250
 
 //The maximum mesh element size. Write below the value you want.
 //[1e22] ==> "DEFAULT Option" 
@@ -128,7 +132,7 @@ y
 //or unstructured mesh
 //[0] ==> "Triangles"; [1] ==> "Quadrangles"; [2] ==> "Both"
 
-0
+1
 
 //OBS.: 
 //The option "Both" does not work when the mesh is structured. 
@@ -310,8 +314,8 @@ kmap.dat
 //and below that, more four components and so on.    
 
 1
-1 0
-0 1
+1 0.1
+0.1 1
 
 //--------------------------------------------------------------------
 //Distribution of porosity:
@@ -367,8 +371,10 @@ porosity.dat
 //group seted into "*.geo" file will be associated with the 1st code 
 //declared below and so on.
 
-1
-101 0
+3
+201 0
+101 1
+102 0
 
 //--------------------------------------------------------------------
 //Tratment of boundary points
@@ -384,8 +390,8 @@ porosity.dat
 //group reported to points will be associated with 1st code written
 //below.
 
-1
-101   
+2
+101 102
 
 //--------------------------------------------------------------------
 //----------------------- Convergence criteria -----------------------
@@ -464,5 +470,5 @@ vpi
 //necessary to erase the numbers below it. Keep it to reference.  
 
 0
-1 1 0 0.025 301 1  0  1 1
-1 0 1 0.025   0 0 501 0 1
+1 0 0 0.025 301 1  0  1 1
+1 1 1 0.025   0 0 501 0 1

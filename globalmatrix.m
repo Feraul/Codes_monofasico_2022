@@ -1,7 +1,8 @@
 % funcao que faz a montagem da matrizes globais para todos os metodos
 % estudado
 function [M,I]=globalmatrix(p,pinterp,gamma,nflagface,nflagno,parameter,kmap,...
-    fonte,metodoP,w,s,benchmark,weightDMP,auxface,wells,mobility,Hesq, Kde, Kn, Kt, Ded,calnormface,gravresult,gravrate)
+    fonte,metodoP,w,s,benchmark,weightDMP,auxface,wells,mobility,Hesq,...
+    Kde, Kn, Kt, Ded,calnormface,gravresult,gravrate,gravno,gravelem,gravface,gravitational)
 
 
 if strcmp(metodoP,'nlfvDMP1')
@@ -31,11 +32,13 @@ elseif strcmp(metodoP,'lfvLPEW')
     [M,I]=assemblematrixlfvLPEW(parameter,fonte,w,s,nflagno,weightDMP,wells,mobility);
 elseif strcmp(metodoP,'lfvHP')
     
-    [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,mobility,gravresult);
+    [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,mobility,gravresult,gravelem,gravface);
 elseif strcmp(metodoP,'mpfad')
-    [ M, I ] = globalmatrixmpfad( w,s, Kde, Ded, Kn, Kt, nflagno, Hesq,wells,1,fonte,gravresult,gravrate);
+    [ M, I ] = globalmatrixmpfad(w,s, Kde, Ded, Kn, Kt, nflagno, Hesq,...
+        fonte,gravresult,gravrate,gravno,gravelem,gravitational);
 elseif strcmp(metodoP,'tpfa')
-    [ M, I ] = globalmatrixtpfa( Kde, Kn, nflagno, Hesq,gravresult,gravrate);
+    [ M, I ] = globalmatrixtpfa( Kde, Kn, nflagface, Hesq,gravresult,...
+        gravrate,gravno,gravelem,gravitational);
    
 end
 end

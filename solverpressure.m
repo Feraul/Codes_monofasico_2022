@@ -2,7 +2,7 @@ function [pressure,errorelativo,flowrate,flowresult,tabletol,coercividade]=...
     solverpressure(kmap,nflagface,nflagno,fonte,...
     tol, nit,p_old,mobility,gamma,wells,parameter,metodoP,...
     Hesq, Kde, Kn, Kt, Ded,weightDMP,auxface,benchmark,...
-    iteration,calnormface,gravresult,gravrate,w,s)
+    iteration,calnormface,gravresult,gravrate,w,s,gravno,gravelem,gravface,gravitational)
 
 errorelativo=0;
 tabletol=0;
@@ -150,7 +150,8 @@ switch metodoP
         % calculo da matriz globlal inicial
         [M_old,RHS_old]=globalmatrix(p_old,pinterp,gamma,nflagface,nflagno,...
             parameter,kmap,fonte,metodoP,w,s,benchmark,weightDMP,auxface,wells,...
-            mobility,Hesq, Kde, Kn, Kt, Ded,calnormface,gravresult,gravrate);
+            mobility,Hesq, Kde, Kn, Kt, Ded,calnormface,gravresult,gravrate,...
+            gravno,gravelem,gravface,gravitational);
         pressure=M_old\RHS_old;
         
         tabletol=0;
@@ -185,7 +186,7 @@ elseif strcmp(metodoP, 'lfvLPEW')
     [flowrate,flowresult]=flowratelfvLPEW(parameter,weightDMP,mobility,pinterp,pressure);
     
 elseif  strcmp(metodoP, 'tpfa')
-    [flowrate, flowresult]=flowrateTPFA(pressure,Kde,Kn,Hesq,nflagno,mobility,gravresult,gravrate,pinterp);
+    [flowrate, flowresult]=flowrateTPFA(pressure,Kde,Kn,Hesq,nflagface,mobility,gravresult,gravrate,pinterp);
 else
     %calculo das vazões
     [flowrate,flowresult]=calflowrateMPFAD(pressure,w,s,Kde,Ded,Kn,Kt,Hesq,nflagno,1,gravresult,gravrate,pinterp);

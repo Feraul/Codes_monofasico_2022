@@ -1,6 +1,5 @@
 function [ M, I ] = globalmatrixmpfad( w,s, Kde, Ded, Kn, Kt, nflag, ...
-    Hesq,wells,mobility,fonte,...
-    gravresult,gravrate,pinterp)
+    Hesq,fonte,gravresult,gravrate,gravno,gravelem,gravitational)
 
 global coord elem esurn1 esurn2  bedge inedge  centelem elemarea bcflag
 
@@ -10,30 +9,36 @@ global coord elem esurn1 esurn2  bedge inedge  centelem elemarea bcflag
 M=sparse(size(elem,1),size(elem,1)); %Prealocação de M.
 I=sparse(size(elem,1),1);
 % fonte
-I=I+fonte;%-gravresult;
+I=I+fonte;
 % contribuição dos poços
-
+m=0;
+m3=0;
 for ifacont=1:size(bedge,1)
+    lef=bedge(ifacont,3);
     
     v0=coord(bedge(ifacont,2),:)-coord(bedge(ifacont,1),:); %fase.
     v1=centelem(bedge(ifacont,3),:)-coord(bedge(ifacont,1),:);
     v2=centelem(bedge(ifacont,3),:)-coord(bedge(ifacont,2),:);
     normcont=norm(v0);
+    
     % Tratamento do nó nos vértices 2 e 4%
     
     if bedge(ifacont,5)<200
         c1=nflag(bedge(ifacont,1),2);
         c2=nflag(bedge(ifacont,2),2);
-        
         A=-Kn(ifacont)/(Hesq(ifacont)*norm(v0));
-        
+        if strcmp(gravitational,'yes')
+            m1=gravno(bedge(ifacont,1),1);
+            m2=gravno(bedge(ifacont,2),1);
+            m=A*(dot(v2,-v0)*m1+dot(v1,v0)*m2-norm(v0)^2*gravelem(lef))-(m2-m1)*Kt(ifacont);
+        end
         %Preenchimento
         
         M(bedge(ifacont,3),bedge(ifacont,3))=M(bedge(ifacont,3),bedge(ifacont,3))-A*(norm(v0)^2);
         
-        I(bedge(ifacont,3))=I(bedge(ifacont,3))-(dot(v2,-v0)*c1+dot ...
-            (v1,v0)*c2)*A+(c2-c1)*Kt(ifacont)-normcont*A*gravrate(ifacont,1);
-      
+        I(bedge(ifacont,3))=I(bedge(ifacont,3))-A*(dot(v2,-v0)*c1+dot ...
+            (v1,v0)*c2)+(c2-c1)*Kt(ifacont)-m;
+        
     else
         % contorno de Neumann
         x=bcflag(:,1)==bedge(ifacont,5);
@@ -41,13 +46,14 @@ for ifacont=1:size(bedge,1)
         I(bedge(ifacont,3))=I(bedge(ifacont,3)) -normcont*bcflag(r,2);
     end
     
-   
+    
 end
 
 
 % contribuição nas faces internas
 for iface=1:size(inedge,1)
-    norma=norm(coord(inedge(iface,1),:)-coord(inedge(iface,2),:));
+    lef=inedge(iface,3);
+    rel=inedge(iface,4);
     %Contabiliza as contribuições do fluxo numa aresta para os elementos %
     %a direita e a esquerda dela.                                        %
     
@@ -106,19 +112,11 @@ for iface=1:size(inedge,1)
             M(inedge(iface,4), esurn1(post_cont))=M(inedge(iface,4),esurn1(post_cont)) + Kde(iface)*Ded(iface)*w(post_cont);
         end
     end
-     I(inedge(iface,3))=I(inedge(iface,3))-norma*Kde(iface)*gravrate(iface+size(bedge,1),1);
-     I(inedge(iface,4))=I(inedge(iface,4))+norma*Kde(iface)*gravrate(iface+size(bedge,1),1);
-end
-% adequação da matriz nos poços produtores
-% if max(wells)~=0
-%     for iw = 1:size(wells,1)
-%         if wells(iw,2)==2 %produtor
-%             M(wells(iw,1),:)=0*M(wells(iw,1),:);
-%             M(wells(iw,1),wells(iw,1))=1;
-%             I(wells(iw,1))=0;
-%         end
-%     end
-% end
-
+    if strcmp(gravitational,'yes')
+        m3= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1)-Ded(iface)*(gravno(inedge(iface,2))-gravno(inedge(iface,1))));
+        I(inedge(iface,3))=I(inedge(iface,3))-m3;
+        I(inedge(iface,4))=I(inedge(iface,4))+m3;
+    
+    end
 end
 

@@ -1,7 +1,7 @@
 %funçao que calcula os fluxos nas arestas internas
 %equacoes 28 e 29 (heterogeneo) ou 15 e 16 (homogeneo)
 
-function [flowrate, flowresult]=flowrateTPFA(p,Kde,Kn,Hesq,nflag,mobility,gravresult,gravrate,pinterp)
+function [flowrate, flowresult]=flowrateTPFA(p,Kde,Kn,Hesq,nflagface,mobility,gravresult,gravrate,pinterp)
 
 global coord bedge inedge bcflag centelem
 
@@ -25,8 +25,8 @@ for ifacont=1:size(bedge,1);
     % calculo das constantes nas faces internas
     A=-Kn(ifacont)/(Hesq(ifacont)*nor);
     if bedge(ifacont,5)<200 % se os nós esteverem na fronteira de DIRICHLET
-        c1=nflag(bedge(ifacont,1),2);
-        c2=nflag(bedge(ifacont,2),2);
+        c1=nflagface(ifacont,2);
+        
         
         flowrate(ifacont)=mobility(ifacont)*A*(nor^2)*(c1-p(lef));
     else

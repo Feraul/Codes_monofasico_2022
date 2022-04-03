@@ -182,7 +182,7 @@ else
     %% calculo das constantes fisicos-geometrico para o TPFA
     [Hesq, Kde, Kn, Kt, Ded]=preMPFAD(kmap);
     % adequação dos flags de contorno
-    nflagno= contflagno(benchmark,bedge);
+    nflagface= contflagface(benchmark,bedge);
     if strcmp(gravitational,'yes')
         [gravresult,gravrate]=gravitation(kmap,grav);
     end
