@@ -119,57 +119,131 @@ switch benchmark
                 % solucao analitica
                 u(i,1)= -sind(x)*cosd(y)+h2*y;
                 % calculo do gravidade
-                grav(i,:)=[cosd(x)*cosd(y) -h2-sind(x)*sind(y)];;
+                grav(i,:)=[cosd(x)*cosd(y) -h2-sind(x)*sind(y)];
                 gravelem(i,1)=sind(x)*cosd(y)-h2*y;
             end
         end
         for j=1:size(coord,1)
             %Define "x" and "y"
-            x1=coord(j,1);
-            y1 = coord(j,2);
+            x21=coord(j,1);
+            y21 = coord(j,2);
             % parametro segundo  Starnoni
             h1=1;
             h2=10;
-            if single(y1)>0.5
+            if single(y21)>0.5
                 
                 % solucao analitica
-                gravno(j,1)= sind(x1)*cosd(y1)-h1*y;
+                gravno(j,1)= sind(x21)*cosd(y21)-h1*y21;
             else
                 % solucao analitica
-                gravno(j,1)= sind(x1)*cosd(y1)-h2*y;
+                gravno(j,1)= sind(x21)*cosd(y21)-h2*y21;
                 
             end
             
         end
         
-        for j=1:size(bedge,1)+size(inedge,1)
+        for jj=1:size(bedge,1)+size(inedge,1)
             %Define "x" and "y"
-            if j<=size(bedge,1)
-               v1=bedge(j,1);
-               v2=bedge(j,2);
+            if jj<=size(bedge,1)
+               v1=bedge(jj,1);
+               v2=bedge(jj,2);
                
                a=0.5*(coord(v1,:)+coord(v2,:));
-               x1=a(1,1);
-               y1=a(1,2);
+              
             else
-               v1=inedge(j-size(bedge,1),1);
-               v2=inedge(j-size(bedge,1),2);
+               v1=inedge(jj-size(bedge,1),1);
+               v2=inedge(jj-size(bedge,1),2);
                
                a=0.5*(coord(v1,:)+coord(v2,:));
-               x1=a(1,1);
-               y1=a(1,2);  
+              
             end
-            
+             x11=a(1,1);
+             y11=a(1,2);  
             % parametro segundo  Starnoni
             h1=1;
             h2=10;
-            if single(y1)>0.5
+            if single(y11)>0.5
                 
                 % solucao analitica
-                gravface(j,1)= sind(x1)*cosd(y1)-h1*y;
+                gravface(jj,1)= sind(x11)*cosd(y11)-h1*y11;
             else
                 % solucao analitica
-                gravface(j,1)= sind(x1)*cosd(y1)-h2*y;
+                gravface(jj,1)= sind(x11)*cosd(y11)-h2*y11;
+                
+            end
+            
+        end
+        
+        K=kmap;
+     case 'starnonigrav4'
+         for i = 1:size(centelem,1)
+            %Define "x" and "y"
+            x = centelem(i,1);
+            y = centelem(i,2);
+            % parametro segundo  Starnoni
+            h1=1;
+            h2=10;
+            if single(y)>0.5
+                
+                % solucao analitica
+                u(i,1)= -100*sind(x)*cosd(y)+h1*y;
+                gravelem(i,1)=100*sind(x)*cosd(y)-h1*y;
+                % calculo do gravidade
+                grav(i,:)=[cosd(x)*cosd(y) -h1-sind(x)*sind(y)];
+            else
+                % solucao analitica
+                u(i,1)= -100*sind(x)*cosd(y)+h2*y;
+                % calculo do gravidade
+                grav(i,:)=[cosd(x)*cosd(y) -h2-sind(x)*sind(y)];
+                gravelem(i,1)=100*sind(x)*cosd(y)-h2*y;
+            end
+        end
+        for j=1:size(coord,1)
+            %Define "x" and "y"
+            x21=coord(j,1);
+            y21 = coord(j,2);
+            % parametro segundo  Starnoni
+            h1=1;
+            h2=10;
+            if single(y21)>0.5
+                
+                % solucao analitica
+                gravno(j,1)= 100*sind(x21)*cosd(y21)-h1*y21;
+            else
+                % solucao analitica
+                gravno(j,1)= 100*sind(x21)*cosd(y21)-h2*y21;
+                
+            end
+            
+        end
+        
+        for jj=1:size(bedge,1)+size(inedge,1)
+            %Define "x" and "y"
+            if jj<=size(bedge,1)
+               v1=bedge(jj,1);
+               v2=bedge(jj,2);
+               
+               a=0.5*(coord(v1,:)+coord(v2,:));
+              
+            else
+               v1=inedge(jj-size(bedge,1),1);
+               v2=inedge(jj-size(bedge,1),2);
+               
+               a=0.5*(coord(v1,:)+coord(v2,:));
+              
+            end
+             x11=a(1,1);
+             y11=a(1,2);  
+            % parametro segundo  Starnoni
+            h1=1;
+            h2=10;
+            if single(y11)>0.5
+                
+                % solucao analitica
+                gravface(jj,1)= 100*sind(x11)*cosd(y11)-h1*y11;
+            else
+                % solucao analitica
+                gravface(jj,1)= 100*sind(x11)*cosd(y11)-h2*y11;
                 
             end
             
@@ -199,20 +273,20 @@ switch benchmark
                 gravelem(i,1)=-h2*y;
             end
         end
-        for j=1:size(coord,1)
+        for jj=1:size(coord,1)
             %Define "x" and "y"
             
-            y1 = coord(j,2);
+            y2 = coord(jj,2);
             % parametro segundo  Starnoni
             h1=1;
             h2=10;
-            if single(y1)>0.5
+            if single(y2)>0.5
                 
                 % solucao analitica
-                gravno(j,1)= -h1*y1;
+                gravno(jj,1)= -h1*y2;
             else
                 % solucao analitica
-                gravno(j,1)= -h2*y1;
+                gravno(jj,1)= -h2*y2;
                 
             end
             
@@ -225,25 +299,25 @@ switch benchmark
                v2=bedge(j,2);
                
                a=0.5*(coord(v1,:)+coord(v2,:));
-               y1=a(1,2);
+               y11=a(1,2);
             else
                v1=inedge(j-size(bedge,1),1);
                v2=inedge(j-size(bedge,1),2);
                
                a=0.5*(coord(v1,:)+coord(v2,:));
-               y1=a(1,2);  
+               y11=a(1,2);  
             end
             
             % parametro segundo  Starnoni
             h1=1;
             h2=10;
-            if single(y1)>0.5
+            if single(y11)>0.5
                 
                 % solucao analitica
-                gravface(j,1)= -h1*y1;
+                gravface(j,1)= -h1*y11;
             else
                 % solucao analitica
-                gravface(j,1)= -h2*y1;
+                gravface(j,1)= -h2*y11;
                 
             end
             
