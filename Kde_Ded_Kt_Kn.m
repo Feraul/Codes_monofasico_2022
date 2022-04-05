@@ -16,6 +16,7 @@ K1=zeros(3,3);
 K2=zeros(3,3);
 K=zeros(3,3);
 
+R=[0 1 0;-1 0 0;0 0 0];
 
 %Loop de arestas internas.%
 
@@ -58,12 +59,13 @@ for iface=1:size(inedge,1),
     K2(2,1)=kmap(elem(inedge(iface,4),5),4);
     K2(2,2)=kmap(elem(inedge(iface,4),5),5);
     
-    % calculo das constantes tangenciais e normais em cada face interna
-    Kn1=(RotH(vd1)'*K1*RotH(vd1))/norm(vd1)^2;
-    Kt1=(RotH(vd1)'*K1*(vd1)')/norm(vd1)^2;
     
-    Kn2=(RotH(vd1)'*K2*RotH(vd1))/norm(vd1)^2;
-    Kt2=(RotH(vd1)'*K2*(vd1)')/norm(vd1)^2;
+    % calculo das constantes tangenciais e normais em cada face interna
+    Kn1 = (RotH(vd1)'*K1*RotH(vd1))/norm(vd1)^2;
+    Kt1 = (RotH(vd1)'*K1*(vd1)')/norm(vd1)^2;
+    
+    Kn2 = (RotH(vd1)'*K2*RotH(vd1))/norm(vd1)^2;
+    Kt2 = (RotH(vd1)'*K2*(vd1)')/norm(vd1)^2;
     % calculo das constantes nas faces internas
     Kde(iface)=-norm(vd1)*((Kn1*Kn2))/(Kn1*H2+Kn2*H1);
     % Ded: é uma constante que tem constantes geometricas + contantes
@@ -100,8 +102,8 @@ for ifacont=1:size(bedge,1)
     
     %Cálculo das constantes tangenciais e normais
     
-    Kn(ifacont)=(RotH(ve1)'*K*RotH(ve1))/norm(ve1)^2;
-    Kt(ifacont)=(RotH(ve1)'*K*(ve1)')/norm(ve1)^2;
+    Kn(ifacont) = (RotH(ve1)'*K*RotH(ve1))/norm(ve1)^2;
+    Kt(ifacont) = (RotH(ve1)'*K*(ve1)')/norm(ve1)^2;
     
     %Adequação dos flags dos nós de Dirichlet
     
