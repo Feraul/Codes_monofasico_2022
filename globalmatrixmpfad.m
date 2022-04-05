@@ -12,7 +12,7 @@ I=sparse(size(elem,1),1);
 I=I+fonte;
 % contribuição dos poços
 m=0;
-m3=0;
+
 for ifacont=1:size(bedge,1)
     lef=bedge(ifacont,3);
     
@@ -30,14 +30,15 @@ for ifacont=1:size(bedge,1)
         if strcmp(gravitational,'yes')
             m1=gravno(bedge(ifacont,1),1);
             m2=gravno(bedge(ifacont,2),1);
-            m=A*(dot(v2,-v0)*m1+dot(v1,v0)*m2-norm(v0)^2*gravelem(lef))-(m2-m1)*Kt(ifacont);
+            m(ifacont,1)=A*(dot(v2,-v0)*m1+dot(v1,v0)*m2-norm(v0)^2*gravelem(lef))-(m2-m1)*Kt(ifacont);
+            %m(ifacont,1)=gravrate(ifacont);
         end
         %Preenchimento
         
         M(bedge(ifacont,3),bedge(ifacont,3))=M(bedge(ifacont,3),bedge(ifacont,3))-A*(norm(v0)^2);
         
         I(bedge(ifacont,3))=I(bedge(ifacont,3))-A*(dot(v2,-v0)*c1+dot ...
-            (v1,v0)*c2)+(c2-c1)*Kt(ifacont)-m;
+            (v1,v0)*c2)+(c2-c1)*Kt(ifacont)-m(ifacont,1);
         
     else
         % contorno de Neumann
@@ -113,9 +114,10 @@ for iface=1:size(inedge,1)
         end
     end
     if strcmp(gravitational,'yes')
-        m3= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1)-Ded(iface)*(gravno(inedge(iface,2))-gravno(inedge(iface,1))));
-        I(inedge(iface,3))=I(inedge(iface,3))-m3;
-        I(inedge(iface,4))=I(inedge(iface,4))+m3;
+        m(iface+size(bedge,1))= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1)-Ded(iface)*(gravno(inedge(iface,2))-gravno(inedge(iface,1))));
+        %m(iface+size(bedge,1))=gravrate(size(bedge,1)+iface,1);
+        I(inedge(iface,3))=I(inedge(iface,3))-m(iface+size(bedge,1));
+        I(inedge(iface,4))=I(inedge(iface,4))+m(iface+size(bedge,1));
     
     end
 end
