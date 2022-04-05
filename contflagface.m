@@ -39,6 +39,23 @@ for ifacont=1:size(bedge,1)
                     nflag(ifacont,2)=-sind(x)*cosd(y)+ 10*y;
                 end 
                  
+            end 
+         case {'starnonigrav4'}
+             xx=bcflag(:,1)==bedge(ifacont,5);
+            rr=find(xx==1);
+            nflag(ifacont,1)=bcflag(rr,1);
+            
+            if nflag(ifacont,1)>200
+               nflag(ifacont,2)=0;
+            else
+               if single(y)>0.5
+                    nflag(ifacont,2)=-100*sind(x)*cosd(y)+ 1*y;
+                else
+                    
+                    % condicao de contorno de Dirichlet no lado direito e esquerdo
+                    nflag(ifacont,2)=-100*sind(x)*cosd(y)+ 10*y;
+                end 
+                 
             end   
         case {'starnonigrav2'}
              xx=bcflag(:,1)==bedge(ifacont,5);
