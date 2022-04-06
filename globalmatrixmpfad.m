@@ -22,18 +22,19 @@ for ifacont=1:size(bedge,1)
     normcont=norm(v0);
     
     % Tratamento do nó nos vértices 2 e 4%
-    
+      A=-Kn(ifacont)/(Hesq(ifacont)*norm(v0));  
     if bedge(ifacont,5)<200
         c1=nflag(bedge(ifacont,1),2);
         c2=nflag(bedge(ifacont,2),2);
-        A=-Kn(ifacont)/(Hesq(ifacont)*norm(v0));
+       
+        %Preenchimento
+        
         if strcmp(gravitational,'yes')
             m1=gravno(bedge(ifacont,1),1);
             m2=gravno(bedge(ifacont,2),1);
             m(ifacont,1)=A*(dot(v2,-v0)*m1+dot(v1,v0)*m2-norm(v0)^2*gravelem(lef))-(m2-m1)*Kt(ifacont);
-            %m(ifacont,1)=gravrate(ifacont);
+           % m(ifacont,1)=gravrate(ifacont);
         end
-        %Preenchimento
         
         M(bedge(ifacont,3),bedge(ifacont,3))=M(bedge(ifacont,3),bedge(ifacont,3))-A*(norm(v0)^2);
         
@@ -41,13 +42,30 @@ for ifacont=1:size(bedge,1)
             (v1,v0)*c2)+(c2-c1)*Kt(ifacont)-m(ifacont,1);
         
     else
+%         no1=bedge(ifacont,1);
+%         no2=bedge(ifacont,2);
+%         nec1=esurn2(no1+1)-esurn2(no1);
+%         nec2=esurn2(no2+1)-esurn2(no2);
+%         g1=0;
+%         
+%         for j=1:nec1
+%             element1=esurn1(esurn2(no1)+j);
+%             g1=g1+w(esurn2(no1)+j)*gravelem(element1);
+%         end
+%         g2=0;
+%         for j=1:nec2
+%             element2=esurn1(esurn2(no2)+j);
+%             g2=g2+w(esurn2(no2)+j)*gravelem(element2);
+%         end
+%             
+        % m(ifacont,1)=A*(dot(v2,-v0)*gravno(bedge(ifacont,1),1)+dot(v1,v0)*gravno(bedge(ifacont,2),1)-norm(v0)^2*gravelem(lef))-(gravno(bedge(ifacont,2),1)-gravno(bedge(ifacont,1),1))*Kt(ifacont);
+        %m(ifacont,1)=A*(dot(v2,-v0)*g1+dot(v1,v0)*g2-norm(v0)^2*gravelem(lef))-(g2-g1)*Kt(ifacont);
         % contorno de Neumann
         x=bcflag(:,1)==bedge(ifacont,5);
         r=find(x==1);
-        I(bedge(ifacont,3))=I(bedge(ifacont,3)) -normcont*bcflag(r,2);
+        I(bedge(ifacont,3))=I(bedge(ifacont,3)) -normcont*bcflag(r,2);%- m(ifacont,1);
     end
-    
-    
+   
 end
 
 
@@ -114,11 +132,28 @@ for iface=1:size(inedge,1)
         end
     end
     if strcmp(gravitational,'yes')
-        m(iface+size(bedge,1))= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1)-Ded(iface)*(gravno(inedge(iface,2))-gravno(inedge(iface,1))));
+        no1=inedge(iface,1);
+        no2=inedge(iface,2);
+        nec1=esurn2(no1+1)-esurn2(no1);
+        nec2=esurn2(no2+1)-esurn2(no2);
+        g1=0;
+        
+        for j=1:nec1
+            element1=esurn1(esurn2(no1)+j);
+            g1=g1+w(esurn2(no1)+j)*gravelem(element1);
+        end
+        g2=0;
+        for j=1:nec2
+            element2=esurn1(esurn2(no2)+j);
+            g2=g2+w(esurn2(no2)+j)*gravelem(element2);
+        end
+        
+        m(iface+size(bedge,1))= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1)-Ded(iface)*(g2-g1));
+        %m(iface+size(bedge,1))= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1)-Ded(iface)*(gravno(no2)-gravno(no1)));
         %m(iface+size(bedge,1))=gravrate(size(bedge,1)+iface,1);
         I(inedge(iface,3))=I(inedge(iface,3))-m(iface+size(bedge,1));
         I(inedge(iface,4))=I(inedge(iface,4))+m(iface+size(bedge,1));
-    
+        
     end
 end
 
