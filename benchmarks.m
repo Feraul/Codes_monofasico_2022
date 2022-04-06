@@ -54,7 +54,7 @@ switch benchmark
         end
         vel=F;
         K=kmap;
-    case 'starnonigrav'
+    case 'starnonigrav2'
         %Klef=zeros(2,2);
         %R=[0 1 0; -1 0 0; 0 0 0];
         for i = 1:size(centelem,1)
@@ -250,7 +250,7 @@ switch benchmark
         end
         
         K=kmap;
-    case 'starnonigrav2'
+    case 'starnonigrav1'
         for i = 1:size(centelem,1)
             %Define "x" and "y"
             x = centelem(i,1);
