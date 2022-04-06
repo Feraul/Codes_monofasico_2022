@@ -781,7 +781,7 @@ for iface=1:size(inedge,1)
         
     end
     
-    
+    %% termo gravitacional
     % os nós que conforman os pontos de interpolação no elemento a esquerda
     auxfacelef1=parameter(1,3,ifactual);
     auxfacelef2=parameter(1,4,ifactual);
