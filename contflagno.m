@@ -26,7 +26,7 @@ for ifacont=1:size(bedge,1)
               nflag(bedge(ifacont,1),2)= 4*x+y+5;
               
             end
-        case{'starnonigrav'}
+        case{'starnonigrav2'}
             xx=bcflag(:,1)==bedge(ifacont,4);
             rr=find(xx==1);
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
@@ -75,7 +75,7 @@ for ifacont=1:size(bedge,1)
                 end
               
             end
-        case 'starnonigrav2'
+        case 'starnonigrav1'
             % flag do no
             xx=bcflag(:,1)==bedge(ifacont,4);
             rr=find(xx==1);
