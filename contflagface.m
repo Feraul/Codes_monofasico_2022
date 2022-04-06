@@ -13,7 +13,7 @@ for ifacont=1:size(bedge,1)
     % elemento
     lef=bedge(ifacont,3);
     switch benchmark
-        case{'starnonigrav'}
+        case{'starnonigrav2'}
             xx=bcflag(:,1)==bedge(ifacont,5);
             rr=find(xx==1);
             nflag(ifacont,1)=bcflag(rr,1);
@@ -57,7 +57,7 @@ for ifacont=1:size(bedge,1)
                 end 
                  
             end   
-        case {'starnonigrav2'}
+        case {'starnonigrav1'}
              xx=bcflag(:,1)==bedge(ifacont,5);
             rr=find(xx==1);
             nflag(ifacont,1)=bcflag(rr,1);
