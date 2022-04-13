@@ -1,8 +1,8 @@
 % este codigo contem todas as informacoes dos diferentes casos, como por
 % exemplo: tensor de permeabilidade (kmap), pressão analitica (u), termos de fonte (fonte),
 % velocidade analitica (vel),gravidade (grav)
-function[elem,kmap,normKmap,u,bedge,fonte,vel,grav,gravno,gravelem,gravface]=benchmarks(benchmark, kmap,elem,bedge)
-global centelem coord inedge normals elemarea bcflag
+function[elem,kmap,normKmap,u,bedge,fonte,vel,grav,gravno,gravelem,gravface]=benchmarks(kmap,elem,bedge)
+global centelem coord inedge normals elemarea bcflag benchmark
 normKmap=0;
 vel=0;
 u=0;

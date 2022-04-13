@@ -1,47 +1,49 @@
-function [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,mobility,gravresult,gravelem,gravface)
-global inedge coord bedge bcflag elem elemarea 
+function [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,mobility,gravresult,gravrate,gravelem,gravface)
+global inedge coord bedge bcflag elem elemarea gravitational
 % incialização das matrizes
 I=sparse(size(elem,1),1);
 M=sparse(size(elem,1),size(elem,1));
 
 I=I+fonte;
-
-    auxmobility=1;
-    for ifacont=1:size(bedge,1)
-        lef=bedge(ifacont,3);
-        
-        normcont=norm(coord(bedge(ifacont,1),:)-coord(bedge(ifacont,2),:));
-        
-        if bedge(ifacont,5)>200
-            x=bcflag(:,1)==bedge(ifacont,5);
-            r=find(x==1);
-            I(lef)=I(lef)- normcont*bcflag(r,2);
-        else
+m=0;
+auxmobility=1;
+for ifacont=1:size(bedge,1)
+    lef=bedge(ifacont,3);
+    
+    normcont=norm(coord(bedge(ifacont,1),:)-coord(bedge(ifacont,2),:));
+    
+    if bedge(ifacont,5)>200
+        x=bcflag(:,1)==bedge(ifacont,5);
+        r=find(x==1);
+        I(lef)=I(lef)- normcont*bcflag(r,2);
+    else
+        if strcmp(gravitational,'yes')
             ifacelef1=parameter(1,3,ifacont);
             ifacelef2=parameter(1,4,ifacont);
             m1=gravface(ifacelef1,1);
             m2=gravface(ifacelef2,1);
             m=normcont*((parameter(1,1,ifacont)+parameter(1,2,ifacont))*gravelem(lef,1)-...
-            parameter(1,1,ifacont)*m1-parameter(1,2,ifacont)*m2);
-            %auxmobility=mobility(ifacont);
-            %-------------------------------------------------------------%
-            % somando 1
-            ifacelef1=parameter(1,3,ifacont);
-            auxparameter1=parameter(1,1,ifacont);
-            [M,I]=tratmentcontourlfvHP(ifacelef1,parameter,nflagface,...
-                normcont,mobility,auxparameter1,auxmobility,lef,weightDMP,M,I);
-            %-------------------------------------------------------------%
-            % somando 2
-            ifacelef2=parameter(1,4,ifacont);
-            auxparameter2=parameter(1,2,ifacont);
-            [M,I]=tratmentcontourlfvHP(ifacelef2,parameter,nflagface,...
-                normcont,mobility,auxparameter2,auxmobility,lef,weightDMP,M,I);
-           
-            M(lef,lef)=M(lef,lef)+ auxmobility*normcont*(auxparameter1 + auxparameter2);
-           I(lef)=I(lef)-m; 
+                parameter(1,1,ifacont)*m1-parameter(1,2,ifacont)*m2);
+            %m=gravrate(ifacont,1);
         end
+        %-------------------------------------------------------------%
+        % somando 1
+        ifacelef1=parameter(1,3,ifacont);
+        auxparameter1=parameter(1,1,ifacont);
+        [M,I]=tratmentcontourlfvHP(ifacelef1,parameter,nflagface,...
+            normcont,mobility,auxparameter1,auxmobility,lef,weightDMP,M,I);
+        %-------------------------------------------------------------%
+        % somando 2
+        ifacelef2=parameter(1,4,ifacont);
+        auxparameter2=parameter(1,2,ifacont);
+        [M,I]=tratmentcontourlfvHP(ifacelef2,parameter,nflagface,...
+            normcont,mobility,auxparameter2,auxmobility,lef,weightDMP,M,I);
         
+        M(lef,lef)=M(lef,lef)+ auxmobility*normcont*(auxparameter1 + auxparameter2);
+        I(lef)=I(lef)-m;
     end
+    
+end
 
 % Montagem da matriz global
 
@@ -75,11 +77,11 @@ for iface=1:size(inedge,1)
     ARR=norma*mulef*(parameter(2,1,ifactual)+parameter(2,2,ifactual));
     % implementação da matriz global
     % contribuição da transmisibilidade no elemento esquerda
-%     M(lef,lef)=M(lef,lef)+ mobility(ifactual)*ALL;
-%     M(lef,rel)=M(lef,rel)- mobility(ifactual)*ARR;
-%     % contribuição da transmisibilidade no elemento direita
-%     M(rel,rel)=M(rel,rel)+ mobility(ifactual)*ARR;
-%     M(rel,lef)=M(rel,lef)- mobility(ifactual)*ALL;
+    %     M(lef,lef)=M(lef,lef)+ mobility(ifactual)*ALL;
+    %     M(lef,rel)=M(lef,rel)- mobility(ifactual)*ARR;
+    %     % contribuição da transmisibilidade no elemento direita
+    %     M(rel,rel)=M(rel,rel)+ mobility(ifactual)*ARR;
+    %     M(rel,lef)=M(rel,lef)- mobility(ifactual)*ALL;
     
     M(lef,lef)=M(lef,lef)+ 1*ALL;
     M(lef,rel)=M(lef,rel)- 1*ARR;
@@ -104,7 +106,7 @@ for iface=1:size(inedge,1)
             % a ideia principal nesta rutina é isolar a pressão na face "ifacelef1"
             % e escrever eem funcção das pressões de face internas ou
             % Dirichlet ou simplesmente em funcação da pressão da VC.
-      
+            
             normcont=norm(coord(bedge(ifacelef1,1),:)-coord(bedge(ifacelef1,2),:));
             x=bcflag(:,1)==bedge(ifacelef1,5);
             r=find(x==1);
@@ -157,7 +159,7 @@ for iface=1:size(inedge,1)
                     
                     %mobilO=mobility(faceoposto);
                     mobilO=1;
-                 
+                    
                     normcontopost=norm(coord(bedge(faceoposto,1),:)-coord(bedge(faceoposto,2),:));
                     
                     x=bcflag(:,1)==bedge(faceoposto,5);
@@ -224,7 +226,7 @@ for iface=1:size(inedge,1)
                 
                 termo3= (opostoksi/atualksi);
                 
-               
+                
                 % contribuição no elemeto a direita
                 M(lef,auxelematual)=M(lef,auxelematual)+ termo0*(termo3*pesatual-termo1);
                 
@@ -254,13 +256,13 @@ for iface=1:size(inedge,1)
         
         % contribuição do elemento a direita
         M(rel,[auxlef,auxrel])=  M(rel,[auxlef,auxrel])+ termo0*[auxweightlef1,auxweightlef2];
-
+        
     end
     
     %--------------------------- somando 2 -------------------------------%
     
-     %termo0=mobility(ifactual)*norma*murel*parameter(1,2,ifactual);
-     termo0=norma*murel*parameter(1,2,ifactual);
+    %termo0=mobility(ifactual)*norma*murel*parameter(1,2,ifactual);
+    termo0=norma*murel*parameter(1,2,ifactual);
     if ifacelef2<size(bedge,1) || ifacelef2==size(bedge,1)
         if nflagface(ifacelef2,1)<200
             % neste caso automaticamente introduzimos o valor dada no
@@ -274,7 +276,7 @@ for iface=1:size(inedge,1)
             % a ideia principal nesta rutina é isolar a pressão na face "ifacelef2"
             % e escrever eem funcção das pressões de face internas ou
             % Dirichlet ou simplesmente em funcação da pressão da VC.
-    
+            
             normcont=norm(coord(bedge(ifacelef2,1),:)-coord(bedge(ifacelef2,2),:));
             x=bcflag(:,1)==bedge(ifacelef2,5);
             r=find(x==1);
@@ -392,7 +394,7 @@ for iface=1:size(inedge,1)
                 
                 termo3= (opostoksi/atualksi);
                 
-                                
+                
                 % contribuição no elemeto a direita
                 M(lef,auxelematual)=M(lef,auxelematual)+ termo0*(termo3*pesatual-termo1);
                 
@@ -427,8 +429,8 @@ for iface=1:size(inedge,1)
     %%
     % contribuições do elemento a direita
     % somando 1
-     %termo0=mobility(ifactual)*norma*mulef*parameter(2,1,ifactual);
-     termo0=norma*mulef*parameter(2,1,ifactual);
+    %termo0=mobility(ifactual)*norma*mulef*parameter(2,1,ifactual);
+    termo0=norma*mulef*parameter(2,1,ifactual);
     if ifacerel1<size(bedge,1) || ifacerel1==size(bedge,1)
         if nflagface(ifacerel1,1)<200
             % neste caso automaticamente introduzimos o valor dada no
@@ -441,7 +443,7 @@ for iface=1:size(inedge,1)
             % a ideia principal nesta rutina é isolar a pressão na face "ifacerel1"
             % e escrever eem funcção das pressões de face internas ou
             % Dirichlet ou simplesmente em funcação da pressão da VC.
-           
+            
             
             normcont=norm(coord(bedge(ifacerel1,1),:)-coord(bedge(ifacerel1,2),:));
             x=bcflag(:,1)==bedge(ifacerel1,5);
@@ -746,7 +748,7 @@ for iface=1:size(inedge,1)
                     pesopost=auxweight1;
                     auxelemopost=auxlef;
                 end
-       
+                
                 % contribuição no elemeto a direita
                 M(rel,auxelematual)=M(rel,auxelematual)+ termo0*(termo3*pesatual-termo1 );
                 
@@ -762,7 +764,7 @@ for iface=1:size(inedge,1)
                 I(lef)=I(lef)+termo0*termo2;
                 
             end
-
+            
         end
         
     else
@@ -780,28 +782,28 @@ for iface=1:size(inedge,1)
         M(rel,[auxlef,auxrel])=  M(rel,[auxlef,auxrel])- termo0*[auxweightrel1,auxweightrel2];
         
     end
-    
-    %% termo gravitacional
-    % os nós que conforman os pontos de interpolação no elemento a esquerda
-    auxfacelef1=parameter(1,3,ifactual);
-    auxfacelef2=parameter(1,4,ifactual);
-    % os nós que conforman os pontos de interpolação no elemento a direita
-    auxfacerel1=parameter(2,3,ifactual);
-    auxfacerel2=parameter(2,4,ifactual);
-   % calculo dos fluxo parcial a esquerda
-    f1=norma*((parameter(1,1,ifactual)+parameter(1,2,ifactual))*gravelem(lef)-...
-                   parameter(1,1,ifactual)*gravface(auxfacelef1)-parameter(1,2,ifactual)*gravface(auxfacelef2));
-    % calculo dos fluxo parcial a direita        
-    f2=norma*((parameter(2,1,ifactual)+parameter(2,2,ifactual))*gravelem(rel)-...
-                       parameter(2,1,ifactual)*gravface(auxfacerel1)-parameter(2,2,ifactual)*gravface(auxfacerel2));
-    % calculo do fluxo unico na face
-   % flowrate(iface+size(bedge,1),1)=mobility(ifactual)*(murel*fluxesq-mulef*fluxdireit);
-    m=(murel*f1-mulef*f2) ;
-    
-    I(lef)=I(lef)-m;
-    I(rel)=I(rel)+m;
+    if strcmp(gravitational,'yes')
+        %% termo gravitacional
+        % os nós que conforman os pontos de interpolação no elemento a esquerda
+        auxfacelef1=parameter(1,3,ifactual);
+        auxfacelef2=parameter(1,4,ifactual);
+        % os nós que conforman os pontos de interpolação no elemento a direita
+        auxfacerel1=parameter(2,3,ifactual);
+        auxfacerel2=parameter(2,4,ifactual);
+        % calculo dos fluxo parcial a esquerda
+        f1=norma*((parameter(1,1,ifactual)+parameter(1,2,ifactual))*gravelem(lef)-...
+            parameter(1,1,ifactual)*gravface(auxfacelef1)-parameter(1,2,ifactual)*gravface(auxfacelef2));
+        % calculo dos fluxo parcial a direita
+        f2=norma*((parameter(2,1,ifactual)+parameter(2,2,ifactual))*gravelem(rel)-...
+            parameter(2,1,ifactual)*gravface(auxfacerel1)-parameter(2,2,ifactual)*gravface(auxfacerel2));
+        
+        m=(murel*f1-mulef*f2) ;
+        %m=gravrate(iface+size(bedge,1),1);
+        I(lef)=I(lef)-m;
+        I(rel)=I(rel)+m;
+    end
 end
-% 
+%
 % % adequação da matriz nos poços produtores
 % if max(max(wells))~=0
 %     for iw = 1:size(wells,1)
