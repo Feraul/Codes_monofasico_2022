@@ -1,5 +1,5 @@
-function errorateconv(solanal, p, velanal,flowrate,erromethod,benchmark)
-global bedge inedge coord elem elemarea
+function errorateconv(solanal, p, velanal,flowrate)
+global bedge inedge coord elem elemarea benchmark erromethod
 
 % calculo das pressões máximas e minimas
 pressuremax= max(p)
