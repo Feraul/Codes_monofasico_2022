@@ -24,7 +24,8 @@ for ifacont=1:size(bedge,1)
         if strcmp(gravitational,'yes')
             m1=gravno(bedge(ifacont,1),1);
             
-            m=A*(norm(v0)^2*m1-norm(v0)^2*gravelem(lef));
+            %m=A*(norm(v0)^2*m1-norm(v0)^2*gravelem(lef));
+            m=gravrate(ifacont);
         end
         
         %Preenchimento
@@ -53,7 +54,8 @@ for iface=1:size(inedge,1),
     M(inedge(iface,4), inedge(iface,4))=M(inedge(iface,4), inedge(iface,4))-Kde(iface,1);
     M(inedge(iface,4), inedge(iface,3))=M(inedge(iface,4), inedge(iface,3))+Kde(iface,1);
     if strcmp(gravitational,'yes')
-        m3= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1));
+        %m3= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1));
+        m3=gravrate(size(bedge,1)+iface,1);
         I(inedge(iface,3))=I(inedge(iface,3))-m3;
         I(inedge(iface,4))=I(inedge(iface,4))+m3;
         
