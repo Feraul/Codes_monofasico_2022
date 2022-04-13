@@ -1,8 +1,8 @@
 function [pressurinterp]=pressureinterp(p,nflagface,nflagno,w,s,...
-    metodoP,parameter,weightDMP,mobility,gravresult,gravrate)
-global inedge coord esurn1 esurn2 bedge bcflag
+    parameter,weightDMP,mobility,gravresult,gravrate)
+global inedge coord esurn1 esurn2 bedge bcflag pmetodo
 
-if strcmp(metodoP,'nlfvDMPSY')
+if strcmp(pmetodo,'nlfvDMPSY')
     pressurinterp=zeros(size(inedge,1)+size(bedge,1),1);
     %% interpolação das pressões no pontos armonicos internos
     pressurinterp(size(bedge,1)+1:size(bedge,1)+size(inedge,1),1)=weightDMP(:,1).*p(weightDMP(:,3))+ weightDMP(:,2).*p(weightDMP(:,4));
@@ -67,7 +67,7 @@ if strcmp(metodoP,'nlfvDMPSY')
         
     end
     
-elseif strcmp(metodoP,'nlfvHP')
+elseif strcmp(pmetodo,'nlfvHP')
     
     
     pressurinterp=zeros(size(inedge,1)+size(bedge,1),1);
@@ -134,7 +134,7 @@ elseif strcmp(metodoP,'nlfvHP')
         
     end
     
-elseif strcmp(metodoP,'lfvHP')||strcmp(metodoP,'nlfvDMPV1')
+elseif strcmp(pmetodo,'lfvHP')||strcmp(pmetodo,'nlfvDMPV1')
     mobil=1;
     mobilO=1;
     pressurinterp=zeros(size(inedge,1)+size(bedge,1),1);
@@ -254,7 +254,7 @@ elseif strcmp(metodoP,'lfvHP')||strcmp(metodoP,'nlfvDMPV1')
         
     end
        
-elseif strcmp(metodoP,'nlfvLPEW') || strcmp(metodoP,'lfvLPEW') || strcmp(metodoP,'nlfvPPS') ||strcmp(metodoP,'mpfad')
+elseif strcmp(pmetodo,'nlfvLPEW') || strcmp(pmetodo,'lfvLPEW') || strcmp(pmetodo,'nlfvPPS') ||strcmp(pmetodo,'mpfad')
     %% interpolação das pressões nos nós
     for no=1:size(coord,1)
         nec1=esurn2(no+1)-esurn2(no);
