@@ -1,7 +1,7 @@
 % Esta funcao calcula ou impoe todos flags de contorno e seus respectivos
 % valores
-function nflag= contflagno(benchmark,bedge)
-global  bcflag coord elem
+function nflag= contflagno(bedge)
+global  bcflag coord elem benchmark
 
 
 % 500000: simplesmente representa o flag dos vertices interiores
@@ -36,8 +36,7 @@ for ifacont=1:size(bedge,1)
                nflag(bedge(ifacont,1),2)=0;
             else
               % condicao de contorno de Dirichlet no lado direito e esquerdo
-              nflag(bedge(ifacont,1),2)= -sind(x)*cosd(y);
-              
+              nflag(bedge(ifacont,1),2)= -sind(x)*cosd(y);              
             end
         case 'starnonigrav3'
             xx=bcflag(:,1)==bedge(ifacont,4);
