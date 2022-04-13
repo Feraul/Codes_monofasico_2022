@@ -1,42 +1,42 @@
 % funcao que faz a montagem da matrizes globais para todos os metodos
 % estudado
 function [M,I]=globalmatrix(p,pinterp,gamma,nflagface,nflagno,parameter,kmap,...
-    fonte,metodoP,w,s,benchmark,weightDMP,auxface,wells,mobility,Hesq,...
-    Kde, Kn, Kt, Ded,calnormface,gravresult,gravrate,gravno,gravelem,gravface,gravitational)
+    fonte,w,s,weightDMP,auxface,wells,mobility,Hesq,...
+    Kde, Kn, Kt, Ded,calnormface,gravresult,gravrate,gravno,gravelem,gravface)
+global pmetodo
 
-
-if strcmp(metodoP,'nlfvDMP1')
+if strcmp(pmetodo,'nlfvDMP1')
     
     [M,I]=assemblematrixDMP(pinterp,gamma,nflagface,parameter,kmap,fonte);
-elseif strcmp(metodoP,'nlfvDMP2')
+elseif strcmp(pmetodo,'nlfvDMP2')
     
     [M,I]=assemblematrixDMPv1(pinterp,gamma,nflagface,parameter,kmap,fonte);
-elseif strcmp(metodoP,'nlfvLPS') || strcmp(metodoP,'nlfvPPS')
+elseif strcmp(pmetodo,'nlfvLPS') || strcmp(pmetodo,'nlfvPPS')
     
     [M,I]=assemblematrixLPSPPS(p,pinterp,parameter,fonte);
-elseif strcmp(metodoP,'nlfvLPEW')
+elseif strcmp(pmetodo,'nlfvLPEW')
     
     [M,I]=assemblematrixGYZS(pinterp,parameter,fonte,wells,mobility,calnormface);
-elseif strcmp(metodoP,'nlfvHP')
+elseif strcmp(pmetodo,'nlfvHP')
     [M,I]=assemblematrixNLFVHP(pinterp,parameter,fonte,wells,Hesq,Kn,Kt,nflagno);
-elseif strcmp(metodoP,'nlfvDMPSY')
+elseif strcmp(pmetodo,'nlfvDMPSY')
     
     [M,I]=assemblematrixDMPSY(p,pinterp,gamma,nflagface,parameter,kmap,fonte,...
-        benchmark,weightDMP,auxface,wells,mobility);
-elseif strcmp(metodoP,'nlfvDMPV1')
+        weightDMP,auxface,wells,mobility);
+elseif strcmp(pmetodo,'nlfvDMPV1')
     
     [M,I]=assemblematrixNLFVDMP(p,pinterp,gamma,nflagface,parameter,kmap,...
-    fonte,benchmark,weightDMP,auxface,wells,mobility);
-elseif strcmp(metodoP,'lfvLPEW')
+    fonte,weightDMP,auxface,wells,mobility);
+elseif strcmp(pmetodo,'lfvLPEW')
     
     [M,I]=assemblematrixlfvLPEW(parameter,fonte,w,s,nflagno,weightDMP,wells,mobility);
-elseif strcmp(metodoP,'lfvHP')
+elseif strcmp(pmetodo,'lfvHP')
     
-    [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,mobility,gravresult,gravelem,gravface);
-elseif strcmp(metodoP,'mpfad')
+    [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,mobility,gravresult,gravrate,gravelem,gravface);
+elseif strcmp(pmetodo,'mpfad')
     [ M, I ] = globalmatrixmpfad(w,s, Kde, Ded, Kn, Kt, nflagno, Hesq,...
-        fonte,gravresult,gravrate,gravno,gravelem,gravitational);
-elseif strcmp(metodoP,'tpfa')
+        fonte,gravresult,gravrate,gravno,gravelem);
+elseif strcmp(pmetodo,'tpfa')
     [ M, I ] = globalmatrixtpfa( Kde, Kn, nflagface, Hesq,gravresult,...
         gravrate,gravno,gravelem,gravitational);
    
