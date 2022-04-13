@@ -1,5 +1,5 @@
-function [nflag]= contflagface(benchmark,bedge)
-global bcflag coord elem
+function [nflag]= contflagface(bedge)
+global bcflag coord elem benchmark
 
 % determinar o flag do nó interior e fronteira de Neumann
 
