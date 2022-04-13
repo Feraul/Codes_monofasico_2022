@@ -1,7 +1,7 @@
 function [M,I]=assemblematrixDMPSY(p,pinterp,gamma,nflag,parameter,kmap,...
-    fonte,benchmark,weightDMP,auxface,wells,mobility)
+    fonte,weightDMP,auxface,wells,mobility)
 
-global inedge coord bedge bcflag elem elemarea
+global inedge coord bedge bcflag elem elemarea benchmark
 
 valuemin=1e-16;
 I=sparse(size(elem,1),1);
