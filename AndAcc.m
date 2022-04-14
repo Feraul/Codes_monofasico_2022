@@ -2,7 +2,7 @@ function [x,iter,res_hist,tabletol] = AndAcc(x,auxtol,kmap,...
     parameter,w,s,nflagface,fonte,gamma,nflagno,...
     weightDMP,auxface,wells,mobility,Hesq, Kde, Kn, Kt, Ded,...
     calnormface,R0,tolpicard,nitpicard)
-
+global elem
 % This performs fixed-point iteration with or without Anderson
 % acceleration for a given fixed-point map g and initial
 % approximate solution x.
@@ -70,21 +70,24 @@ mAA = 0; % é o "m_{k}" no artigo
         erro = 0.0; %exact
     end
     tabletol(1,1:2)=[0, erro];
+   erroaux1=0;
+   erroaux2=erro;
 for iter = 0:itmax
   
     if erro<tolpicard
         break
     else
-        
-%         if rcond(full(M_new))<1e-5
-             [L,U] = ilu(M_new,struct('type','ilutp','droptol',1e-6));
-             %min(10^-5,10^-1*erro)
-%             [gval,fl1,rr1,it1,rv1]=bicgstab(M_new,RHS_new,10^-12,1000,L,U,x);
-%         else
-%            [gval,fl1,rr1,it1,rv1]=bicgstab(M_new,RHS_new,min(10^-5,10^-1*erro),1000);
-%        end
-        [gval,fl1,rr1,it1,rv1]=gmres(M_new,RHS_new,10,1e-9,1000,L,U);
-        %gval=M_new\RHS_new;
+
+        if abs(erroaux1-erroaux2)<1e-10
+            % utilizo quando a sequencia de erros se mantem quase constantes
+            gval=M_new\RHS_new;
+        else
+            % precondicionador
+            [L,U] = ilu(M_new,struct('type','ilutp','droptol',1e-6));
+            
+            restarrt=size(elem,1)-1;
+            [gval,fl1,rr1,it1,rv1]=gmres(M_new,RHS_new,restarrt,1e-9,1000,L,U);
+        end
     end
     
     fval = gval - x;
@@ -199,10 +202,15 @@ for iter = 0:itmax
     
     if (R0 ~= 0.0)
         erro = abs(RR/R0)
+        
     else
         erro = 0.0; %exact
     end
+    
     tabletol(iter+2,1:2)=[iter+1, erro];
+    % guarda o erro atual e anterior com objetivo de comparar depois 
+    erroaux1=tabletol(iter+1,2);
+    erroaux2=erro;
     %% plotagem no visit
     % S=ones(size(x,1),1);
     % postprocessor(x,S,iter)
