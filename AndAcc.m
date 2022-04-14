@@ -55,54 +55,42 @@ mAA = 0; % é o "m_{k}" no artigo
 % Top of the iteration loop.
 %% Interpolação das pressões na arestas (faces)
 % Apply g and compute the current residual norm.
-    [pinterp_new]=pressureinterp(x,nflagface,nflagno,w,s,...
-        parameter,weightDMP);
-    %% Calculo da matriz global
-    [M_new,RHS_new]=globalmatrix(x,pinterp_new,gamma,nflagface,nflagno...
-        ,parameter,kmap,fonte,w,s,weightDMP,auxface,wells,...
-        mobility,Hesq, Kde, Kn, Kt, Ded,calnormface,0);
-    
-    RR = norm(M_new*x - RHS_new);
-    
-    if (R0 ~= 0.0)
-        erro = abs(RR/R0)
-    else
-        erro = 0.0; %exact
-    end
-    tabletol(1,1:2)=[0, erro];
-   erroaux1=0;
-   erroaux2=erro;
+[pinterp_new]=pressureinterp(x,nflagface,nflagno,w,s,...
+    parameter,weightDMP);
+%% Calculo da matriz global
+[M_new,RHS_new]=globalmatrix(x,pinterp_new,gamma,nflagface,nflagno...
+    ,parameter,kmap,fonte,w,s,weightDMP,auxface,wells,...
+    mobility,Hesq, Kde, Kn, Kt, Ded,calnormface,0);
+
+RR = norm(M_new*x - RHS_new);
+
+if (R0 ~= 0.0)
+    erro = abs(RR/R0)
+else
+    erro = 0.0; %exact
+end
+tabletol(1,1:2)=[0, erro];
+erroaux1=0;
+erroaux2=erro;
 for iter = 0:itmax
-  
+    
     if erro<tolpicard
         break
     else
-
+        
         if abs(erroaux1-erroaux2)<1e-10
             % utilizo quando a sequencia de erros se mantem quase constantes
             gval=M_new\RHS_new;
         else
             % precondicionador
             [L,U] = ilu(M_new,struct('type','ilutp','droptol',1e-6));
-            
             restarrt=7;
             [gval,fl1,rr1,it1,rv1]=gmres(M_new,RHS_new,restarrt,1e-9,1000,L,U);
         end
     end
     
     fval = gval - x;
-%     res_norm = norm(fval);
-%     fprintf('%d %e \n', iter, res_norm);
-%     res_hist = [res_hist;[iter,res_norm]];
-    % Set the residual tolerance on the initial iteration.
-%     if iter == 0,
-%         tol = max(atol,rtol*res_norm);
-%     end
-    % Test for stopping.
-%     if erro <= tolpicard,
-%         fprintf('Terminate with residual norm = %e \n\n', res_norm);
-%         break;
-%     end
+    
     if mMax == 0 || iter < AAstart,
         % Without acceleration, update x <- g(x) to obtain the next
         % approximate solution.
@@ -184,8 +172,8 @@ for iter = 0:itmax
             if isa(beta,'function_handle'),
                 x = x - (1-beta(iter))*(fval - Q*R*gamma_AA);
             else
-                if beta > 0 && beta ~= 1 
-                    x = x - (1-beta)*(fval - Q*R*gamma_AA);          
+                if beta > 0 && beta ~= 1
+                    x = x - (1-beta)*(fval - Q*R*gamma_AA);
                 end
             end
         end
@@ -208,7 +196,7 @@ for iter = 0:itmax
     end
     
     tabletol(iter+2,1:2)=[iter+1, erro];
-    % guarda o erro atual e anterior com objetivo de comparar depois 
+    % guarda o erro atual e anterior com objetivo de comparar depois
     erroaux1=tabletol(iter+1,2);
     erroaux2=erro;
     %% plotagem no visit
@@ -216,8 +204,3 @@ for iter = 0:itmax
     % postprocessor(x,S,iter)
     
 end
-%Bottom of the iteration loop.
-% if res_norm > tol && iter == itmax,
-%     fprintf('\n Terminate after itmax = %d iterations. \n', itmax);
-%     fprintf(' Residual norm = %e \n\n', res_norm);
-% end

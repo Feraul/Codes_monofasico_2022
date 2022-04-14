@@ -29,10 +29,12 @@ elseif strcmp(pmetodo,'nlfvDMPV1')
     fonte,weightDMP,auxface,wells,mobility);
 elseif strcmp(pmetodo,'lfvLPEW')
     
-    [M,I]=assemblematrixlfvLPEW(parameter,fonte,w,s,nflagno,weightDMP,wells,mobility);
+    [M,I]=assemblematrixlfvLPEW(parameter,fonte,w,s,nflagno,weightDMP,...
+        wells,mobility);
 elseif strcmp(pmetodo,'lfvHP')
     
-    [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,mobility,gravresult,gravrate,gravelem,gravface);
+    [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,...
+        mobility,gravresult,gravrate,gravelem,gravface);
 elseif strcmp(pmetodo,'mpfad')
     [ M, I ] = globalmatrixmpfad(w,s, Kde, Ded, Kn, Kt, nflagno, Hesq,...
         fonte,gravresult,gravrate,gravno,gravelem);

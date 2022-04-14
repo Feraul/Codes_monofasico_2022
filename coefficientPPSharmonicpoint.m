@@ -88,7 +88,8 @@ for ifacont=1:size(bedge,1)
         end
         j=j+1;
     end
-    
+    % quado nao e possivel encontrar os coeficientes este trecho de rutina 
+    % reorganiza os pontos harmonicos
     if (ksii==1e30 && ksij==1e30) || (ksii>1e10 && ksij>1e10)
         
         [ksii,ksij,aux11,aux12,auxy]=aroundfacelement(F,y,lef,ve2,klef,kmap,raioaux);
@@ -227,6 +228,8 @@ for iface=1:size(inedge,1)
         end
         j=j+1;
     end
+    % quado nao e possivel encontrar os coeficientes este trecho de rutina 
+    % reorganiza os pontos harmonicos
     if (ksii==1e30 && ksij==1e30) || (ksii>1e10 && ksij>1e10)
         
         [ksii,ksij,aux11,aux12,auxy]=aroundfacelement(F,y,lef,ve2,klef,kmap,raioaux);
@@ -340,6 +343,8 @@ for iface=1:size(inedge,1)
         j=j+1;
         
     end
+    % quado nao e possivel encontrar os coeficientes este trecho de rutina 
+    % reorganiza os pontos harmonicos
     if (ksii==1e30 && ksij==1e30)|| (ksii>1e10 && ksij>1e10)
         
         [ksii,ksij,auxi,auxj,auxy]=aroundfacelement(F,y,rel,vetor12,krel,kmap,raioaux);

@@ -28,25 +28,21 @@ switch benchmark
             end
             elem(i,5)=i;
         end
-        
+        R1=[0 -1 0; 1 0 0; 0 0 0];
         for iface=1:size(bedge,1)+size(inedge,1)
-            R1=[0 -1 0; 1 0 0; 0 0 0];
+            
             if iface< size(bedge,1) || iface==size(bedge,1)
                 v1=bedge(iface,1);
                 v2=bedge(iface,2);
-                
-                IJ=coord(v2,:)-coord(v1,:);
-                norma=norm(IJ);
-                nij=R1*IJ'/norma;
             else
                 v1=inedge(iface-size(bedge,1),1);
-                v2=inedge(iface-size(bedge,1),2);
-                IJ=coord(v2,:)-coord(v1,:);
-                norma=norm(IJ);
-                nij=R1*IJ'/norma;
+                v2=inedge(iface-size(bedge,1),2); 
             end
+            IJ=coord(v2,:)-coord(v1,:);
+            norma=norm(IJ);
+            nij=R1*IJ'/norma;
             p1=(coord(v2,:)+coord(v1,:))*0.5;
-            if p1(1,1)<0.5
+            if p1(1,1)<=0.5
                 a=[-43, -17, 0];
                 
             else
@@ -57,7 +53,7 @@ switch benchmark
         end
         vel=F;
         K=kmap;
-     case 'starnonigrav1'
+    case 'starnonigrav1'
         for i = 1:size(centelem,1)
             %Define "x" and "y"
             x = centelem(i,1);
@@ -102,17 +98,17 @@ switch benchmark
         for j=1:size(bedge,1)+size(inedge,1)
             %Define "x" and "y"
             if j<=size(bedge,1)
-               v1=bedge(j,1);
-               v2=bedge(j,2);
-               
-               a=0.5*(coord(v1,:)+coord(v2,:));
-               y11=a(1,2);
+                v1=bedge(j,1);
+                v2=bedge(j,2);
+                
+                a=0.5*(coord(v1,:)+coord(v2,:));
+                y11=a(1,2);
             else
-               v1=inedge(j-size(bedge,1),1);
-               v2=inedge(j-size(bedge,1),2);
-               
-               a=0.5*(coord(v1,:)+coord(v2,:));
-               y11=a(1,2);  
+                v1=inedge(j-size(bedge,1),1);
+                v2=inedge(j-size(bedge,1),2);
+                
+                a=0.5*(coord(v1,:)+coord(v2,:));
+                y11=a(1,2);
             end
             
             % parametro segundo  Starnoni
@@ -152,33 +148,33 @@ switch benchmark
             y1 = coord(j,2);
             % parametro segundo  Starnoni
             
-                % solucao analitica
-                gravno(j,1)= sind(x1)*cosd(y1);
+            % solucao analitica
+            gravno(j,1)= sind(x1)*cosd(y1);
         end
         
         for j=1:size(bedge,1)+size(inedge,1)
             %Define "x" and "y"
             if j<=size(bedge,1)
-               v1=bedge(j,1);
-               v2=bedge(j,2);
-               
-               a=0.5*(coord(v1,:)+coord(v2,:));
-               x2=a(1,1);
-               y2=a(1,2);
+                v1=bedge(j,1);
+                v2=bedge(j,2);
+                
+                a=0.5*(coord(v1,:)+coord(v2,:));
+                x2=a(1,1);
+                y2=a(1,2);
             else
-               v1=inedge(j-size(bedge,1),1);
-               v2=inedge(j-size(bedge,1),2);
-               
-               a=0.5*(coord(v1,:)+coord(v2,:));
-               x2=a(1,1);
-               y2=a(1,2);  
+                v1=inedge(j-size(bedge,1),1);
+                v2=inedge(j-size(bedge,1),2);
+                
+                a=0.5*(coord(v1,:)+coord(v2,:));
+                x2=a(1,1);
+                y2=a(1,2);
             end
-             gravface(j,1)= sind(x2)*cosd(y2);           
+            gravface(j,1)= sind(x2)*cosd(y2);
         end
-
+        
         K=kmap;
     case 'starnonigrav3'
-         for i = 1:size(centelem,1)
+        for i = 1:size(centelem,1)
             %Define "x" and "y"
             x = centelem(i,1);
             y = centelem(i,2);
@@ -222,20 +218,20 @@ switch benchmark
         for jj=1:size(bedge,1)+size(inedge,1)
             %Define "x" and "y"
             if jj<=size(bedge,1)
-               v1=bedge(jj,1);
-               v2=bedge(jj,2);
-               
-               a=0.5*(coord(v1,:)+coord(v2,:));
-              
+                v1=bedge(jj,1);
+                v2=bedge(jj,2);
+                
+                a=0.5*(coord(v1,:)+coord(v2,:));
+                
             else
-               v1=inedge(jj-size(bedge,1),1);
-               v2=inedge(jj-size(bedge,1),2);
-               
-               a=0.5*(coord(v1,:)+coord(v2,:));
-              
+                v1=inedge(jj-size(bedge,1),1);
+                v2=inedge(jj-size(bedge,1),2);
+                
+                a=0.5*(coord(v1,:)+coord(v2,:));
+                
             end
-             x11=a(1,1);
-             y11=a(1,2);  
+            x11=a(1,1);
+            y11=a(1,2);
             % parametro segundo  Starnoni
             h1=1;
             h2=10;
@@ -252,8 +248,8 @@ switch benchmark
         end
         
         K=kmap;
-     case 'starnonigrav4'
-         for i = 1:size(centelem,1)
+    case 'starnonigrav4'
+        for i = 1:size(centelem,1)
             %Define "x" and "y"
             x = centelem(i,1);
             y = centelem(i,2);
@@ -297,20 +293,20 @@ switch benchmark
         for jj=1:size(bedge,1)+size(inedge,1)
             %Define "x" and "y"
             if jj<=size(bedge,1)
-               v1=bedge(jj,1);
-               v2=bedge(jj,2);
-               
-               a=0.5*(coord(v1,:)+coord(v2,:));
-              
+                v1=bedge(jj,1);
+                v2=bedge(jj,2);
+                
+                a=0.5*(coord(v1,:)+coord(v2,:));
+                
             else
-               v1=inedge(jj-size(bedge,1),1);
-               v2=inedge(jj-size(bedge,1),2);
-               
-               a=0.5*(coord(v1,:)+coord(v2,:));
-              
+                v1=inedge(jj-size(bedge,1),1);
+                v2=inedge(jj-size(bedge,1),2);
+                
+                a=0.5*(coord(v1,:)+coord(v2,:));
+                
             end
-             x11=a(1,1);
-             y11=a(1,2);  
+            x11=a(1,1);
+            y11=a(1,2);
             % parametro segundo  Starnoni
             h1=1;
             h2=10;
@@ -327,7 +323,7 @@ switch benchmark
         end
         
         K=kmap;
-   
+        
     case 'zhangkobaise'
         R=[0 1 0; -1 0 0; 0 0 0];
         for i = 1:size(centelem,1)
