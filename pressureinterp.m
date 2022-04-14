@@ -254,7 +254,8 @@ elseif strcmp(pmetodo,'lfvHP')||strcmp(pmetodo,'nlfvDMPV1')
         
     end
        
-elseif strcmp(pmetodo,'nlfvLPEW') || strcmp(pmetodo,'lfvLPEW') || strcmp(pmetodo,'nlfvPPS') ||strcmp(pmetodo,'mpfad')
+elseif strcmp(pmetodo,'nlfvLPEW') || strcmp(pmetodo,'lfvLPEW') || ...
+        strcmp(pmetodo,'nlfvPPS') ||strcmp(pmetodo,'mpfad') ||strcmp(pmetodo,'nlfvLPS')
     %% interpolação das pressões nos nós
     for no=1:size(coord,1)
         nec1=esurn2(no+1)-esurn2(no);
