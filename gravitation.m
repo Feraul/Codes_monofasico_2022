@@ -1,4 +1,4 @@
-function [G,g]=gravitation(kmap,grav)
+function [G,g]=gravitation(kmap,grav,gravface)
 global inedge bedge elem centelem coord normals
 Klef=zeros(2,2);
 Krel=zeros(2,2);
@@ -14,8 +14,9 @@ for i=1:size(inedge,1)+size(bedge,1)
         Klef(1,2)=kmap(elem(lef,5),3);
         Klef(2,1)=kmap(elem(lef,5),4);
         Klef(2,2)=kmap(elem(lef,5),5);
-        g(i,1)=dot(normals(i,1:2),(Klef*grav(lef,:)')');
         
+        g(i,1)=dot(normals(i,1:2),(Klef*grav(i,:)')');
+       % g(i,1)=gravface(i,1);
         G(lef,1)=G(lef,1)+g(i,1);
     else
         
