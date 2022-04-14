@@ -85,7 +85,7 @@ for iter = 0:itmax
             % precondicionador
             [L,U] = ilu(M_new,struct('type','ilutp','droptol',1e-6));
             
-            restarrt=size(elem,1)-1;
+            restarrt=7;
             [gval,fl1,rr1,it1,rv1]=gmres(M_new,RHS_new,restarrt,1e-9,1000,L,U);
         end
     end

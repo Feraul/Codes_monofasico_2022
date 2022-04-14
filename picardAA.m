@@ -9,7 +9,7 @@ ciclos=1;
 %precondicionador ILU
 [L,U] = ilu(M_old,struct('type','ilutp','droptol',1e-9));
 
-restarrt=size(elem,1)-1;
+restarrt=7;
 [p_old,fl1,rr1,it1,rv1]=gmres(M_old,RHS_old,restarrt,1e-9,1000,L,U);
 
 [p_new,iter,res_hist,tabletol]=AndAcc(p_old,1e-8,kmap,parameter,w,s,...

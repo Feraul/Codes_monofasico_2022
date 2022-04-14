@@ -23,7 +23,7 @@ while (tolpicard<er || tolpicard==er) && (step<nitpicard)
         %utilizando o precondicionado
         [L,U] = ilu(M_old,struct('type','ilutp','droptol',1e-6));
         % calculo do novo campo de pressao
-        restarrt=size(elem,1)-1;
+        restarrt=7;
         [p_new]=gmres(M_old,RHS_old,restarrt,1e-9,1000,L,U);
         % plotagem no visit
     end
