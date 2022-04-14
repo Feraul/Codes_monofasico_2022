@@ -1,6 +1,6 @@
-function [y,weightDMP,raioaux]=harmonicopoint(kmap,N,benchmark)
+function [y,weightDMP,raioaux]=harmonicopoint(kmap,N)
 
-global inedge bedge coord elem centelem
+global inedge bedge coord elem centelem benchmark
 y=zeros(size(inedge,1)+size(bedge,1),3);
 Klef=zeros(3,3);
 Krel=zeros(3,3);
