@@ -68,8 +68,8 @@ for iface=1:size(inedge,1)
     M(rel,rel)=M(rel,rel)+ ARR;
     M(rel,lef)=M(rel,lef)- ALL; 
     
-    I(lef, 1)=I(lef,1)- norma*Bmas*valuemin/(p(lef)+valuemin)+norma*Bmenos*valuemin/(p(rel)+valuemin);
-    I(rel, 1)=I(rel,1)- norma*Bmenos*valuemin/(p(rel)+valuemin)+norma*Bmas*valuemin/(p(lef)+valuemin);
+    I(lef, 1)=I(lef,1)- (norma*Bmas*valuemin/(p(lef)+valuemin)-norma*Bmenos*valuemin/(p(rel)+valuemin));
+    I(rel, 1)=I(rel,1)+ (norma*Bmas*valuemin/(p(lef)+valuemin)-norma*Bmenos*valuemin/(p(rel)+valuemin));
     
 end
 %% malha 23x23
