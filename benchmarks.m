@@ -136,11 +136,11 @@ switch benchmark
             y = centelem(i,2);
             % solucao analitica foi calculado usando pag. 385
             % Calculo II Tom Apostol
-            u(i,1)= -sind(x)*cosd(y);
-            gravelem(i,1)=sind(x)*cosd(y);
+            u(i,1)= -sin(x)*cos(y);
+            gravelem(i,1)=sin(x)*cos(y);
             % gravidade
-            grav(i,:)=[cosd(x)*cosd(y) -sind(x)*sind(y)];
-            
+            grav(i,:)=[cos(x)*cos(y) -sin(x)*sin(y)];
+            %grav(i,:)=[0 sind(x)*cosd(y)/y];
         end
         for j=1:size(coord,1)
             %Define "x" and "y"
