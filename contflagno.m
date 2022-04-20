@@ -36,7 +36,7 @@ for ifacont=1:size(bedge,1)
                nflag(bedge(ifacont,1),2)=0;
             else
               % condicao de contorno de Dirichlet no lado direito e esquerdo
-              nflag(bedge(ifacont,1),2)= -sind(x)*cosd(y);              
+              nflag(bedge(ifacont,1),2)= -sin(x)*cos(y);              
             end
         case 'starnonigrav3'
             xx=bcflag(:,1)==bedge(ifacont,4);
