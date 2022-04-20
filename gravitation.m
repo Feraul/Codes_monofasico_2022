@@ -15,7 +15,7 @@ for i=1:size(inedge,1)+size(bedge,1)
         Klef(2,1)=kmap(elem(lef,5),4);
         Klef(2,2)=kmap(elem(lef,5),5);
         
-        g(i,1)=dot(normals(i,1:2),(Klef*grav(i,:)')');
+        g(i,1)=dot(normals(i,1:2),(Klef*grav(lef,:)')');
        % g(i,1)=gravface(i,1);
         G(lef,1)=G(lef,1)+g(i,1);
     else
@@ -50,8 +50,8 @@ for i=1:size(inedge,1)+size(bedge,1)
         graveq=(dj1*grav(lef,:)+dj2*grav(rel,:))'; % equation 22
         g(i,1)=dot(normals(i,1:2),(Keq*graveq)'); % equation 20
         
-        G(lef,1)=G(lef,1)+g(ii+size(bedge,1),1);
-        G(rel,1)=G(rel,1)-g(ii+size(bedge,1),1);
+        G(lef,1)=G(lef,1)+g(i,1);
+        G(rel,1)=G(rel,1)-g(i,1);
     end
     
     

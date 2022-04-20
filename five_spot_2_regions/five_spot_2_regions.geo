@@ -1,18 +1,18 @@
 //--------------------------------------------------------------------
 //---------------- UNIVERSIDADE FEDERAL DE PERNAMBUCO ----------------
 //---------------- CENTRO DE TECNOLOGIA E GEOCIENCIAS ----------------
+//---------- PROGRAMA DE POS GRADUACAO EM ENGENHARIA CIVIL -----------
 //--------------------------------------------------------------------
 
-//Work developed by: Marcio Souza, Luiz E. Queiroz e Fernando Contreras
+//Work developed by: Marcio Souza and Luiz E. Queiroz
 //Adviser Professors: Paulo Lyra & Darlan Carvalho
-//Create date: 13/12/2011
-//Create date: 2022/3/29;	hour: 16:22h
+//Create date: 2022/4/19;	hour: 15:32h
 
 //--------------------------------------------------------------------
 //This file has CAD parameters. It is related to building of domain
 
 //"cl1" corresponds to element size attributed in "Start.dat";
-cl1 = 0.015600;
+cl1 = 0.031300;
 
 Point(1) = {0.000000, 0.000000, 0.000000, cl1};
 Point(2) = {0.500000, 0.000000, 0.000000, cl1};

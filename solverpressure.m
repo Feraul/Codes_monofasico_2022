@@ -166,8 +166,9 @@ switch pmetodo
         pressure=M_old\RHS_old;
         
         tabletol=0;
-        iter=[1,1];
-        ciclos=1;
+        name = pmetodo;
+        X = sprintf('>> calculo o campo de pressao pelo metodo: %s ',name);
+        disp(X)
         
 end
 

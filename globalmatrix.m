@@ -40,7 +40,7 @@ elseif strcmp(pmetodo,'mpfad')
         fonte,gravresult,gravrate,gravno,gravelem);
 elseif strcmp(pmetodo,'tpfa')
     [ M, I ] = globalmatrixtpfa( Kde, Kn, nflagface, Hesq,gravresult,...
-        gravrate,gravno,gravelem,gravitational);
+        gravrate,gravno,gravelem);
    
 end
 end
