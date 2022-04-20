@@ -14,8 +14,11 @@ for i=1:size(inedge,1)+size(bedge,1)
         Klef(1,2)=kmap(elem(lef,5),3);
         Klef(2,1)=kmap(elem(lef,5),4);
         Klef(2,2)=kmap(elem(lef,5),5);
-        
-        g(i,1)=dot(normals(i,1:2),(Klef*grav(lef,:)')');
+        x=(coord(bedge(i,1),1)+coord(bedge(i,2),1))*0.5;
+        y=(coord(bedge(i,1),2)+coord(bedge(i,2),2))*0.5;
+        gravface1=[cosd(x)*cosd(y) -sind(x)*sind(y)];
+        %g(i,1)=dot(normals(i,1:2),(Klef*grav(lef,1:2)')');
+        g(i,1)=dot(normals(i,1:2),(Klef*gravface1')');
        % g(i,1)=gravface(i,1);
         G(lef,1)=G(lef,1)+g(i,1);
     else
