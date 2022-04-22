@@ -56,7 +56,6 @@ switch benchmark
     case 'starnonigrav1'
         for i = 1:size(centelem,1)
             %Define "x" and "y"
-            x = centelem(i,1);
             y = centelem(i,2);
             % parametro segundo  Starnoni
             h1=1;
@@ -100,13 +99,11 @@ switch benchmark
             if j<=size(bedge,1)
                 v1=bedge(j,1);
                 v2=bedge(j,2);
-                
                 a=0.5*(coord(v1,:)+coord(v2,:));
                 y11=a(1,2);
             else
                 v1=inedge(j-size(bedge,1),1);
-                v2=inedge(j-size(bedge,1),2);
-                
+                v2=inedge(j-size(bedge,1),2);  
                 a=0.5*(coord(v1,:)+coord(v2,:));
                 y11=a(1,2);
             end
@@ -149,7 +146,7 @@ switch benchmark
             % parametro segundo  Starnoni
             
             % solucao analitica
-            gravno(j,1)= sind(x1)*cosd(y1);
+            gravno(j,1)= sin(x1)*cos(y1);
         end
         
         for j=1:size(bedge,1)+size(inedge,1)
@@ -169,7 +166,7 @@ switch benchmark
                 x2=a(1,1);
                 y2=a(1,2);
             end
-            gravface(j,1)= sind(x2)*cosd(y2);
+            gravface(j,1)= sin(x2)*cos(y2);
         end
         
         K=kmap;
@@ -184,16 +181,16 @@ switch benchmark
             if single(y)>0.5
                 
                 % solucao analitica
-                u(i,1)= -sind(x)*cosd(y)+h1*y;
-                gravelem(i,1)=sind(x)*cosd(y)-h1*y;
+                u(i,1)= -sin(x)*cos(y)+h1*y;
+                gravelem(i,1)=sin(x)*cos(y)-h1*y;
                 % calculo do gravidade
-                grav(i,:)=[cosd(x)*cosd(y) -h1-sind(x)*sind(y)];
+                grav(i,:)=[cosd(x)*cos(y) -h1-sin(x)*sin(y)];
             else
                 % solucao analitica
-                u(i,1)= -sind(x)*cosd(y)+h2*y;
+                u(i,1)= -sin(x)*cos(y)+h2*y;
                 % calculo do gravidade
-                grav(i,:)=[cosd(x)*cosd(y) -h2-sind(x)*sind(y)];
-                gravelem(i,1)=sind(x)*cosd(y)-h2*y;
+                grav(i,:)=[cos(x)*cos(y) -h2-sin(x)*sin(y)];
+                gravelem(i,1)=sin(x)*cos(y)-h2*y;
             end
         end
         for j=1:size(coord,1)
@@ -206,10 +203,10 @@ switch benchmark
             if single(y21)>0.5
                 
                 % solucao analitica
-                gravno(j,1)= sind(x21)*cosd(y21)-h1*y21;
+                gravno(j,1)= sin(x21)*cos(y21)-h1*y21;
             else
                 % solucao analitica
-                gravno(j,1)= sind(x21)*cosd(y21)-h2*y21;
+                gravno(j,1)= sin(x21)*cos(y21)-h2*y21;
                 
             end
             
@@ -238,10 +235,10 @@ switch benchmark
             if single(y11)>0.5
                 
                 % solucao analitica
-                gravface(jj,1)= sind(x11)*cosd(y11)-h1*y11;
+                gravface(jj,1)= sin(x11)*cos(y11)-h1*y11;
             else
                 % solucao analitica
-                gravface(jj,1)= sind(x11)*cosd(y11)-h2*y11;
+                gravface(jj,1)= sin(x11)*cos(y11)-h2*y11;
                 
             end
             
