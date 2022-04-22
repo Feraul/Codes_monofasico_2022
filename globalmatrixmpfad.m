@@ -48,35 +48,35 @@ for ifacont=1:size(bedge,1)
         
     else
         
-        %                 if strcmp(gravitational,'yes')
-        %                     no1=bedge(ifacont,1);
-        %                     no2=bedge(ifacont,2);
-        %                     nec1=esurn2(no1+1)-esurn2(no1);
-        %                     nec2=esurn2(no2+1)-esurn2(no2);
-        %                     g1=0;
-        %                     if nflagno(no1,1)<200
-        %                         g1=gravno(no1,1);
-        %                     else
-        %                         for j=1:nec1
-        %                             element1=esurn1(esurn2(no1)+j);
-        %                             g1=g1+w(esurn2(no1)+j)*gravelem(element1);
-        %                         end
-        %                     end
-        %                     g2=0;
-        %                     if  nflagno(no2,1)<200
-        %                         g2=gravno(no2,1);
-        %                     else
-        %                         for j=1:nec2
-        %                             element2=esurn1(esurn2(no2)+j);
-        %                             g2=g2+w(esurn2(no2)+j)*gravelem(element2);
-        %                         end
-        %                     end
-        %
-        %                     m=A*(dot(v2,-v0)*g1+dot(v1,v0)*g2-norm(v0)^2*gravelem(lef))-(g2-g1)*Kt(ifacont);
-        %                     % m=gravrate(ifacont);
-        %                 else
-        %                     m=0;
-        %                 end
+%                         if strcmp(gravitational,'yes')
+%                             no1=bedge(ifacont,1);
+%                             no2=bedge(ifacont,2);
+%                             nec1=esurn2(no1+1)-esurn2(no1);
+%                             nec2=esurn2(no2+1)-esurn2(no2);
+%                             g1=0;
+%                             if nflagno(no1,1)<200
+%                                 g1=gravno(no1,1);
+%                             else
+%                                 for j=1:nec1
+%                                     element1=esurn1(esurn2(no1)+j);
+%                                     g1=g1+w(esurn2(no1)+j)*gravelem(element1);
+%                                 end
+%                             end
+%                             g2=0;
+%                             if  nflagno(no2,1)<200
+%                                 g2=gravno(no2,1);
+%                             else
+%                                 for j=1:nec2
+%                                     element2=esurn1(esurn2(no2)+j);
+%                                     g2=g2+w(esurn2(no2)+j)*gravelem(element2);
+%                                 end
+%                             end
+%         
+%                             %m=A*(dot(v2,-v0)*g1+dot(v1,v0)*g2-norm(v0)^2*gravelem(lef))-(g2-g1)*Kt(ifacont);
+%                              m=gravrate(ifacont);
+%                         else
+%                             m=0;
+%                         end
         
         % contorno de Neumann
         x=bcflag(:,1)==bedge(ifacont,5);
