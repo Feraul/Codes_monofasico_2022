@@ -154,10 +154,7 @@ switch pmetodo
     case {'lfvHP','lfvLPEW','mpfad','tpfa'}
         % incializando variaveis
         
-        % interpolação nos nós ou faces
-        [pinterp]=pressureinterp(p_old,nflagface,nflagno,w,s,...
-            parameter,weightDMP,mobility,gravresult,gravrate);
-        
+        pinterp=0;
         % calculo da matriz globlal inicial
         [M_old,RHS_old]=globalmatrix(p_old,pinterp,gamma,nflagface,nflagno,...
             parameter,kmap,fonte,w,s,weightDMP,auxface,wells,...
