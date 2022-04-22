@@ -1,6 +1,6 @@
 % Esta funcao calcula os pesos fornecidos na equacao 15do artigo  S.Miao
 % and J. Wu, 2021.
-function [ w,s] = Pre_ELPEW_2(kmap,N,g)
+function [ w,s] = Pre_ELPEW_2(kmap)
 global coord  esurn2
 % devolve os pesos "w" cujos elementos são organizados em um vetor
 %Retorna todos os parâmetros necessários às expressões dos fluxos.
