@@ -1,4 +1,4 @@
-function [ w,s] = Pre_LPEW_2(kmap,N,g)
+function [ w,s] = Pre_LPEW_2(kmap,N)
 global coord bcflag bedge nsurn1 nsurn2 inedge
 % devolve os pesos "w" cujos elementos são organizados em um vetor
 %Retorna todos os parâmetros necessários às expressões dos fluxos.
