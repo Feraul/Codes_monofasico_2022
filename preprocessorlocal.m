@@ -195,7 +195,7 @@ elseif strcmp(pmetodo,'mpfad')
         [weight,contrcontor] = Pre_LPEW_1(kmap,N);
     elseif strcmp(interpol,'eLPEW2')
         % interpolaca LPEW2 modificado por proposto por Miao e Wu 2021
-        [weight,contrcontor] = Pre_ELPEW_2(kmap,N,gravrate);
+        [weight,contrcontor] = Pre_ELPEW_2(kmap);
      elseif strcmp(interpol,'LS')
        [ weight,contrcontor] = LS(kmap);
        
@@ -203,8 +203,9 @@ elseif strcmp(pmetodo,'mpfad')
         disp('>> falta implementar!')
         
     else
+        % caso contrario utiliza interpolacao LPEW2
         % interpolaca LPEW1 proposto por Gao e Wu 2010
-        [weight,contrcontor] = Pre_LPEW_2(kmap,N,gravrate);
+        [weight,contrcontor] = Pre_LPEW_2(kmap,N);
     end
     % gravitational term
     if strcmp(gravitational,'yes')
