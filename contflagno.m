@@ -31,17 +31,17 @@ for ifacont=1:size(bedge,1)
             xx=bcflag(:,1)==bedge(ifacont,4);
             rr=find(xx==1);
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
-            
+             h1=1; h2=10;
             if nflag(bedge(ifacont,1),1)>200
               % condicao de contorno de Neumann no lado superior e inferior
                nflag(bedge(ifacont,1),2)=0;
             else
                 if single(y)>0.5
-                    nflag(bedge(ifacont,1),2)= y;
+                    nflag(bedge(ifacont,1),2)= h1*y;
                 else
                     
                     % condicao de contorno de Dirichlet no lado direito e esquerdo
-                    nflag(bedge(ifacont,1),2)= 10*y;
+                    nflag(bedge(ifacont,1),2)= h2*y;
                 end
               
             end
