@@ -26,7 +26,26 @@ for ifacont=1:size(bedge,1)
               nflag(bedge(ifacont,1),2)= 4*x+y+5;
               
             end
-        case{'starnonigrav2'}
+        case 'starnonigrav1'
+            % flag do no
+            xx=bcflag(:,1)==bedge(ifacont,4);
+            rr=find(xx==1);
+            nflag(bedge(ifacont,1),1)=bcflag(rr,1);
+            
+            if nflag(bedge(ifacont,1),1)>200
+              % condicao de contorno de Neumann no lado superior e inferior
+               nflag(bedge(ifacont,1),2)=0;
+            else
+                if single(y)>0.5
+                    nflag(bedge(ifacont,1),2)= y;
+                else
+                    
+                    % condicao de contorno de Dirichlet no lado direito e esquerdo
+                    nflag(bedge(ifacont,1),2)= 10*y;
+                end
+              
+            end
+        case 'starnonigrav2'
             xx=bcflag(:,1)==bedge(ifacont,4);
             rr=find(xx==1);
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
@@ -48,11 +67,10 @@ for ifacont=1:size(bedge,1)
                nflag(bedge(ifacont,1),2)=0;
             else
                 if single(y)>0.5
-                    nflag(bedge(ifacont,1),2)= -sind(x)*cosd(y)+h1*y;
+                    nflag(bedge(ifacont,1),2)= -sin(x)*cos(y)+h1*y;
                 else
-                    
                     % condicao de contorno de Dirichlet no lado direito e esquerdo
-                    nflag(bedge(ifacont,1),2)= -sind(x)*cosd(y)+h2*y;
+                    nflag(bedge(ifacont,1),2)= -sin(x)*cos(y)+h2*y;
                 end
               
             end
@@ -66,33 +84,14 @@ for ifacont=1:size(bedge,1)
                nflag(bedge(ifacont,1),2)=0;
             else
                 if single(y)>0.5
-                    nflag(bedge(ifacont,1),2)= -100*sind(x)*cosd(y)+h1*y;
+                    nflag(bedge(ifacont,1),2)= -100*sin(x)*cos(y)+h1*y;
                 else
                     
                     % condicao de contorno de Dirichlet no lado direito e esquerdo
-                    nflag(bedge(ifacont,1),2)= -100*sind(x)*cosd(y)+h2*y;
+                    nflag(bedge(ifacont,1),2)= -100*sin(x)*cos(y)+h2*y;
                 end
-              
             end
-        case 'starnonigrav1'
-            % flag do no
-            xx=bcflag(:,1)==bedge(ifacont,4);
-            rr=find(xx==1);
-            nflag(bedge(ifacont,1),1)=bcflag(rr,1);
-            
-            if nflag(bedge(ifacont,1),1)>200
-              % condicao de contorno de Neumann no lado superior e inferior
-               nflag(bedge(ifacont,1),2)=0;
-            else
-                if single(y)>0.5
-                    nflag(bedge(ifacont,1),2)= y;
-                else
-                    
-                    % condicao de contorno de Dirichlet no lado direito e esquerdo
-                    nflag(bedge(ifacont,1),2)= 10*y;
-                end
-              
-            end
+       
         case{'zhangkobaise'}
             xx=bcflag(:,1)==bedge(ifacont,4);
             rr=find(xx==1);
