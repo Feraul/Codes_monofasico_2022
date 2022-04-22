@@ -148,7 +148,6 @@ for iface=1:size(inedge,1)
             
             M(rel, esurn1(post_cont))=M(rel,esurn1(post_cont)) + Kde(iface)*Ded(iface)*w(post_cont);
             
-            % I(esurn1(post_cont))=I(esurn1(post_cont))-Kde(iface)*Ded(iface)*w(post_cont)*gravelem(esurn1(post_cont));
         end
     end
     % termo gravitacional
