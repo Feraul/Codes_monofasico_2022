@@ -184,7 +184,7 @@ switch benchmark
                 u(i,1)= -sin(x)*cos(y)+h1*y;
                 gravelem(i,1)=sin(x)*cos(y)-h1*y;
                 % calculo do gravidade
-                grav(i,:)=[cosd(x)*cos(y) -h1-sin(x)*sin(y)];
+                grav(i,:)=[cos(x)*cos(y) -h1-sin(x)*sin(y)];
             else
                 % solucao analitica
                 u(i,1)= -sin(x)*cos(y)+h2*y;
@@ -256,15 +256,15 @@ switch benchmark
             if single(y)>0.5
                 
                 % solucao analitica
-                u(i,1)= -100*sind(x)*cosd(y)+h1*y;
+                u(i,1)= -100*sin(x)*cos(y)+h1*y;
                 gravelem(i,1)=100*sind(x)*cosd(y)-h1*y;
                 % calculo do gravidade
-                grav(i,:)=[cosd(x)*cosd(y) -h1-sind(x)*sind(y)];
+                grav(i,:)=[100*cos(x)*cos(y) -h1-100*sin(x)*sin(y)];
             else
                 % solucao analitica
-                u(i,1)= -100*sind(x)*cosd(y)+h2*y;
+                u(i,1)= -100*sin(x)*cos(y)+h2*y;
                 % calculo do gravidade
-                grav(i,:)=[cosd(x)*cosd(y) -h2-sind(x)*sind(y)];
+                grav(i,:)=[100*cos(x)*cos(y) -h2-100*sin(x)*sin(y)];
                 gravelem(i,1)=100*sind(x)*cosd(y)-h2*y;
             end
         end
