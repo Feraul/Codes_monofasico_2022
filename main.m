@@ -40,7 +40,7 @@ global coord centelem elem esurn1 esurn2 nsurn1 nsurn2 bedge inedge ...
 % erromethod3 --->  ''     ''     por Eigestad et al 2005
 % erromethod4 --->  ''     ''     por Shen e Yuan 2015
 % erromethod6 --->  ''     ''     por M. Starnoni 2019
-erromethod='erromethod1';
+erromethod='erromethod6';
 %% defina o tipo de solver 
 % tpfa      --> metodo Linear dos volumes finito TPFA
 % mpfad     --> (MPFA-D) 
@@ -65,11 +65,11 @@ pmetodo='mpfad';
 %  iteration='AA';  % picard com aceleracao de Anderson
 %iteration='iterhybrid';
 %% defina o ponto de interpolacao
-%interpol='LPEW2';
+interpol='LPEW2';
 %interpol='LPEW1';
 %interpol='LS';
 %interpol='eLS';
-interpol='eLPEW2';
+%interpol='eLPEW2';
 %% correcao dos pontos harmonicos
 % digite 'yes' ou 'no'
 correction='no';
