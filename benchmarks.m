@@ -58,21 +58,23 @@ switch benchmark
             %Define "x" and "y"
             y = centelem(i,2);
             % parametro segundo  Starnoni
-            h1=1;
-            h2=10;
-            if single(y)>0.5
+            h1=10;
+            h2=1;
+            if y>=0.5
                 
                 % solucao analitica
-                u(i,1)= h1*y;
-                gravelem(i,1)=-h1*y;
+                u(i,1)= 11-h1*y;
+                gravelem(i,1)=h1*y;
                 % calculo do gravidade
-                grav(i,:)=-h1*[0,1];
+                grav(i,:)=h1*[0,1];
+
             else
                 % solucao analitica
-                u(i,1)= h2*y;
+                u(i,1)= 6.5-h2*y;
                 % calculo do gravidade
-                grav(i,:)=-h2*[0,1];
+                grav(i,:)=h2*[0,1];
                 gravelem(i,1)=-h2*y;
+
             end
         end
         for jj=1:size(coord,1)
@@ -133,10 +135,13 @@ switch benchmark
             y = centelem(i,2);
             % solucao analitica foi calculado usando pag. 385
             % Calculo II Tom Apostol
-            u(i,1)= -sin(x)*cos(y);
+            
+                u(i,1)= sin(x)*cos(y);
+                
+           
             gravelem(i,1)=sin(x)*cos(y);
             % gravidade
-            grav(i,:)=[cos(x)*cos(y) -sin(x)*sin(y)];
+            grav(i,:)=[-cos(x)*cos(y) sin(x)*sin(y)];
             %grav(i,:)=[0 sind(x)*cosd(y)/y];
         end
         for j=1:size(coord,1)
@@ -176,20 +181,20 @@ switch benchmark
             x = centelem(i,1);
             y = centelem(i,2);
             % parametro segundo  Starnoni
-            h1=1;
-            h2=10;
+            h1=10;
+            h2=1;
             if single(y)>0.5
                 
                 % solucao analitica
-                u(i,1)= -sin(x)*cos(y)+h1*y;
+                u(i,1)= sin(x)*cos(y)+11-h1*y;
                 gravelem(i,1)=sin(x)*cos(y)-h1*y;
                 % calculo do gravidade
-                grav(i,:)=[cos(x)*cos(y) -h1-sin(x)*sin(y)];
+                grav(i,:)=[-cos(x)*cos(y) h1+sin(x)*sin(y)];
             else
                 % solucao analitica
-                u(i,1)= -sin(x)*cos(y)+h2*y;
+                u(i,1)= sin(x)*cos(y)+6.5-h2*y;
                 % calculo do gravidade
-                grav(i,:)=[cos(x)*cos(y) -h2-sin(x)*sin(y)];
+                grav(i,:)=[-cos(x)*cos(y) h2+sin(x)*sin(y)];
                 gravelem(i,1)=sin(x)*cos(y)-h2*y;
             end
         end
@@ -251,20 +256,20 @@ switch benchmark
             x = centelem(i,1);
             y = centelem(i,2);
             % parametro segundo  Starnoni
-            h1=1;
-            h2=10;
+            h1=10;
+            h2=1;
             if single(y)>0.5
                 
                 % solucao analitica
-                u(i,1)= -100*sin(x)*cos(y)+h1*y;
+                u(i,1)= 100*sin(x)*cos(y)+11-h1*y;
                 gravelem(i,1)=100*sind(x)*cosd(y)-h1*y;
                 % calculo do gravidade
-                grav(i,:)=[100*cos(x)*cos(y) -h1-100*sin(x)*sin(y)];
+                grav(i,:)=[-100*cos(x)*cos(y) h1+100*sin(x)*sin(y)];
             else
                 % solucao analitica
-                u(i,1)= -100*sin(x)*cos(y)+h2*y;
+                u(i,1)= 100*sin(x)*cos(y)+6.5-h2*y;
                 % calculo do gravidade
-                grav(i,:)=[100*cos(x)*cos(y) -h2-100*sin(x)*sin(y)];
+                grav(i,:)=[-100*cos(x)*cos(y) h2+100*sin(x)*sin(y)];
                 gravelem(i,1)=100*sind(x)*cosd(y)-h2*y;
             end
         end

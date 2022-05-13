@@ -1,7 +1,7 @@
 % Esta funcao calcula ou impoe todos flags de contorno e seus respectivos
 % valores
-function nflag= contflagno(bedge)
-global  bcflag coord elem benchmark
+function nflag= contflagno
+global  bcflag coord elem benchmark bedge
 
 
 % 500000: simplesmente representa o flag dos vertices interiores
@@ -31,17 +31,16 @@ for ifacont=1:size(bedge,1)
             xx=bcflag(:,1)==bedge(ifacont,4);
             rr=find(xx==1);
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
-             h1=1; h2=10;
+             h1=10; h2=1;
             if nflag(bedge(ifacont,1),1)>200
               % condicao de contorno de Neumann no lado superior e inferior
                nflag(bedge(ifacont,1),2)=0;
             else
-                if single(y)>0.5
-                    nflag(bedge(ifacont,1),2)= h1*y;
-                else
-                    
-                    % condicao de contorno de Dirichlet no lado direito e esquerdo
-                    nflag(bedge(ifacont,1),2)= h2*y;
+                % condicao de contorno de Dirichlet no lado direito e esquerdo
+                if y>=0.5
+                    nflag(bedge(ifacont,1),2)= 11-h1*y;
+                else    
+                    nflag(bedge(ifacont,1),2)= 6.5-h2*y;
                 end
               
             end
@@ -55,22 +54,24 @@ for ifacont=1:size(bedge,1)
                nflag(bedge(ifacont,1),2)=0;
             else
               % condicao de contorno de Dirichlet no lado direito e esquerdo
-              nflag(bedge(ifacont,1),2)= -sin(x)*cos(y);              
+              
+              nflag(bedge(ifacont,1),2)= sin(x)*cos(y); 
+              
             end
         case 'starnonigrav3'
             xx=bcflag(:,1)==bedge(ifacont,4);
             rr=find(xx==1);
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
-            h1=1; h2=10;
+            h1=10; h2=1;
             if nflag(bedge(ifacont,1),1)>200
               % condicao de contorno de Neumann no lado superior e inferior
                nflag(bedge(ifacont,1),2)=0;
             else
-                if single(y)>0.5
-                    nflag(bedge(ifacont,1),2)= -sin(x)*cos(y)+h1*y;
+                if y>=0.5
+                    nflag(bedge(ifacont,1),2)= sin(x)*cos(y)+11-h1*y;
                 else
                     % condicao de contorno de Dirichlet no lado direito e esquerdo
-                    nflag(bedge(ifacont,1),2)= -sin(x)*cos(y)+h2*y;
+                    nflag(bedge(ifacont,1),2)= sin(x)*cos(y)+6.5-h2*y;
                 end
               
             end
@@ -78,17 +79,17 @@ for ifacont=1:size(bedge,1)
             xx=bcflag(:,1)==bedge(ifacont,4);
             rr=find(xx==1);
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
-            h1=1; h2=10;
+            h1=10; h2=1;
             if nflag(bedge(ifacont,1),1)>200
               % condicao de contorno de Neumann no lado superior e inferior
                nflag(bedge(ifacont,1),2)=0;
             else
-                if single(y)>0.5
-                    nflag(bedge(ifacont,1),2)= -100*sin(x)*cos(y)+h1*y;
+                if y>=0.5
+                    nflag(bedge(ifacont,1),2)= 100*sin(x)*cos(y)+11-h1*y;
                 else
                     
                     % condicao de contorno de Dirichlet no lado direito e esquerdo
-                    nflag(bedge(ifacont,1),2)= -100*sin(x)*cos(y)+h2*y;
+                    nflag(bedge(ifacont,1),2)= 100*sin(x)*cos(y)+6.5-h2*y;
                 end
             end
        
