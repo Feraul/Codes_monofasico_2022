@@ -1,6 +1,6 @@
 function [M,I] = globalmatrixtpfa(Kde, Kn, nflagface, Hesq,gravresult,gravrate,gravno,gravelem)
 
-global inedge bedge elem coord bcflag gravitational
+global inedge bedge elem coord bcflag gravitational strategy
 
 % Constrói a matriz global.
 % prealocação da matriz global e do vetor termo de fonte
@@ -9,7 +9,7 @@ I=zeros(size(elem,1),1);
 
 % Loop de faces de contorno
 m=0;
-m3=0;
+
 for ifacont=1:size(bedge,1)
     v0=coord(bedge(ifacont,2),:)-coord(bedge(ifacont,1),:);
     normcont=norm(v0);
@@ -22,9 +22,15 @@ for ifacont=1:size(bedge,1)
         c1=nflagface(ifacont,2);
         
         if strcmp(gravitational,'yes')
-            m1=-nflagface(ifacont,2);
-            m=A*(norm(v0)^2*m1-norm(v0)^2*gravelem(lef));
-            %m=gravrate(ifacont);
+            if strcmp(strategy,'starnoni')
+                m=-gravrate(ifacont);
+            else
+                m1=-nflagface(ifacont,2);
+                m=A*(norm(v0)^2*m1-norm(v0)^2*gravelem(lef));
+            end
+        else
+            m=0;
+            
         end
         
         %Preenchimento
@@ -53,11 +59,16 @@ for iface=1:size(inedge,1),
     M(inedge(iface,4), inedge(iface,4))=M(inedge(iface,4), inedge(iface,4))-Kde(iface,1);
     M(inedge(iface,4), inedge(iface,3))=M(inedge(iface,4), inedge(iface,3))+Kde(iface,1);
     if strcmp(gravitational,'yes')
-        m= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1));
-        %m=gravrate(size(bedge,1)+iface,1);
+        if strcmp(strategy,'starnoni')
+            m=-gravrate(size(bedge,1)+iface);
+        else
+            m= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1));
+            %m=gravrate(size(bedge,1)+iface,1);
+            
+        end
         I(lef)=I(lef)-m;
         I(rel)=I(rel)+m;
-        
     end
+        
 end
 end
