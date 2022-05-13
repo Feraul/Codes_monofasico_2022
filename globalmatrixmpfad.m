@@ -1,7 +1,7 @@
 function [ M, I ] = globalmatrixmpfad( w,s, Kde, Ded, Kn, Kt, nflagno, ...
     Hesq,fonte,gravresult,gravrate,gravno,gravelem)
 
-global coord elem esurn1 esurn2  bedge inedge  centelem bcflag gravitational...
+global coord elem esurn1 esurn2  bedge inedge  centelem bcflag elemarea gravitational...
     strategy
 
 %-----------------------inicio da rutina ----------------------------------%
@@ -9,8 +9,9 @@ global coord elem esurn1 esurn2  bedge inedge  centelem bcflag gravitational...
 
 M=sparse(size(elem,1),size(elem,1)); %Prealocação de M.
 I=sparse(size(elem,1),1);
+Iaux=zeros(size(elem,1),1);
 % fonte
-I=I+fonte;
+I=I+fonte;%+gravresult;
 % contribuição dos poços
 m=0;
 
@@ -45,43 +46,47 @@ for ifacont=1:size(bedge,1)
         M(lef,lef)=M(lef,lef)-A*(norm(v0)^2);
         
         I(lef)=I(lef)-A*(dot(v2,-v0)*c1+dot(v1,v0)*c2)+(c2-c1)*Kt(ifacont)-m;
-        
+        %Iaux(lef)=Iaux(lef)-m;
     else
         
-%                         if strcmp(gravitational,'yes')
-%                             no1=bedge(ifacont,1);
-%                             no2=bedge(ifacont,2);
-%                             nec1=esurn2(no1+1)-esurn2(no1);
-%                             nec2=esurn2(no2+1)-esurn2(no2);
-%                             g1=0;
-%                             if nflagno(no1,1)<200
-%                                 g1=gravno(no1,1);
-%                             else
-%                                 for j=1:nec1
-%                                     element1=esurn1(esurn2(no1)+j);
-%                                     g1=g1+w(esurn2(no1)+j)*gravelem(element1);
-%                                 end
-%                             end
-%                             g2=0;
-%                             if  nflagno(no2,1)<200
-%                                 g2=gravno(no2,1);
-%                             else
-%                                 for j=1:nec2
-%                                     element2=esurn1(esurn2(no2)+j);
-%                                     g2=g2+w(esurn2(no2)+j)*gravelem(element2);
-%                                 end
-%                             end
+%                 if strcmp(gravitational,'yes')
 %         
-%                             %m=A*(dot(v2,-v0)*g1+dot(v1,v0)*g2-norm(v0)^2*gravelem(lef))-(g2-g1)*Kt(ifacont);
-%                              m=gravrate(ifacont);
+%                     if strcmp(strategy,'starnoni')
+%                         m=-gravrate(ifacont);
+%                     elseif strcmp(strategy,'inhouse')
+%                         no1=bedge(ifacont,1);
+%                         no2=bedge(ifacont,2);
+%                         nec1=esurn2(no1+1)-esurn2(no1);
+%                         nec2=esurn2(no2+1)-esurn2(no2);
+%                         g1=0;
+%                         if nflagno(no1,1)<200
+%                             g1=gravno(no1,1);
 %                         else
-%                             m=0;
+%                             for j=1:nec1
+%                                 element1=esurn1(esurn2(no1)+j);
+%                                 g1=g1+w(esurn2(no1)+j)*gravelem(element1);
+%                             end
 %                         end
+%                         g2=0;
+%                         if  nflagno(no2,1)<200
+%                             g2=gravno(no2,1);
+%                         else
+%                             for j=1:nec2
+%                                 element2=esurn1(esurn2(no2)+j);
+%                                 g2=g2+w(esurn2(no2)+j)*gravelem(element2);
+%                             end
+%                         end
+%         
+%                     end
+%                 else
+%                     m=0;
+%                 end
         
         % contorno de Neumann
         x=bcflag(:,1)==bedge(ifacont,5);
         r=find(x==1);
-        I(lef)=I(lef) -normcont*bcflag(r,2);%+m;
+        I(lef)=I(lef) -normcont*bcflag(r,2);%-m;
+        %Iaux(lef)=Iaux(lef)-m;
     end
     
 end
@@ -152,7 +157,6 @@ for iface=1:size(inedge,1)
     end
     % termo gravitacional
     if strcmp(gravitational,'yes')
-        
         if strcmp(strategy,'starnoni')
             m=-gravrate(size(bedge,1)+iface,1);
         elseif strcmp(strategy,'inhouse')
@@ -178,13 +182,11 @@ for iface=1:size(inedge,1)
                     g2=g2+w(esurn2(no2)+jj)*gravelem(element2);
                 end
             end
-            
             m= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1)-Ded(iface)*(g2-g1));
         end
-        
         I(lef)=I(lef)-m;
         I(rel)=I(rel)+m;
-        
     end
+end
 end
 
