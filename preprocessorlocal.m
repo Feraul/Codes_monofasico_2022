@@ -1,7 +1,7 @@
 function [pointarmonic,parameter,gamma,p_old,tol,nit,er,nflagface,...
     nflagno,weightDMP,Hesq,Kde,Kn,Kt,Ded,auxface,calnormface,...
     gravresult,gravrate,weight,contrcontor]=preprocessorlocal(kmap,...
-    N,grav,gravface)
+    N,grav,gravface,gravelem)
 global elem gravitational pmetodo interpol correction bedge strategy
 % inicializando as variaveis
 nflagno=0;
@@ -27,7 +27,7 @@ if strcmp(pmetodo,'nlfvLPEW')
     %temos usado para muitos estes o seguinte rutina
     [parameter,calnormface]=coefficientLPSangle(kmap);
     % adequação dos flags de contorno
-    nflagno= contflagno(bedge);
+    nflagno= contflagno;
     
     % calculo dos pesos que correspondem aos metodos de interpolacao
     if strcmp(interpol,'LPEW1')
@@ -187,7 +187,7 @@ elseif strcmp(pmetodo,'mpfad')
     %% calculo das constantes fisicos-geometrico
     [Hesq, Kde, Kn, Kt, Ded]=preMPFAD(kmap);
     % adequação dos flags de contorno
-    nflagno= contflagno(bedge);
+    nflagno= contflagno;
     
     % calculo dos pesos que correspondem aos metodos de interpolacao
     if strcmp(interpol,'LPEW1')
@@ -211,7 +211,7 @@ elseif strcmp(pmetodo,'mpfad')
     if strcmp(gravitational,'yes')
         if strcmp(strategy,'starnoni')
         
-        [gravresult,gravrate]=gravitation(kmap,grav,gravface);
+        [gravresult,gravrate]=gravitation(kmap,grav,gravface,gravelem);
         end
     end
 else
