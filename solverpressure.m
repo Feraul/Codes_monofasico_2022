@@ -162,6 +162,8 @@ switch pmetodo
             gravno,gravelem,gravface);
         pressure=M_old\RHS_old;
         
+        
+        
         tabletol=0;
         name = pmetodo;
         X = sprintf('>> calculo o campo de pressao pelo metodo: %s ',name);
