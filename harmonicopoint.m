@@ -53,6 +53,7 @@ for iface=1:size(inedge,1)
     % calculo dos pontos armonicos
     y(iface+size(bedge,1),:)=(hrel*Knlef*centelem(lef,:)'+ hlef*Knrel*centelem(rel,:)'+...
         hlef*hrel*(Klef'-Krel')*(R*(vd1/norm(vd1))'))/(hrel*Knlef+hlef*Knrel);
+   
     %=====================================================================%
     %     calculo dos pontos que saim fora da face interna nos pontos
     %     intermeadiarios da discontinuidade, sobre na discontinuidade
