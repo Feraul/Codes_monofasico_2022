@@ -1,5 +1,5 @@
 function [M,I]=assemblematrixlfvHPv3(parameter,fonte,nflagface,weightDMP,wells,mobility,gravresult,gravrate,gravelem,gravface)
-global inedge coord bedge bcflag elem elemarea gravitational
+global inedge coord bedge bcflag elem elemarea gravitational strategy
 % incialização das matrizes
 I=sparse(size(elem,1),1);
 M=sparse(size(elem,1),size(elem,1));
@@ -18,12 +18,17 @@ for ifacont=1:size(bedge,1)
         I(lef)=I(lef)- normcont*bcflag(r,2);
     else
         if strcmp(gravitational,'yes')
-            ifacelef1=parameter(1,3,ifacont);
-            ifacelef2=parameter(1,4,ifacont);
-            m1=gravface(ifacelef1,1);
-            m2=gravface(ifacelef2,1);
-            m=normcont*((parameter(1,1,ifacont)+parameter(1,2,ifacont))*gravelem(lef,1)-...
-                parameter(1,1,ifacont)*m1-parameter(1,2,ifacont)*m2);
+            if strcmp(strategy,'starnoni')
+                m=-gravrate(ifacont);
+            elseif strcmp(strategy,'inhouse')
+                
+                ifacelef1=parameter(1,3,ifacont);
+                ifacelef2=parameter(1,4,ifacont);
+                m1=gravface(ifacelef1,1);
+                m2=gravface(ifacelef2,1);
+                m=normcont*((parameter(1,1,ifacont)+parameter(1,2,ifacont))*gravelem(lef,1)-...
+                    parameter(1,1,ifacont)*m1-parameter(1,2,ifacont)*m2);
+            end
             %m=gravrate(ifacont,1);
         end
         %-------------------------------------------------------------%
@@ -783,21 +788,26 @@ for iface=1:size(inedge,1)
         
     end
     if strcmp(gravitational,'yes')
-        %% termo gravitacional
-        % os nós que conforman os pontos de interpolação no elemento a esquerda
-        auxfacelef1=parameter(1,3,ifactual);
-        auxfacelef2=parameter(1,4,ifactual);
-        % os nós que conforman os pontos de interpolação no elemento a direita
-        auxfacerel1=parameter(2,3,ifactual);
-        auxfacerel2=parameter(2,4,ifactual);
-        % calculo dos fluxo parcial a esquerda
-        f1=norma*((parameter(1,1,ifactual)+parameter(1,2,ifactual))*gravelem(lef)-...
-            parameter(1,1,ifactual)*gravface(auxfacelef1)-parameter(1,2,ifactual)*gravface(auxfacelef2));
-        % calculo dos fluxo parcial a direita
-        f2=norma*((parameter(2,1,ifactual)+parameter(2,2,ifactual))*gravelem(rel)-...
-            parameter(2,1,ifactual)*gravface(auxfacerel1)-parameter(2,2,ifactual)*gravface(auxfacerel2));
         
-        m=(murel*f1-mulef*f2) ;
+        if strcmp(strategy,'starnoni')
+            m=-gravrate(size(bedge,1)+iface);
+        elseif strcmp(strategy,'inhouse')
+            %% termo gravitacional
+            % os nós que conforman os pontos de interpolação no elemento a esquerda
+            auxfacelef1=parameter(1,3,ifactual);
+            auxfacelef2=parameter(1,4,ifactual);
+            % os nós que conforman os pontos de interpolação no elemento a direita
+            auxfacerel1=parameter(2,3,ifactual);
+            auxfacerel2=parameter(2,4,ifactual);
+            % calculo dos fluxo parcial a esquerda
+            f1=norma*((parameter(1,1,ifactual)+parameter(1,2,ifactual))*gravelem(lef)-...
+                parameter(1,1,ifactual)*gravface(auxfacelef1)-parameter(1,2,ifactual)*gravface(auxfacelef2));
+            % calculo dos fluxo parcial a direita
+            f2=norma*((parameter(2,1,ifactual)+parameter(2,2,ifactual))*gravelem(rel)-...
+                parameter(2,1,ifactual)*gravface(auxfacerel1)-parameter(2,2,ifactual)*gravface(auxfacerel2));
+            
+            m=(murel*f1-mulef*f2) ;
+        end
         %m=gravrate(iface+size(bedge,1),1);
         I(lef)=I(lef)-m;
         I(rel)=I(rel)+m;
