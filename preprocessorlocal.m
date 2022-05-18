@@ -145,7 +145,7 @@ elseif strcmp(pmetodo,'nlfvDMPSY')|| strcmp(pmetodo,'lfvHP') || strcmp(pmetodo,'
     % adequação dos flag de face de contorno
     nflagface= contflagface(bedge);
     % adequação dos nos flags de contorno
-    nflagno= contflagno(bedge);
+    nflagno= contflagno;
     % gravitational term
     if strcmp(gravitational,'yes')
         [gravresult,gravrate]=gravitation(kmap,grav,gravface);
