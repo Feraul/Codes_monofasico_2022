@@ -25,12 +25,12 @@ for ifacont=1:size(bedge,1)
             if strcmp(strategy,'starnoni')
                 m=-gravrate(ifacont);
             else
+                % proposto de nos
                 m1=-nflagface(ifacont,2);
                 m=A*(norm(v0)^2*m1-norm(v0)^2*gravelem(lef));
             end
         else
             m=0;
-            
         end
         
         %Preenchimento
