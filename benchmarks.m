@@ -60,21 +60,18 @@ switch benchmark
             % parametro segundo  Starnoni
             h1=10;
             h2=1;
-            if y>=0.5
-                
+            if y>=0.5             
                 % solucao analitica
                 u(i,1)= 11-h1*y;
                 gravelem(i,1)=h1*y;
                 % calculo do gravidade
                 grav(i,:)=h1*[0,1];
-
             else
                 % solucao analitica
                 u(i,1)= 6.5-h2*y;
                 % calculo do gravidade
                 grav(i,:)=h2*[0,1];
-                gravelem(i,1)=-h2*y;
-
+                gravelem(i,1)=h2*y;
             end
         end
         for jj=1:size(coord,1)
@@ -82,18 +79,14 @@ switch benchmark
             
             y2 = coord(jj,2);
             % parametro segundo  Starnoni
-            h1=1;
-            h2=10;
-            if single(y2)>0.5
-                
+            
+            if y2>=0.5 
                 % solucao analitica
-                gravno(jj,1)= -h1*y2;
+                gravno(jj,1)= h1*y2;
             else
                 % solucao analitica
-                gravno(jj,1)= -h2*y2;
-                
-            end
-            
+                gravno(jj,1)= h2*y2;
+            end   
         end
         
         for j=1:size(bedge,1)+size(inedge,1)
@@ -102,43 +95,36 @@ switch benchmark
                 v1=bedge(j,1);
                 v2=bedge(j,2);
                 a=0.5*(coord(v1,:)+coord(v2,:));
-                y11=a(1,2);
             else
                 v1=inedge(j-size(bedge,1),1);
                 v2=inedge(j-size(bedge,1),2);  
                 a=0.5*(coord(v1,:)+coord(v2,:));
-                y11=a(1,2);
             end
-            
+            y11=a(1,2);
             % parametro segundo  Starnoni
-            h1=1;
-            h2=10;
-            if single(y11)>0.5
-                
+           
+            if y11>=0.5    
                 % solucao analitica
-                gravface(j,1)= -h1*y11;
+                gravface(j,1)= h1*y11;
             else
                 % solucao analitica
-                gravface(j,1)= -h2*y11;
-                
+                gravface(j,1)= h2*y11; 
             end
-            
         end
         
         K=kmap;
     case 'starnonigrav2'
-        %Klef=zeros(2,2);
-        %R=[0 1 0; -1 0 0; 0 0 0];
+        
         for i = 1:size(centelem,1)
             %Define "x" and "y"
             x = centelem(i,1);
             y = centelem(i,2);
             % solucao analitica foi calculado usando pag. 385
             % Calculo II Tom Apostol
+            %  sin e cos no radianes
+            u(i,1)=1+sin(x)*cos(y);
             
-                u(i,1)= sin(x)*cos(y);
-                
-           
+            
             gravelem(i,1)=sin(x)*cos(y);
             % gravidade
             grav(i,:)=[-cos(x)*cos(y) sin(x)*sin(y)];
@@ -151,7 +137,7 @@ switch benchmark
             % parametro segundo  Starnoni
             
             % solucao analitica
-            gravno(j,1)= sin(x1)*cos(y1);
+            gravno(j,1)= -sin(x1)*cos(y1);
         end
         
         for j=1:size(bedge,1)+size(inedge,1)
@@ -171,7 +157,7 @@ switch benchmark
                 x2=a(1,1);
                 y2=a(1,2);
             end
-            gravface(j,1)= sin(x2)*cos(y2);
+            gravface(j,1)= -sin(x2)*cos(y2);
         end
         
         K=kmap;
