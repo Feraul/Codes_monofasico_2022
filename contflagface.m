@@ -25,6 +25,23 @@ for ifacont=1:size(bedge,1)
               nflag(ifacont,2)= 4*x+y+5;
               
             end
+        case {'starnonigrav1'}
+             xx=bcflag(:,1)==bedge(ifacont,5);
+            rr=find(xx==1);
+            nflag(ifacont,1)=bcflag(rr,1);
+            
+            if nflag(ifacont,1)>200
+               nflag(ifacont,2)=0;
+            else
+                if y>=0.5
+                    nflag(ifacont,2)= 11-10*y;
+                else
+                    
+                    % condicao de contorno de Dirichlet no lado direito e esquerdo
+                    nflag(ifacont,2)= 6.5-1*y;
+                end
+                 
+            end
         case{'starnonigrav2'}
             xx=bcflag(:,1)==bedge(ifacont,5);
             rr=find(xx==1);
@@ -33,7 +50,7 @@ for ifacont=1:size(bedge,1)
             if nflag(ifacont,1)>200
                nflag(ifacont,2)=0;
             else
-               nflag(ifacont,2)=-sind(x)*cosd(y);  
+               nflag(ifacont,2)=1+sin(x)*cos(y);  
             end
         case {'starnonigrav3'}
              xx=bcflag(:,1)==bedge(ifacont,5);
@@ -69,23 +86,7 @@ for ifacont=1:size(bedge,1)
                 end 
                  
             end   
-        case {'starnonigrav1'}
-             xx=bcflag(:,1)==bedge(ifacont,5);
-            rr=find(xx==1);
-            nflag(ifacont,1)=bcflag(rr,1);
-            
-            if nflag(ifacont,1)>200
-               nflag(ifacont,2)=0;
-            else
-               if single(y)>0.5
-                    nflag(ifacont,2)= 1*y;
-                else
-                    
-                    % condicao de contorno de Dirichlet no lado direito e esquerdo
-                    nflag(ifacont,2)= 10*y;
-                end 
-                 
-            end
+        
         case{'zhangkobaise'}
             xx=bcflag(:,1)==bedge(ifacont,5);
             rr=find(xx==1);
