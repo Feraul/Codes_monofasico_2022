@@ -3,7 +3,8 @@
 function nflag= contflagno
 global  bcflag coord elem benchmark bedge
 
-
+% quarta coluna corresponde a flag do vertice
+% quinta coluna corresponde a flag da face
 % 500000: simplesmente representa o flag dos vertices interiores
 nflag=50000*ones(size(coord,1),2); 
 
@@ -55,12 +56,12 @@ for ifacont=1:size(bedge,1)
             else
               % condicao de contorno de Dirichlet no lado direito e esquerdo
               
-              nflag(bedge(ifacont,1),2)= sin(x)*cos(y); 
-              
+              nflag(bedge(ifacont,1),2)= 1+sin(x)*cos(y);
             end
         case 'starnonigrav3'
             xx=bcflag(:,1)==bedge(ifacont,4);
             rr=find(xx==1);
+            % sin e cos calcula o angulo em radianes
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
             h1=10; h2=1;
             if nflag(bedge(ifacont,1),1)>200
