@@ -130,7 +130,8 @@ switch benchmark
                for i=1:size(elem,1)
                     s1=s1+(solanal(i,1)-p(i,1))^2*elemarea(i,1);
                     s2=s2+(solanal(i,1))^2*elemarea(i,1);
-                end
+               end
+                
                 erropressure=sqrt(s1)/sqrt(s2)
                 % calcula o erro respeito a velocidade
                 e=-velanal-velnum;
