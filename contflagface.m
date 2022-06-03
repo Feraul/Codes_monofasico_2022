@@ -1,5 +1,5 @@
-function [nflag]= contflagface(bedge)
-global bcflag coord elem benchmark
+function [nflag]= contflagface
+global bcflag coord elem benchmark bedge
 
 % determinar o flag do nó interior e fronteira de Neumann
 
@@ -50,7 +50,7 @@ for ifacont=1:size(bedge,1)
             if nflag(ifacont,1)>200
                nflag(ifacont,2)=0;
             else
-               nflag(ifacont,2)=1+sin(x)*cos(y);  
+               nflag(ifacont,2)=10+sin(x)*cos(y);  
             end
         case {'starnonigrav3'}
              xx=bcflag(:,1)==bedge(ifacont,5);

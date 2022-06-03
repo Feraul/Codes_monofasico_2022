@@ -14,10 +14,11 @@ for ifacont=1:size(bedge,1)
     y=a(1,2);
     
     lef=bedge(ifacont,3);
-    %%
+    
     switch benchmark
         case 'miao'
-            xx=bcflag(:,1)==bedge(ifacont,4);
+            xx=bcflag(:,1)==bedge(ifacont,4); % quarta coluna bedge 
+            %corresoponde ao flag do vertice
             rr=find(xx==1);
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
             
@@ -29,7 +30,8 @@ for ifacont=1:size(bedge,1)
             end
         case 'starnonigrav1'
             % flag do no
-            xx=bcflag(:,1)==bedge(ifacont,4);
+            xx=bcflag(:,1)==bedge(ifacont,4); % quarta coluna bedge 
+            %corresoponde ao flag do vertice
             rr=find(xx==1);
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
              h1=10; h2=1;
@@ -46,7 +48,8 @@ for ifacont=1:size(bedge,1)
               
             end
         case 'starnonigrav2'
-            xx=bcflag(:,1)==bedge(ifacont,4);
+            xx=bcflag(:,1)==bedge(ifacont,4); % quarta coluna bedge 
+            %corresoponde ao flag do vertice
             rr=find(xx==1);
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
             
@@ -56,7 +59,7 @@ for ifacont=1:size(bedge,1)
             else
               % condicao de contorno de Dirichlet no lado direito e esquerdo
               
-              nflag(bedge(ifacont,1),2)= 1+sin(x)*cos(y);
+              nflag(bedge(ifacont,1),2)= 10+sin(x)*cos(y);
             end
         case 'starnonigrav3'
             xx=bcflag(:,1)==bedge(ifacont,4);
@@ -95,7 +98,8 @@ for ifacont=1:size(bedge,1)
             end
        
         case{'zhangkobaise'}
-            xx=bcflag(:,1)==bedge(ifacont,4);
+            xx=bcflag(:,1)==bedge(ifacont,4);% quarta coluna bedge 
+            %corresoponde ao flag do vertice
             rr=find(xx==1);
             nflag(bedge(ifacont,1),1)=bcflag(rr,1);
             teta=calculoteta(x,y);
