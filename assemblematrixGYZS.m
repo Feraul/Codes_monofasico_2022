@@ -1,43 +1,38 @@
-function [M,I]=assemblematrixGYZS(pinterp,parameter,fonte,wells,mobility,calnormface)
-global inedge coord bedge bcflag elem elemarea
+function [M,I]=assemblematrixGYZS(pinterp,parameter,fonte,wells,calnormface,gravrate)
+global inedge coord bedge bcflag elem elemarea gravitational strategy
 I=sparse(size(elem,1),1);
 M=sparse(size(elem,1),size(elem,1));
 
 %% fonte
 I=I+fonte;
 %%
-if max(max(wells))~=0
-    sumvol=0;
-    for iw = 1:size(wells,1)
-        
-        if wells(iw,2)==1            % injetor
-            I(wells(iw,1))= 1*elemarea(wells(iw,1));        % injeta um m3 de agua por dia (d)
-            sumvol=sumvol+ elemarea(wells(iw,1));
+
+for ifacont=1:size(bedge,1)
+    lef=bedge(ifacont,3);
+    
+    normcont=norm(coord(bedge(ifacont,1),:)-coord(bedge(ifacont,2),:));
+    
+    if bedge(ifacont,5)>200
+        x=bcflag(:,1)==bedge(ifacont,5);
+        r=find(x==1);
+        I(lef)=I(lef)- normcont*bcflag(r,2);
+    else
+        %% calculo da contribuição do contorno, veja Eq. 2.17 (resp. eq. 24) do artigo Gao and Wu 2015 (resp. Gao and Wu 2014)
+        if strcmp(gravitational,'yes')
+            if strcmp(strategy,'starnoni')
+                m=gravrate(ifacont);
+            else
+                m=0;
+            end
         end
-    end
-    I=I./sumvol;
-else
-    for ifacont=1:size(bedge,1)
-        lef=bedge(ifacont,3);
+        alef=normcont*(parameter(1,1,ifacont)*pinterp(parameter(1,3,ifacont))+...
+            parameter(1,2,ifacont)*pinterp(parameter(1,4,ifacont)));
         
-        normcont=norm(coord(bedge(ifacont,1),:)-coord(bedge(ifacont,2),:));
+        Alef=normcont*(parameter(1,1,ifacont)+parameter(1,2,ifacont));
         
-        if bedge(ifacont,5)>200
-            x=bcflag(:,1)==bedge(ifacont,5);
-            r=find(x==1);
-            I(lef)=I(lef)- normcont*bcflag(r,2);
-        else
-            %% calculo da contribuição do contorno, veja Eq. 2.17 (resp. eq. 24) do artigo Gao and Wu 2015 (resp. Gao and Wu 2014)
-            
-            alef=normcont*(parameter(1,1,ifacont)*pinterp(parameter(1,3,ifacont))+...
-                parameter(1,2,ifacont)*pinterp(parameter(1,4,ifacont)));
-            
-            Alef=normcont*(parameter(1,1,ifacont)+parameter(1,2,ifacont));
-            
-            %% implementação da matriz global no contorno
-            M(lef,lef)=M(lef,lef)+ Alef;
-            I(lef,1)=I(lef,1)+alef;
-        end
+        %% implementação da matriz global no contorno
+        M(lef,lef)=M(lef,lef)+ Alef;
+        I(lef,1)=I(lef,1)+alef-m;
     end
 end
 %% Montagem da matriz global
@@ -63,15 +58,15 @@ for iface=1:size(inedge,1)
     %    parameter(2,2,ifactual)*pinterp(parameter(2,4,ifactual));
     arel= parameter(2,1,ifactual)*pinterp(parameter(2,3,ifactual))+...
         parameter(2,2,ifactual)*pinterp(parameter(2,4,ifactual));
-      
-     mulef=(abs(arel)+coef)/(abs(alef)+abs(arel)+2*coef);  
-     murel=(abs(alef)+coef)/(abs(alef)+abs(arel)+2*coef);
-     
-    % mulef=(arel+coef)/(alef+arel+2*coef);  
+    
+    mulef=(abs(arel)+coef)/(abs(alef)+abs(arel)+2*coef);
+    murel=(abs(alef)+coef)/(abs(alef)+abs(arel)+2*coef);
+    
+    % mulef=(arel+coef)/(alef+arel+2*coef);
     % murel=(alef+coef)/(alef+arel+2*coef);
     % calculo da contribuição, Eq. 2.12 (resp. Eq. 21) do artigo Gao and Wu 2015 (resp. Gao and Wu 2014)
     ALL=norma*mulef*(parameter(1,1,ifactual)+parameter(1,2,ifactual));
-   
+    
     ARR=norma*murel*(parameter(2,1,ifactual)+parameter(2,2,ifactual));
     % implementação da matriz global
     % contribuição da transmisibilidade no elemento esquerda
@@ -79,7 +74,16 @@ for iface=1:size(inedge,1)
     M(lef,rel)=M(lef,rel)- ARR;
     % contribuição da transmisibilidade no elemento direita
     M(rel,rel)=M(rel,rel)+ ARR;
-    M(rel,lef)=M(rel,lef)- ALL;    
+    M(rel,lef)=M(rel,lef)- ALL;
+     if strcmp(gravitational,'yes')
+            if strcmp(strategy,'starnoni')
+                m=gravrate(size(bedge,1)+iface);
+            else
+                m=0;
+            end
+            I(lef)=I(lef)-m;
+            I(rel)=I(rel)+m;
+     end
 end
 %% malha 23x23
 % M(357,:)=0*M(357,:);
