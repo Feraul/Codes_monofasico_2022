@@ -1,4 +1,4 @@
-function [M,I] = globalmatrixtpfa(Kde, Kn, nflagface, Hesq,gravresult,gravrate,gravno,gravelem)
+function [M,I] = globalmatrixtpfa(Kde, Kn, nflagface, Hesq,gravresult,gravrate,gravno,gravelem,fonte)
 
 global inedge bedge elem coord bcflag gravitational strategy
 
@@ -6,7 +6,7 @@ global inedge bedge elem coord bcflag gravitational strategy
 % prealocação da matriz global e do vetor termo de fonte
 M=zeros(size(elem,1),size(elem,1));
 I=zeros(size(elem,1),1);
-
+I=I+fonte;
 % Loop de faces de contorno
 m=0;
 
@@ -23,7 +23,7 @@ for ifacont=1:size(bedge,1)
         
         if strcmp(gravitational,'yes')
             if strcmp(strategy,'starnoni')
-                m=-gravrate(ifacont);
+                m=gravrate(ifacont);
             else
                 % proposto de nos
                 m1=-nflagface(ifacont,2);
@@ -60,7 +60,7 @@ for iface=1:size(inedge,1),
     M(inedge(iface,4), inedge(iface,3))=M(inedge(iface,4), inedge(iface,3))+Kde(iface,1);
     if strcmp(gravitational,'yes')
         if strcmp(strategy,'starnoni')
-            m=-gravrate(size(bedge,1)+iface);
+            m=gravrate(size(bedge,1)+iface);
         else
             m= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1));
             %m=gravrate(size(bedge,1)+iface,1);
