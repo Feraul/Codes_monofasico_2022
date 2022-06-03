@@ -42,7 +42,7 @@ if strcmp(pmetodo,'nlfvLPEW')
         disp('>> falta implementar!')
     else
         % interpolaca LPEW1 proposto por Gao e Wu 2010
-        [weight,contrcontor] = Pre_LPEW_2(kmap,N,gravrate);
+        [weight,contrcontor] = Pre_LPEW_2(kmap,N);
     end
     % calculo do termo gravitacional
     if strcmp(gravitational,'yes')
@@ -57,7 +57,7 @@ elseif strcmp(pmetodo,'nlfvLPS')
     %temos usado para muitos estes o seguinte rutina
     [parameter,calnormface]=coefficientLPSangle(kmap);
     % adequação dos flags de contorno
-    nflagno= contflagno(bedge);
+    nflagno= contflagno;
     
     % calculo dos pesos que correspondem aos metodos de interpolacao
     if strcmp(interpol,'LPEW1')
@@ -91,7 +91,7 @@ elseif strcmp(pmetodo,'nlfvPPS')
     %temos usado para muitos estes o seguinte rutina
     [parameter,calnormface]=coefficientLPSangle(kmap);
     % adequação dos flags de contorno
-    nflagno= contflagno(bedge);
+    nflagno= contflagno;
     
     if strcmp(correction,'yes')
         % calculo dos pontos harmonicos com correcao
@@ -120,9 +120,9 @@ elseif strcmp(pmetodo,'nlfvHP')
     % temos usado este parametro durante muito tempo em muitos testes
     [parameter,auxface]=coefficientPPSharmonicpoint(facelement,pointarmonic,kmap,raioaux);
     % adequação dos flag de face de contorno
-    nflagface= contflagface(bedge);
+    nflagface= contflagface;
     % adequação dos nos flags de contorno
-    nflagno= contflagno(bedge);
+    nflagno= contflagno;
     %calculo de parametros
     [Hesq, Kde, Kn, Kt, Ded]=preMPFAD(kmap);
     
@@ -143,7 +143,7 @@ elseif strcmp(pmetodo,'nlfvDMPSY')|| strcmp(pmetodo,'lfvHP') || strcmp(pmetodo,'
     % esta rutina estamos usando de 7/2/2016
     %[parameter]=coefficientPPSusingHP(kmap,facelement,pointarmonic); %para lfvHP
     % adequação dos flag de face de contorno
-    nflagface= contflagface(bedge);
+    nflagface= contflagface;
     % adequação dos nos flags de contorno
     nflagno= contflagno;
     % gravitational term
@@ -156,7 +156,7 @@ elseif strcmp(pmetodo,'lfvLPEW')
     %[parameter]=coefficientLPS(kmap);
     [parameter]=coefficientLPSangle(kmap);
     % adequação dos flags de contorno
-    nflagno= contflagno(bedge);
+    nflagno= contflagno;
     % calculo dos pesos DMP
     [weightDMP]=weightnlfvDMP(kmap);
     
@@ -218,7 +218,7 @@ else
     %% calculo das constantes fisicos-geometrico para o TPFA
     [Hesq, Kde, Kn, Kt, Ded]=preMPFAD(kmap);
     % adequação dos flags de contorno
-    nflagface= contflagface(bedge);
+    nflagface= contflagface;
     if strcmp(gravitational,'yes')
         [gravresult,gravrate]=gravitation(kmap,grav,gravface);
     end
@@ -226,7 +226,7 @@ end
 %% dados inicialização métodos dos volumes finitos não linear
 gamma=0.0;                     % este parametro esta no intervalo [0,1] pode ser utilizado para o método nao linear MPFA
 p_old=1*ones(size(elem,1),1);  % inicializando a presao
-tol=1e-13;                      % tolerancia para metodos não lineares
+tol=1e-10;                      % tolerancia para metodos não lineares
 nit=2000;                      % numero de iteracoes de Picard
 er=1;                          % inicializacao do erro
 end
