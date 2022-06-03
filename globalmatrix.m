@@ -16,7 +16,8 @@ elseif strcmp(pmetodo,'nlfvLPS') || strcmp(pmetodo,'nlfvPPS')
     [M,I]=assemblematrixLPSPPS(p,pinterp,parameter,fonte);
 elseif strcmp(pmetodo,'nlfvLPEW')
     
-    [M,I]=assemblematrixGYZS(pinterp,parameter,fonte,wells,mobility,calnormface);
+    [M,I]=assemblematrixGYZS(pinterp,parameter,fonte,wells,calnormface,gravrate);
+    
 elseif strcmp(pmetodo,'nlfvHP')
     [M,I]=assemblematrixNLFVHP(pinterp,parameter,fonte,wells,Hesq,Kn,Kt,nflagno);
 elseif strcmp(pmetodo,'nlfvDMPSY')
@@ -40,7 +41,7 @@ elseif strcmp(pmetodo,'mpfad')
         fonte,gravresult,gravrate,gravno,gravelem);
 elseif strcmp(pmetodo,'tpfa')
     [ M, I ] = globalmatrixtpfa( Kde, Kn, nflagface, Hesq,gravresult,...
-        gravrate,gravno,gravelem);
+        gravrate,gravno,gravelem,fonte);
    
 end
 end
