@@ -19,7 +19,7 @@ for ifacont=1:size(bedge,1)
     else
         if strcmp(gravitational,'yes')
             if strcmp(strategy,'starnoni')
-                m=-gravrate(ifacont);
+                m=gravrate(ifacont);
             elseif strcmp(strategy,'inhouse')
                 
                 ifacelef1=parameter(1,3,ifacont);
@@ -50,7 +50,7 @@ for ifacont=1:size(bedge,1)
     
 end
 
-% Montagem da matriz global
+%% Montagem da matriz global
 
 for iface=1:size(inedge,1)
     lef=inedge(iface,3);
@@ -790,7 +790,7 @@ for iface=1:size(inedge,1)
     if strcmp(gravitational,'yes')
         
         if strcmp(strategy,'starnoni')
-            m=-gravrate(size(bedge,1)+iface);
+            m=gravrate(size(bedge,1)+iface);
         elseif strcmp(strategy,'inhouse')
             %% termo gravitacional
             % os nós que conforman os pontos de interpolação no elemento a esquerda
