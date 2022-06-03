@@ -122,13 +122,14 @@ switch benchmark
             % solucao analitica foi calculado usando pag. 385
             % Calculo II Tom Apostol
             %  sin e cos no radianes
-            u(i,1)=1+sin(x)*cos(y);
+            u(i,1)=10+sin(x)*cos(y);
             
-            
-            gravelem(i,1)=sin(x)*cos(y);
+            gravelem(i,1)=-10-sin(x)*cos(y);
             % gravidade
             grav(i,:)=[-cos(x)*cos(y) sin(x)*sin(y)];
-            %grav(i,:)=[0 sind(x)*cosd(y)/y];
+            
+            % \nabla*(-K*[-cos(x)*cos(y) sin(x)*sin(y)] )
+           fonte(i,:)=(0.2*cos(x)*sin(y)+2*sin(x)*cos(y))*elemarea(i,1);
         end
         for j=1:size(coord,1)
             %Define "x" and "y"
@@ -137,7 +138,7 @@ switch benchmark
             % parametro segundo  Starnoni
             
             % solucao analitica
-            gravno(j,1)= -sin(x1)*cos(y1);
+            gravno(j,1)=-10- sin(x1)*cos(y1);
         end
         
         for j=1:size(bedge,1)+size(inedge,1)
@@ -157,7 +158,7 @@ switch benchmark
                 x2=a(1,1);
                 y2=a(1,2);
             end
-            gravface(j,1)= -sin(x2)*cos(y2);
+            gravface(j,1)= -10-sin(x2)*cos(y2);
         end
         
         K=kmap;
