@@ -8,39 +8,43 @@ K1=zeros(3,3);
 K2=zeros(3,3);
 K=zeros(3,3);
 for ifacont=1:size(bedge,1)
+    % elemento a esquerda 
     lef=bedge(ifacont,3);
+    % vetor de orientacao da face em questao
     ve1=coord(bedge(ifacont,2),1:2)-coord(bedge(ifacont,1),1:2);
-    
+    % calculo do ponto meio da face em questao
     vmaux=(coord(bedge(ifacont,1),1:2)+coord(bedge(ifacont,2),1:2))*0.5;
-    
+    % distancia do centro ao ponto medio da face
     dist=norm(centelem(lef,1:2)-vmaux);
-    y=centelem(lef,2);
-    
-    if bedge(ifacont,5)<200
-        if bedge(ifacont,5)==102
-            x=centelem(lef,1)+2*dist;
-        else
-            x=centelem(lef,1)-2*dist; 
-        end
-        
-        gravaux=[-cos(x)*cos(y) sin(x)*sin(y)] ;
-    else
-       gravaux=0; 
+
+    if vmaux(1,1)==1 && vmaux(1,2)~=0
+        x=1+dist;
+        y=centelem(lef,2);
+    elseif vmaux(1,1)==0 && vmaux(1,2)~=0
+        x=0-dist;
+        y=centelem(lef,2);
+    elseif vmaux(1,1)~=0 && vmaux(1,2)==0
+        y=0-dist;
+        x=centelem(lef,1);
+    elseif vmaux(1,1)~=0 && vmaux(1,2)==1
+        y=1+dist;
+        x=centelem(lef,1);
     end
-    
+    % calculo do gravidade no elemento fantasma
+    gravaux=[-cos(x)*cos(y) sin(x)*sin(y)] ;
     % tensor de permeabilidade do elemento a esquerda
     Klef(1,1)=-kmap(elem(lef,5),2);
     Klef(1,2)=-kmap(elem(lef,5),3);
     Klef(2,1)=-kmap(elem(lef,5),4);
     Klef(2,2)=-kmap(elem(lef,5),5);
-    Keq=inv((dist*inv(Klef)+dist*inv(Klef))/(dist+dist));
-    g(ifacont,1)=dot((R*ve1')'*Keq,(dist*grav(lef,1:2)+dist*gravaux)/(dist+dist));
+    Keq=inv((dist*inv(Klef)+dist*inv(Klef)));
+    g(ifacont,1)=dot((R*ve1')'*Keq,(dist*grav(lef,1:2)+dist*gravaux));
    
     G(lef,1)=G(lef,1)-g(ifacont,1);
 
 end
 for iface=1:size(inedge,1)
-   
+         % elementos a esquerda e a direita
          lef=inedge(iface,3);
          rel=inedge(iface,4);
          
@@ -62,22 +66,22 @@ for iface=1:size(inedge,1)
 %          ce=cross(vd1aux,ve2);
 %          dj2=norm(ce)/norm(vd1aux); % altura a esquerda
          
-         % tensor do elemento a esquerda
+         % tensor de permeabilidade do elemento a esquerda
          
          Klef(1,1)=-kmap(elem(lef,5),2);
          Klef(1,2)=-kmap(elem(lef,5),3);
          Klef(2,1)=-kmap(elem(lef,5),4);
          Klef(2,2)=-kmap(elem(lef,5),5);
          
-         % tensor do elemento a direita
+         % tensor de permeabilidade do elemento a direita
          
          Krel(1,1)=-kmap(elem(rel,5),2);
          Krel(1,2)=-kmap(elem(rel,5),3);
          Krel(2,1)=-kmap(elem(rel,5),4);
          Krel(2,2)=-kmap(elem(rel,5),5);
          
-         Keq=inv((dj1*inv(Klef)+dj2*inv(Krel))/(dj1+dj2)); % equation 21
-         graveq=((dj1*grav(lef,:)+dj2*grav(rel,:))')/(dj1+dj2); % equation 22
+         Keq=inv((dj1*inv(Klef)+dj2*inv(Krel))); % equation 21
+         graveq=((dj1*grav(lef,:)+dj2*grav(rel,:))'); % equation 22
          g(iface+size(bedge,1),1)=dot(((R*vd1')')*Keq, graveq);% equation 20
         
          G(lef,1)=G(lef,1)-g(iface+size(bedge,1),1);
