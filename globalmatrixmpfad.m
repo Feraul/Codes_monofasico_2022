@@ -5,13 +5,13 @@ global coord elem esurn1 esurn2  bedge inedge  centelem bcflag elemarea gravitat
     strategy
 
 %-----------------------inicio da rutina ----------------------------------%
-%Constrói a matriz global.
+%Constroi a matriz global.
 
-M=sparse(size(elem,1),size(elem,1)); %Prealocação de M.
+M=sparse(size(elem,1),size(elem,1)); %Prealocacao de M.
 I=sparse(size(elem,1),1);
-% fonte
+% contribuicao do termo de fonte
 I=I+fonte;
-% contribuição dos poços
+
 m=0;
 
 for ifacont=1:size(bedge,1)
@@ -24,7 +24,9 @@ for ifacont=1:size(bedge,1)
     
     % Tratamento do nó nos vértices 2 e 4%
     A=-Kn(ifacont)/(Hesq(ifacont)*norm(v0));
+    
     if bedge(ifacont,5)<200
+        % Contorno de Dirichlet
         c1=nflagno(bedge(ifacont,1),2);
         c2=nflagno(bedge(ifacont,2),2);
         
@@ -32,7 +34,7 @@ for ifacont=1:size(bedge,1)
         
         if strcmp(gravitational,'yes')
             if strcmp(strategy,'starnoni')
-                m=-gravrate(ifacont);
+                m=gravrate(ifacont);
             elseif strcmp(strategy,'inhouse')
                 g1=gravno(bedge(ifacont,1),1); % gravidade no vertice 1
                 g2=gravno(bedge(ifacont,2),1); % gravidade no vertice 2
@@ -47,11 +49,12 @@ for ifacont=1:size(bedge,1)
         I(lef)=I(lef)-A*(dot(v2,-v0)*c1+dot(v1,v0)*c2)+(c2-c1)*Kt(ifacont)-m;
         
     else
-        % contorno de Neumann
+        
+        % Contorno de Neumann
         x=bcflag(:,1)==bedge(ifacont,5);
         r=find(x==1);
         I(lef)=I(lef) -normcont*bcflag(r,2);
-        
+       
     end
     
 end
@@ -61,6 +64,7 @@ end
 for iface=1:size(inedge,1)
     lef=inedge(iface,3);
     rel=inedge(iface,4);
+    
     %Contabiliza as contribuições do fluxo numa aresta para os elementos %
     %a direita e a esquerda dela.                                        %
     
@@ -123,7 +127,7 @@ for iface=1:size(inedge,1)
     % termo gravitacional
     if strcmp(gravitational,'yes')
         if strcmp(strategy,'starnoni')
-            m=-gravrate(size(bedge,1)+iface,1);
+            m=gravrate(size(bedge,1)+iface,1);
         elseif strcmp(strategy,'inhouse')
             no1=inedge(iface,1);
             no2=inedge(iface,2);
