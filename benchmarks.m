@@ -128,8 +128,10 @@ switch benchmark
             % gravidade
             grav(i,:)=[-cos(x)*cos(y) sin(x)*sin(y)];
             
-            % \nabla*(-K*[-cos(x)*cos(y) sin(x)*sin(y)] )
-           fonte(i,:)=(0.2*cos(x)*sin(y)+2*sin(x)*cos(y))*elemarea(i,1);
+            % \nabla*(-K*[-cos(x)*cos(y) sin(x)*sin(y)] ), usando o grav
+            %fonte(i,:)=(0.2*cos(x)*sin(y)+2*sin(x)*cos(y))*elemarea(i,1);
+            %usando o -K nabla p
+            %fonte(i,:)=-(0.2*cos(x)*sin(y)+2*sin(x)*cos(y))*elemarea(i,1);
         end
         for j=1:size(coord,1)
             %Define "x" and "y"
