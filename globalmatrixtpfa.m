@@ -23,7 +23,7 @@ for ifacont=1:size(bedge,1)
         
         if strcmp(gravitational,'yes')
             if strcmp(strategy,'starnoni')
-                m=gravrate(ifacont);
+                m=-gravrate(ifacont);
             else
                 % proposto de nos
                 m1=-nflagface(ifacont,2);
@@ -32,12 +32,10 @@ for ifacont=1:size(bedge,1)
         else
             m=0;
         end
-        
         %Preenchimento
-        
         M(bedge(ifacont,3),bedge(ifacont,3))=M(bedge(ifacont,3),bedge(ifacont,3))- A*(norm(v0)^2);
         
-        I(bedge(ifacont,3))=I(bedge(ifacont,3))-c1*A*(norm(v0)^2)-m;
+        I(bedge(ifacont,3))=I(bedge(ifacont,3))-c1*A*(norm(v0)^2)+m;
         
     else
         x=bcflag(:,1)==bedge(ifacont,5);
@@ -50,7 +48,7 @@ for ifacont=1:size(bedge,1)
 end
 
 for iface=1:size(inedge,1),
-     lef=inedge(iface,3);
+    lef=inedge(iface,3);
     rel=inedge(iface,4);
     %Contabiliza as contribuições do fluxo numa faces  para os elementos %
     %a direita e a esquerda dela.                                        %
@@ -60,14 +58,14 @@ for iface=1:size(inedge,1),
     M(inedge(iface,4), inedge(iface,3))=M(inedge(iface,4), inedge(iface,3))+Kde(iface,1);
     if strcmp(gravitational,'yes')
         if strcmp(strategy,'starnoni')
-            m=gravrate(size(bedge,1)+iface);
+            m=-gravrate(size(bedge,1)+iface);
         else
             m= Kde(iface)*(gravelem(rel,1)-gravelem(lef,1));
             %m=gravrate(size(bedge,1)+iface,1);
             
         end
-        I(lef)=I(lef)-m;
-        I(rel)=I(rel)+m;
+        I(lef)=I(lef)+m;
+        I(rel)=I(rel)-m;
     end
         
 end
