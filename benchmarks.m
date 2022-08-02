@@ -36,7 +36,7 @@ switch benchmark
                 v2=bedge(iface,2);
             else
                 v1=inedge(iface-size(bedge,1),1);
-                v2=inedge(iface-size(bedge,1),2); 
+                v2=inedge(iface-size(bedge,1),2);
             end
             IJ=coord(v2,:)-coord(v1,:);
             norma=norm(IJ);
@@ -60,7 +60,7 @@ switch benchmark
             % parametro segundo  Starnoni
             h1=10;
             h2=1;
-            if y>=0.5             
+            if y>=0.5
                 % solucao analitica
                 u(i,1)= 11-h1*y;
                 gravelem(i,1)=h1*y;
@@ -80,13 +80,13 @@ switch benchmark
             y2 = coord(jj,2);
             % parametro segundo  Starnoni
             
-            if y2>=0.5 
+            if y2>=0.5
                 % solucao analitica
                 gravno(jj,1)= h1*y2;
             else
                 % solucao analitica
                 gravno(jj,1)= h2*y2;
-            end   
+            end
         end
         
         for j=1:size(bedge,1)+size(inedge,1)
@@ -97,18 +97,18 @@ switch benchmark
                 a=0.5*(coord(v1,:)+coord(v2,:));
             else
                 v1=inedge(j-size(bedge,1),1);
-                v2=inedge(j-size(bedge,1),2);  
+                v2=inedge(j-size(bedge,1),2);
                 a=0.5*(coord(v1,:)+coord(v2,:));
             end
             y11=a(1,2);
             % parametro segundo  Starnoni
-           
-            if y11>=0.5    
+            
+            if y11>=0.5
                 % solucao analitica
                 gravface(j,1)= h1*y11;
             else
                 % solucao analitica
-                gravface(j,1)= h2*y11; 
+                gravface(j,1)= h2*y11;
             end
         end
         
@@ -122,13 +122,13 @@ switch benchmark
             % solucao analitica foi calculado usando pag. 385
             % Calculo II Tom Apostol
             %  sin e cos no radianes
-            u(i,1)=10+sin(x)*cos(y);
+            u(i,1)=1-sin(x)*cos(y);
             
-            gravelem(i,1)=-10-sin(x)*cos(y);
+            gravelem(i,1)=-1+sin(x)*cos(y);
             % gravidade
             grav(i,:)=[-cos(x)*cos(y) sin(x)*sin(y)];
             
-            % \nabla*(-K*[-cos(x)*cos(y) sin(x)*sin(y)] ), usando o grav
+            % \nabla*(-K*[cos(x)*cos(y) -sin(x)*sin(y)] ), usando o grav
             %fonte(i,:)=(0.2*cos(x)*sin(y)+2*sin(x)*cos(y))*elemarea(i,1);
             %usando o -K nabla p
             %fonte(i,:)=-(0.2*cos(x)*sin(y)+2*sin(x)*cos(y))*elemarea(i,1);
@@ -140,7 +140,7 @@ switch benchmark
             % parametro segundo  Starnoni
             
             % solucao analitica
-            gravno(j,1)=-10- sin(x1)*cos(y1);
+            gravno(j,1)=-1+ sin(x1)*cos(y1);
         end
         
         for j=1:size(bedge,1)+size(inedge,1)
@@ -148,19 +148,14 @@ switch benchmark
             if j<=size(bedge,1)
                 v1=bedge(j,1);
                 v2=bedge(j,2);
-                
-                a=0.5*(coord(v1,:)+coord(v2,:));
-                x2=a(1,1);
-                y2=a(1,2);
             else
                 v1=inedge(j-size(bedge,1),1);
                 v2=inedge(j-size(bedge,1),2);
-                
-                a=0.5*(coord(v1,:)+coord(v2,:));
-                x2=a(1,1);
-                y2=a(1,2);
             end
-            gravface(j,1)= -10-sin(x2)*cos(y2);
+            a=0.5*(coord(v1,:)+coord(v2,:));
+            x2=a(1,1);
+            y2=a(1,2);
+            gravface(j,1:2)= [-cos(x2)*cos(y2) sin(x2)*sin(y2) ];
         end
         
         K=kmap;
