@@ -20,6 +20,16 @@ gravresult=0;
 gravrate=0;
 weight=0;
 contrcontor=0;
+
+% gravitational term
+if strcmp(gravitational,'yes')
+    if strcmp(strategy,'starnoni')
+        
+        %[gravresult,gravrate]=gravitation(kmap,grav,gravface);
+        [gravresult,gravrate]=gravitation_aux(kmap,grav,gravface);
+    end
+end
+
 if strcmp(pmetodo,'nlfvLPEW')
     %% calculo dos parametros ou constantes (ksi)
     % esta rutina estamos usando de 7/2/2016
@@ -44,12 +54,7 @@ if strcmp(pmetodo,'nlfvLPEW')
         % interpolaca LPEW1 proposto por Gao e Wu 2010
         [weight,contrcontor] = Pre_LPEW_2(kmap,N);
     end
-    % calculo do termo gravitacional
-    if strcmp(gravitational,'yes')
-        if strcmp(strategy,'starnoni')
-        [gravresult,gravrate]=gravitation(kmap,grav);
-        end 
-    end
+    
 elseif strcmp(pmetodo,'nlfvLPS')
     %% calculo dos parametros ou constantes (ksi)
     % esta rutina estamos usando de 7/2/2016
@@ -74,12 +79,7 @@ elseif strcmp(pmetodo,'nlfvLPS')
         % interpolaca LPEW1 proposto por Gao e Wu 2010
         [weight,contrcontor] = Pre_LPEW_2(kmap,N,gravrate);
     end
-    % calculo do termo gravitacional
-    if strcmp(gravitational,'yes')
-        if strcmp(strategy,'starnoni')
-        [gravresult,gravrate]=gravitation(kmap,grav);
-        end 
-    end
+    
 elseif strcmp(pmetodo,'interpfree')
     [parameter]=coeffinterpfree(kmap,F);
     
@@ -99,11 +99,6 @@ elseif strcmp(pmetodo,'nlfvPPS')
     else
         % calculoa dos pontos harmonicos sem correcao
         [pointarmonic,weightDMP,raioaux]=harmonicopoint(kmap,N,benchmark);
-    end
-    
-    % calculo do termo gravitacional
-    if strcmp(gravitational,'yes')
-        [gravresult,gravrate]=gravitation(kmap,grav);
     end
 elseif strcmp(pmetodo,'nlfvHP')
     %% faces alrededor de um elemento
@@ -146,10 +141,7 @@ elseif strcmp(pmetodo,'nlfvDMPSY')|| strcmp(pmetodo,'lfvHP') || strcmp(pmetodo,'
     nflagface= contflagface;
     % adequação dos nos flags de contorno
     nflagno= contflagno;
-    % gravitational term
-    if strcmp(gravitational,'yes')
-        [gravresult,gravrate]=gravitation(kmap,grav,gravface);
-    end
+    
 elseif strcmp(pmetodo,'lfvLPEW')
     %% calculo dos parametros ou constantes (ksi)
     
@@ -168,7 +160,7 @@ elseif strcmp(pmetodo,'lfvLPEW')
     elseif strcmp(interpol,'eLPEW2')
         % interpolaca LPEW2 modificado por proposto por Miao e Wu 2021
         [weight,contrcontor] = Pre_ELPEW_2(kmap,N,gravrate);
-     elseif strcmp(interpol,'LS')
+    elseif strcmp(interpol,'LS')
         [ weight,contrcontor] = LS(kmap);
     elseif strcmp(interpol,'eLS')
         disp('>> falta implementar!')
@@ -177,9 +169,6 @@ elseif strcmp(pmetodo,'lfvLPEW')
         [weight,contrcontor] = Pre_LPEW_2(kmap,N,gravrate);
     end
     
-    if strcmp(gravitational,'yes')
-        [gravresult,gravrate]=gravitation(kmap,grav);
-    end
     % outra maneira de calcular os pesos proposto no artigo
     %[weightDMP]=weightlfv(parameter);
 elseif strcmp(pmetodo,'mpfad')
@@ -196,9 +185,9 @@ elseif strcmp(pmetodo,'mpfad')
     elseif strcmp(interpol,'eLPEW2')
         % interpolaca LPEW2 modificado por proposto por Miao e Wu 2021
         [weight,contrcontor] = Pre_ELPEW_2(kmap);
-     elseif strcmp(interpol,'LS')
-       [ weight,contrcontor] = LS(kmap);
-       
+    elseif strcmp(interpol,'LS')
+        [ weight,contrcontor] = LS(kmap);
+        
     elseif strcmp(interpol,'eLS')
         disp('>> falta implementar!')
         
@@ -207,21 +196,12 @@ elseif strcmp(pmetodo,'mpfad')
         % interpolaca LPEW1 proposto por Gao e Wu 2010
         [weight,contrcontor] = Pre_LPEW_2(kmap,N);
     end
-    % gravitational term
-    if strcmp(gravitational,'yes')
-        if strcmp(strategy,'starnoni')
-        
-        [gravresult,gravrate]=gravitation(kmap,grav,gravface,gravelem);
-        end
-    end
+    
 else
-    %% calculo das constantes fisicos-geometrico para o TPFA
+    % calculo das constantes fisicos-geometrico para o TPFA
     [Hesq, Kde, Kn, Kt, Ded]=preMPFAD(kmap);
     % adequação dos flags de contorno
     nflagface= contflagface;
-    if strcmp(gravitational,'yes')
-        [gravresult,gravrate]=gravitation(kmap,grav,gravface);
-    end
 end
 %% dados inicialização métodos dos volumes finitos não linear
 gamma=0.0;                     % este parametro esta no intervalo [0,1] pode ser utilizado para o método nao linear MPFA
