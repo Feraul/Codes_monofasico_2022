@@ -6,7 +6,7 @@ M=sparse(size(elem,1),size(elem,1));
 %% fonte
 I=I+fonte;
 %%
-
+m=0;
 for ifacont=1:size(bedge,1)
     lef=bedge(ifacont,3);
     
@@ -20,7 +20,7 @@ for ifacont=1:size(bedge,1)
         %% calculo da contribuição do contorno, veja Eq. 2.17 (resp. eq. 24) do artigo Gao and Wu 2015 (resp. Gao and Wu 2014)
         if strcmp(gravitational,'yes')
             if strcmp(strategy,'starnoni')
-                m=gravrate(ifacont);
+                m=-gravrate(ifacont);
             else
                 m=0;
             end
@@ -32,7 +32,7 @@ for ifacont=1:size(bedge,1)
         
         %% implementação da matriz global no contorno
         M(lef,lef)=M(lef,lef)+ Alef;
-        I(lef,1)=I(lef,1)+alef-m;
+        I(lef,1)=I(lef,1)+alef+m;
     end
 end
 %% Montagem da matriz global
@@ -77,12 +77,12 @@ for iface=1:size(inedge,1)
     M(rel,lef)=M(rel,lef)- ALL;
      if strcmp(gravitational,'yes')
             if strcmp(strategy,'starnoni')
-                m=gravrate(size(bedge,1)+iface);
+                m=-gravrate(size(bedge,1)+iface);
             else
                 m=0;
             end
-            I(lef)=I(lef)-m;
-            I(rel)=I(rel)+m;
+            I(lef)=I(lef)+m;
+            I(rel)=I(rel)-m;
      end
 end
 %% malha 23x23
