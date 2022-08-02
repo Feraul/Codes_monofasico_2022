@@ -14,6 +14,7 @@ inedgesize = size(inedge,1);
 %Initialize "flowrate" and "flowresult"
 flowrate = zeros(bedgesize + inedgesize,1);
 flowresult = zeros(size(centelem,1),1);
+m=0;
 for ifacont=1:size(bedge,1);
     lef=bedge(ifacont,3);
     O=centelem(lef,:); % baricentro do elemento a esuqerda
