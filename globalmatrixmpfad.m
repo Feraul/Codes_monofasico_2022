@@ -49,7 +49,7 @@ for ifacont=1:size(bedge,1)
         I(lef)=I(lef)-A*(dot(v2,-v0)*c1+dot(v1,v0)*c2)+(c2-c1)*Kt(ifacont)-m;
         
     else
-       
+        
         % Contorno de Neumann
         x=bcflag(:,1)==bedge(ifacont,5);
         r=find(x==1);
@@ -114,7 +114,7 @@ for iface=1:size(inedge,1)
         end
     end
     if nflagno(inedge(iface,2),1)>200
-        for j=1:(esurn2(inedge(iface,2)+1)-esurn2(inedge(iface,2))),
+        for j=1:(esurn2(inedge(iface,2)+1)-esurn2(inedge(iface,2)))
             
             post_cont=esurn2(inedge(iface,2))+j;
             
