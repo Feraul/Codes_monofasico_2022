@@ -19,7 +19,7 @@ n
 //If [y] write, immediately below, only the name of mesh file with 
 //extension *.msh:
 
-HomegeneoLitology32.msh
+HomegeneoLitology128.msh
 
 //OBS.: This file must be puted into folder together with *.m files 
 //or in a folder whose path will be declared immediately below:
@@ -129,7 +129,7 @@ y
 //or unstructured mesh
 //[0] ==> "Triangles"; [1] ==> "Quadrangles"; [2] ==> "Both"
 
-0
+1
 
 //OBS.: 
 //The option "Both" does not work when the mesh is structured. 
